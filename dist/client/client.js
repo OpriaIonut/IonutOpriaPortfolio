@@ -1,0 +1,1 @@
+(()=>{"use strict";var __webpack_modules__={883:()=>{eval('\r\nconsole.log("hello world!");\r\n\n\n//# sourceURL=webpack://ionutopriaportfolio/./src/client/client.ts?')}},__webpack_exports__={};__webpack_modules__[883]()})();
