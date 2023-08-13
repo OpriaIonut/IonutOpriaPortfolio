@@ -1,0 +1,24 @@
+body{
+    background-color: rgb(50, 50, 50);
+    color: aliceblue;
+}
+
+.homePageReferalLink
+{
+    border-radius: 100%;
+    background-color: brown;
+    width: 25px;
+    height: 25px;
+}
+
+#languageChartCanvas
+{
+    width: 500px;
+    height: 500px;
+}
+
+#softwareChartCanvas
+{
+    width: 500px;
+    height: 500px;
+}
