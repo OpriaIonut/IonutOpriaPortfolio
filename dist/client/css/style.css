@@ -56,3 +56,38 @@ body{
 {
     padding: 5px;
 }
+
+.wideCellGallery
+{
+    width: 90%;
+}
+
+.wideCellGalleryLeftPanel
+{
+    display: inline-block;
+    width: 30%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.wideCellGalleryRightPanel
+{
+    display: inline-block;
+    width: 70%;
+    height: auto;
+}
+
+.wideCellGalleryTitle
+{
+    font-size: 2.5vw;
+    text-align: center;
+}
+
+.wideCellGalleryTag
+{
+    width: auto;
+    display: inline-block;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 10px;
+}
