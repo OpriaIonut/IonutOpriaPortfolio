@@ -22,13 +22,17 @@ export class HomePanel
         subtitle.innerHTML = "Game Programmer";
         parentNode.appendChild(subtitle);
 
-        this.createCellLink(parentNode, "", "https://www.linkedin.com/in/ionut-opria-6164b5150/");
-        this.createCellLink(parentNode, "", "https://kirirato.itch.io");
-        this.createCellLink(parentNode, "", "https://twitter.com/Kirirato");
-        this.createCellLink(parentNode, "", "https://sketchfab.com/kirirato");
-        this.createCellLink(parentNode, "", "https://www.artstation.com/kirirato16");
-        this.createCellLink(parentNode, "", "email");
-        this.createCellLink(parentNode, "", "CV");
+        let linksParent = document.createElement("div");
+        linksParent.id = "linksParent";
+        parentNode.appendChild(linksParent);
+
+        this.createCellLink(linksParent, "", "https://www.linkedin.com/in/ionut-opria-6164b5150/");
+        this.createCellLink(linksParent, "", "https://kirirato.itch.io");
+        this.createCellLink(linksParent, "", "https://twitter.com/Kirirato");
+        this.createCellLink(linksParent, "", "https://sketchfab.com/kirirato");
+        this.createCellLink(linksParent, "", "https://www.artstation.com/kirirato16");
+        this.createCellLink(linksParent, "", "email");
+        this.createCellLink(linksParent, "", "CV");
     }
 
     private createCellLink(parentNode: HTMLElement, imageSrc: string, link: string)

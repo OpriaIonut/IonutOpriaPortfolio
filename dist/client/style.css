@@ -3,22 +3,56 @@ body{
     color: aliceblue;
 }
 
+.fullwidth
+{
+    width: 100%;
+}
+
 .homePageReferalLink
 {
     border-radius: 100%;
     background-color: brown;
     width: 25px;
     height: 25px;
+    display: inline-block;
+    margin: 5px;
 }
 
-#languageChartCanvas
+#skillCharts
 {
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: auto;
 }
 
-#softwareChartCanvas
+.skillChartItem
 {
-    width: 500px;
-    height: 500px;
+    width: 30vw;
+    margin: 1vw;
+    height: auto;
+    display: inline-block;
+}
+
+#specialSkillsPanel
+{
+    width: 100%;
+}
+
+#specialSkillsArt, #specialSkillsProgramming
+{
+    vertical-align: top;
+    width: 45vw;
+    display: inline-block;
+}
+
+
+.wideCellWithDesc
+{
+    background-color: rgb(20, 20, 20);
+    margin: 10px;
+    padding: 3x;
+}
+
+.wideCellWithDescTitle, .wideCellWithDescText
+{
+    padding: 5px;
 }
