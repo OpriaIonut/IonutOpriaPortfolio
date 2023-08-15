@@ -44,6 +44,7 @@ export class GalleryView
                 slide.classList.add("gallery" + id + "S0");
 
             let img = document.createElement("img");
+            img.className = "fullres";
             img.src = imagesPath + index.toString() + ".jpg";
             slide.appendChild(img);
 

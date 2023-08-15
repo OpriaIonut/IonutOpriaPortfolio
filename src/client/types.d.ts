@@ -1,3 +1,5 @@
+import { AnimationClip, Object3D } from "three"
+
 export declare type ChartColorTheme = 
 {
     fill: boolean,
@@ -34,4 +36,22 @@ export declare type CellGalleryConfig =
     _tagColors: string[],
     _description: string,
     _moreDetailsPage: string
+}
+
+export declare type ThreeSceneConfig =
+{
+    _backgroundColor: string,
+    _minZoom: number,
+    _maxZoom: number,
+    _applyBloom: boolean,
+    _bloomIntensity: number,
+    _applyVignette: boolean,
+    _vignetteIntensity: number,
+    _litLighting: boolean
+}
+
+export declare type Asset3D =
+{
+    model: Object3D,
+    animations: AnimationClip[]
 }
