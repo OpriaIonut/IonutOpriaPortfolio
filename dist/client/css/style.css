@@ -99,6 +99,7 @@ body{
     display: inline-block;
     margin: 10px;
     background-color: brown;
+    vertical-align: top;
 }
 .multiCellWithGalleryTopPanel
 {
@@ -119,4 +120,20 @@ body{
 .multiCellWithGalleryTagsList
 {
     text-align: center;
+}
+
+.middleCenterBtn
+{
+    width: 15vw;
+    height: 3vw;
+    background-color: rgb(165, 195, 195);
+    border-radius: 3vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#softwareProjectsPanel
+{
+    vertical-align: top;
 }

@@ -2,6 +2,7 @@ import { AboutMePanel } from "./scripts/Panels/AbotMePanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
 import { HomePanel } from "./scripts/Panels/HomePanel";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
+import { SoftwareProjectsPanel } from "./scripts/Panels/SoftwareProjectsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
 
@@ -11,3 +12,4 @@ const skillChartsPanel = new SkillChartsPanel();
 const specialSkillsPanel = new SpecialSkillsPanel();
 const workProjectsPanel = new WorkProjectsPanel();
 const gameProjectsPanel = new GameProjectsPanel();
+const softwareProjectsPanel = new SoftwareProjectsPanel();
