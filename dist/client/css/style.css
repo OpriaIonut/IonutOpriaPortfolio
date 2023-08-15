@@ -54,8 +54,20 @@ body{
 
 .wideCellWithDescTitle, .wideCellWithDescText
 {
+    position: relative;
+    display: inline-block;
+    width: 90%;
     padding: 5px;
 }
+.wideCellWithDescBtn
+{
+    position: relative;
+    width: 5%;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+}
+
 
 .wideCellGallery
 {
