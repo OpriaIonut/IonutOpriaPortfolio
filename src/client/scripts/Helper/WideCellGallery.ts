@@ -1,17 +1,5 @@
+import { CellGalleryConfig } from "../../types";
 import { GalleryView } from "./GalleryView";
-
-export declare type CellGalleryConfig =
-{
-    _id: string,
-    _imagesPath: string,
-    _imageCount: number,
-    _imageDurationMs: number,
-    _title: string,
-    _tags: string[],
-    _tagColors: string[],
-    _description: string,
-    _moreDetailsPage: string
-}
 
 export class WideCellGallery
 {
@@ -58,7 +46,7 @@ export class WideCellGallery
         let moreDetails = document.createElement("button");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton";
-        moreDetails.classList.add("wideCellMoreDetailsButton");
+        moreDetails.classList.add("wideCellGalleryMoreDetailsButton");
         leftPanel.appendChild(moreDetails);
     }
 }

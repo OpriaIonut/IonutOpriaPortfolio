@@ -24,11 +24,11 @@ export class GalleryView
             let input = document.createElement("input");
             input.type = "radio";
             input.name = "r";
-            input.id = "galleryR" + index;
+            input.id = "gallery" + id + "R" + index;
             if(index == 0)
                 input.checked = true;
             
-            cssRules += `#galleryR${index}:checked ~ .galleryS0 { margin-left: -${100 / (imageCount - 1) * index}%; }\n`;
+            cssRules += `#gallery${id}R${index}:checked ~ .gallery${id}S0 { margin-left: -${100 / imageCount * index}%; }\n`;
             slidesParent.appendChild(input);
         }
         style.textContent = cssRules;
@@ -38,9 +38,10 @@ export class GalleryView
         {
             let slide = document.createElement("div");
             slide.className = "gallerySlide"; 
+            slide.style.width = `${100 / imageCount}%`;
             slidesParent.appendChild(slide);
             if(index == 0)
-                slide.classList.add("galleryS0");
+                slide.classList.add("gallery" + id + "S0");
 
             let img = document.createElement("img");
             img.src = imagesPath + index.toString() + ".jpg";
@@ -48,7 +49,7 @@ export class GalleryView
 
             let navLabel = document.createElement("label");
             navLabel.className = "galleryBar";
-            navLabel.htmlFor = "galleryR" + index;
+            navLabel.htmlFor = "gallery" + id + "R" + index;
             navigation.appendChild(navLabel);
         }
     }

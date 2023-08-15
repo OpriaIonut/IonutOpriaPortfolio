@@ -83,11 +83,40 @@ body{
     text-align: center;
 }
 
-.wideCellGalleryTag
+.wideCellGalleryTag, .multiCellWithGalleryTag
 {
     width: auto;
     display: inline-block;
     padding: 5px;
     margin: 3px;
     border-radius: 10px;
+}
+
+
+
+.multiCellWithGallery
+{
+    display: inline-block;
+    margin: 10px;
+    background-color: brown;
+}
+.multiCellWithGalleryTopPanel
+{
+    width: 100%;
+    height: 100%;
+}
+.multiCellWithGalleryDownPanel
+{
+    width: 100%;
+    height: 25vw;
+    background-color: blueviolet;
+}
+.multiCellWithGalleryTitle
+{
+    font-size: 2.5vw;
+    text-align: center;
+}
+.multiCellWithGalleryTagsList
+{
+    text-align: center;
 }
