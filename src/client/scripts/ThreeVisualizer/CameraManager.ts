@@ -9,7 +9,7 @@ import { LUTPass } from "three/examples/jsm/postprocessing/LUTPass";
 import { LUTCubeLoader } from "three/examples/jsm/loaders/LUTCubeLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PostProcessingConfig, ThreeSceneConfig } from "../../types";
-import { ChromaticAberrationsShader } from "./ChromaticAberrationsShader";
+import { ChromaticAberrationsShader } from "./Shaders/ChromaticAberrationsShader";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
@@ -46,6 +46,8 @@ export class CameraManager
     private _directionalLight: THREE.DirectionalLight;
 
     private _controls: OrbitControls | undefined;
+
+    public usePostProcessing: boolean = true;
 
     public get controls(): OrbitControls { return this._controls as OrbitControls }
 
@@ -128,8 +130,11 @@ export class CameraManager
     {
         this.refreshCameraVectors();
         this._controls?.update();
-        this._effectComposer?.render(deltaTime);
-        // this._renderer?.render(this._scene, this._camera as Camera);
+
+        if(this.usePostProcessing)
+            this._effectComposer?.render(deltaTime);
+        else
+            this._renderer?.render(this._scene, this._camera as Camera);
     }
 
     public applySceneConfig(config: ThreeSceneConfig)

@@ -62,7 +62,7 @@ export class ButtonsWithSelection
         this._spawnedButtons = [];
     }
 
-    private changeSelectedButton(newIndex: number)
+    public changeSelectedButton(newIndex: number)
     {
         this._spawnedButtons[this._currentSelected].className = "buttonsWithSelection";
         this._currentSelected = newIndex;
