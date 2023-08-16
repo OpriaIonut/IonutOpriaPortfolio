@@ -44,6 +44,7 @@ export class CameraManager
 
     private _ambientLight: THREE.AmbientLight;
     private _directionalLight: THREE.DirectionalLight;
+    private _directionalLightBasePosition: Vector3 = new Vector3(10, 10, 10);
 
     private _controls: OrbitControls | undefined;
 
@@ -77,7 +78,7 @@ export class CameraManager
 
         this._ambientLight = new AmbientLight(0xffffff, 0.5);
         this._directionalLight = new DirectionalLight(0xffffff, 1.0);
-        this._directionalLight.position.set(10, 10, 10);
+        this._directionalLight.position.copy(this._directionalLightBasePosition);
 
         this.scene.add(this._ambientLight);
         this.scene.add(this._directionalLight);
@@ -199,5 +200,12 @@ export class CameraManager
 
         this._cameraUp.copy(upDir);
         this._camera?.localToWorld(this._cameraUp);
+    }
+
+    public setDirLightAngle(angle: number)
+    {
+        let newVect = this._directionalLightBasePosition.clone();
+        newVect.applyAxisAngle(upDir, angle);
+        this._directionalLight.position.copy(newVect);
     }
 }

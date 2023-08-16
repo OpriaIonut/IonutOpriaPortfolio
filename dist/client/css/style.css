@@ -1,3 +1,7 @@
+/* *{
+    user-select: none;
+} */
+
 body{
     background-color: rgb(50, 50, 50);
     color: aliceblue;
@@ -207,7 +211,6 @@ body{
 {
     position: relative;
     margin: 7px;
-    margin-bottom: 15px;
 }
 
 .buttonsWithSelectionParent
@@ -246,4 +249,34 @@ body{
     margin: 7px;
     font-size: 20px;
     border-bottom: 2px solid #fff;
+}
+
+.horizontalSliderParent
+{
+    width: 100%;
+    margin: 5px;   
+}
+
+.horizontalSliderTitle
+{
+    width: auto;
+    display: inline-block;
+    padding: 7px;
+}
+
+.horizontalSliderBtn
+{
+    width: 40%;
+    height: 100%;
+    border-radius: 3vw;
+    display: inline-block;
+    background-color: rgb(62, 76, 78);
+    text-align: center;
+    border: 2px solid #fff;
+    user-select: none;
+}
+
+.horizontalSliderText
+{
+    pointer-events: none;
 }

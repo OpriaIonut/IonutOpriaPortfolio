@@ -7,6 +7,7 @@ import { DebugUI } from "./DebugGUI";
 import { threeDebugGUI } from "../../client";
 import { ButtonsWithSelection } from "../Helper/ButtonsWithSelection";
 import { MaterialCache } from "./MaterialCache";
+import { HorizontalSliderWithTitle } from "../Helper/HorizontalSliderWithTitle";
 
 export class ThreeModelView
 {
@@ -25,6 +26,7 @@ export class ThreeModelView
     private _trisCounter!: HTMLDivElement;
     private _poseSettings!: ButtonsWithSelection;
     private _meshSettings!: ButtonsWithSelection;
+    private _lightSettings!: HorizontalSliderWithTitle;
 
     private _gui!: DebugUI;
 
@@ -148,6 +150,7 @@ export class ThreeModelView
 
         this._materialCache.registerModel(this._currentModel);
         this._meshSettings.changeSelectedButton(0);
+        this._lightSettings.resetValue();
 
         this.findModelAnimations(asset);
         this.findModelStatistics();
@@ -257,6 +260,7 @@ export class ThreeModelView
     {
         this.onPoseChanged = this.onPoseChanged.bind(this);
         this.onModelSettingChanged = this.onModelSettingChanged.bind(this);
+        this.onLightSliderChanged = this.onLightSliderChanged.bind(this);
 
         let settingsParent = document.createElement("div");
         settingsParent.id = "threeViewSettingsParent";
@@ -267,8 +271,7 @@ export class ThreeModelView
         this._trisCounter.className = "threeViewTrisCounter";
         settingsParent.appendChild(this._trisCounter);
 
-        //To do: Light rotation
-
+        this._lightSettings = new HorizontalSliderWithTitle(settingsParent, "Light Angle", 0, 360, 0, this.onLightSliderChanged);
         this._poseSettings = new ButtonsWithSelection(settingsParent, "Mesh Poses", this.onPoseChanged);
 
         this._meshSettings = new ButtonsWithSelection(settingsParent, "Mesh Rendering", this.onModelSettingChanged);
@@ -372,6 +375,11 @@ export class ThreeModelView
         if(action !== undefined)
             action.fadeIn(3.0).play();
         this._previousAnim = poseName;
+    }
+
+    private onLightSliderChanged(value: number)
+    {
+        this._cameraManager.setDirLightAngle(value * (Math.PI / 180));
     }
 
     private onDebugUIChanged()
