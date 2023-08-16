@@ -41,7 +41,9 @@ const zoroPostProccessing: PostProcessingConfig =
     _chromaAberrationLength: 0.05,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Bourbon 64.CUBE",
+    _lutIntensity: 0.0
 }
 
 const oniGurlPost: PostProcessingConfig =
@@ -52,7 +54,9 @@ const oniGurlPost: PostProcessingConfig =
     _chromaAberrationLength: 0.0,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Chemical 168.CUBE",
+    _lutIntensity: 0.5
 }
 
 const enriPost: PostProcessingConfig =
@@ -63,7 +67,9 @@ const enriPost: PostProcessingConfig =
     _chromaAberrationLength: 0.0,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Remy 24.CUBE",
+    _lutIntensity: 0.35
 }
 
 const mechSpiderPost: PostProcessingConfig =
@@ -75,6 +81,8 @@ const mechSpiderPost: PostProcessingConfig =
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
     _chromaAberrationRedOut: false,
+    _lutName: "Bourbon 64.CUBE",
+    _lutIntensity: 0.0
 }
 
 const godEaterPost: PostProcessingConfig =
@@ -85,7 +93,9 @@ const godEaterPost: PostProcessingConfig =
     _chromaAberrationLength: 0.0,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Bourbon 64.CUBE",
+    _lutIntensity: 0.0
 }
 
 const anchorPost: PostProcessingConfig =
@@ -96,7 +106,9 @@ const anchorPost: PostProcessingConfig =
     _chromaAberrationLength: 0.05,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Chemical 168.CUBE",
+    _lutIntensity: 0.85
 }
 
 const fantasyBowPost: PostProcessingConfig =
@@ -107,7 +119,9 @@ const fantasyBowPost: PostProcessingConfig =
     _chromaAberrationLength: 0.0,
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
-    _chromaAberrationRedOut: true
+    _chromaAberrationRedOut: true,
+    _lutName: "Bourbon 64.CUBE",
+    _lutIntensity: 0.65
 }
 
 export const ThreeModelConfig: any =
@@ -185,5 +199,3 @@ export const ThreeModelConfig: any =
         totalBytes: 603952
     }
 };
-
-export const OutlineMeshes = ["MechaGirl", "OniGurl"];

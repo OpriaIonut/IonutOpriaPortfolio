@@ -57,7 +57,9 @@ export declare type PostProcessingConfig =
     _vignetteOffset: number,
     _vignetteDarkness: number,
     _chromaAberrationLength: number,
-    _chromaAberrationRedOut: boolean
+    _chromaAberrationRedOut: boolean,
+    _lutName: string,
+    _lutIntensity: number
 }
 
 export declare type Asset3D =

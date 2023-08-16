@@ -1,11 +1,10 @@
 import * as THREE from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { CameraManager } from "./CameraManager";
-import { OutlineMeshes, ThreeModelConfig } from "./ThreeModelsConfig";
+import { CameraManager, lutMap } from "./CameraManager";
+import { ThreeModelConfig } from "./ThreeModelsConfig";
 import { ObjectLoader } from "./ObjectLoader";
 import { Asset3D, PostProcessingConfig, ThreeSceneConfig } from "../../types";
-import { GUI } from "dat.gui";
 import { DebugUI } from "./DebugGUI";
+import { threeDebugGUI } from "../../client";
 
 export class ThreeModelView
 {
@@ -19,7 +18,7 @@ export class ThreeModelView
 
     private _gui!: DebugUI;
 
-    private _postProcessingSettings: PostProcessingConfig = {
+    private _debugPostSettings: PostProcessingConfig = {
         _bloomRadius: 0.05,
         _bloomStrength: 1.0,
         _bloomThreshold: 1.0,
@@ -27,9 +26,10 @@ export class ThreeModelView
         _chromaAberrationRedOut: false,
         _vignetteOffset: 1.0,
         _vignetteDarkness: 1.0,
+        _lutName: "Bourbon 64.CUBE",
+        _lutIntensity: 0.0
     }
-
-    private _sceneConfig: ThreeSceneConfig = {
+    private _debugSceneConfig: ThreeSceneConfig = {
         _backgroundColor: new THREE.Color(0xffffff),
         _directionalIntensity: 3.0,
         _litLighting: true,
@@ -64,7 +64,8 @@ export class ThreeModelView
         this.onModelLoaded = this.onModelLoaded.bind(this);
         this.onModelProgress = this.onModelProgress.bind(this);
 
-        this.createDebugUI();
+        if(threeDebugGUI)
+            this.createDebugUI();
     }
 
     private createDebugUI()
@@ -72,29 +73,33 @@ export class ThreeModelView
         this.onDebugUIChanged = this.onDebugUIChanged.bind(this);
         this._gui = new DebugUI();
 
-        this._gui.addSlider("", this._postProcessingSettings, "_bloomRadius", 0.0, 1.0, "Bloom Radius", this.onDebugUIChanged);
-        this._gui.addSlider("", this._postProcessingSettings, "_bloomStrength", 0.0, 3.0, "Bloom Strength", this.onDebugUIChanged);
-        this._gui.addSlider("", this._postProcessingSettings, "_bloomThreshold", 0.0, 1.0, "Bloom Threshold", this.onDebugUIChanged);
-        this._gui.addSlider("", this._postProcessingSettings, "_chromaAberrationLength", 0.0, 0.25, "CHA Length", this.onDebugUIChanged);
-        this._gui.addSlider("", this._postProcessingSettings, "_vignetteOffset", 0.0, 1.0, "Vignette Offset", this.onDebugUIChanged);
-        this._gui.addSlider("", this._postProcessingSettings, "_vignetteDarkness", 0.0, 1.0, "Vignette Darkness", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_bloomRadius", 0.0, 1.0, "Bloom Radius", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_bloomStrength", 0.0, 3.0, "Bloom Strength", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_bloomThreshold", 0.0, 1.0, "Bloom Threshold", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_chromaAberrationLength", 0.0, 0.25, "CHA Length", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_vignetteOffset", 0.0, 1.0, "Vignette Offset", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_vignetteDarkness", 0.0, 1.0, "Vignette Darkness", this.onDebugUIChanged);
 
-        this._gui.addCheckbox("", this._postProcessingSettings, "_chromaAberrationRedOut", "Red Out", this.onDebugUIChanged);
+        this._gui.addCheckbox("", this._debugPostSettings, "_chromaAberrationRedOut", "Red Out", this.onDebugUIChanged);
     
-        this._gui.addSlider("", this._sceneConfig, "_ambientIntensity", 0.0, 3.0, "Ambient", this.onDebugUIChanged);
-        this._gui.addSlider("", this._sceneConfig, "_directionalIntensity", 0.0, 10.0, "Directional", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugSceneConfig, "_ambientIntensity", 0.0, 3.0, "Ambient", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugSceneConfig, "_directionalIntensity", 0.0, 10.0, "Directional", this.onDebugUIChanged);
 
-        this._gui.addColorPicker("", this._sceneConfig, "_lightColor", "LightColor", (value: any) => { this._sceneConfig._lightColor.setStyle(value); this.onDebugUIChanged(); });
+        this._gui.addColorPicker("", this._debugSceneConfig, "_lightColor", "LightColor", (value: any) => { this._debugSceneConfig._lightColor.setStyle(value); this.onDebugUIChanged(); });
         // this._gui.addColorPicker("", this._sceneConfig, "_backgroundColor", "BG Color", (value: any) => { this._sceneConfig._backgroundColor.setStyle(value); this.onDebugUIChanged(); });
 
-        this._gui.addSlider("", this._sceneConfig, "_minZoom", 0.0, 3.0, "MinZoom", this.onDebugUIChanged);
-        this._gui.addSlider("", this._sceneConfig, "_maxZoom", 0.0, 10.0, "MaxZoom", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugSceneConfig, "_minZoom", 0.0, 3.0, "MinZoom", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugSceneConfig, "_maxZoom", 0.0, 10.0, "MaxZoom", this.onDebugUIChanged);
+
+        let lutNames = Object.keys(lutMap);
+        this._gui.addDropdown("", this._debugPostSettings, "_lutName", lutNames, "Lut", this.onDebugUIChanged);
+        this._gui.addSlider("", this._debugPostSettings, "_lutIntensity", 0.0, 1.0, "Lut Intensity", this.onDebugUIChanged);
     }
 
     private onDebugUIChanged()
     {
-        this._cameraManager.applyPostProcessing(this._postProcessingSettings);
-        this._cameraManager.applySceneConfig(this._sceneConfig);
+        this._cameraManager.applyPostProcessing(this._debugPostSettings);
+        this._cameraManager.applySceneConfig(this._debugSceneConfig);
     }
 
     public activateView(modelName: string, targetProgressBar: HTMLDivElement)
@@ -106,20 +111,22 @@ export class ThreeModelView
         this._cameraManager.applySceneConfig(config.sceneConfig);
         this._cameraManager.applyPostProcessing(config.postProcessing);
 
-        this._postProcessingSettings._bloomRadius = config.postProcessing._bloomRadius;
-        this._postProcessingSettings._bloomStrength = config.postProcessing._bloomStrength;
-        this._postProcessingSettings._bloomThreshold = config.postProcessing._bloomThreshold;
-        this._postProcessingSettings._chromaAberrationLength = config.postProcessing._chromaAberrationLength;
-        this._postProcessingSettings._chromaAberrationRedOut = config.postProcessing._chromaAberrationRedOut;
-        this._postProcessingSettings._vignetteDarkness = config.postProcessing._vignetteDarkness;
-        this._postProcessingSettings._vignetteOffset = config.postProcessing._vignetteOffset;
+        this._debugPostSettings._bloomRadius = config.postProcessing._bloomRadius;
+        this._debugPostSettings._bloomStrength = config.postProcessing._bloomStrength;
+        this._debugPostSettings._bloomThreshold = config.postProcessing._bloomThreshold;
+        this._debugPostSettings._chromaAberrationLength = config.postProcessing._chromaAberrationLength;
+        this._debugPostSettings._chromaAberrationRedOut = config.postProcessing._chromaAberrationRedOut;
+        this._debugPostSettings._vignetteDarkness = config.postProcessing._vignetteDarkness;
+        this._debugPostSettings._vignetteOffset = config.postProcessing._vignetteOffset;
+        this._debugPostSettings._lutName = config.postProcessing._lutName;
+        this._debugPostSettings._lutIntensity = config.postProcessing._lutIntensity;
         
-        this._sceneConfig._ambientIntensity = config.sceneConfig._ambientIntensity;
-        this._sceneConfig._backgroundColor = config.sceneConfig._backgroundColor;
-        this._sceneConfig._directionalIntensity = config.sceneConfig._directionalIntensity;
-        this._sceneConfig._lightColor = config.sceneConfig._lightColor;
-        this._sceneConfig._minZoom = config.sceneConfig._minZoom;
-        this._sceneConfig._maxZoom = config.sceneConfig._maxZoom;
+        this._debugSceneConfig._ambientIntensity = config.sceneConfig._ambientIntensity;
+        this._debugSceneConfig._backgroundColor = config.sceneConfig._backgroundColor;
+        this._debugSceneConfig._directionalIntensity = config.sceneConfig._directionalIntensity;
+        this._debugSceneConfig._lightColor = config.sceneConfig._lightColor;
+        this._debugSceneConfig._minZoom = config.sceneConfig._minZoom;
+        this._debugSceneConfig._maxZoom = config.sceneConfig._maxZoom;
 
         this._cameraManager.resetCamera();
         this._objectLoader.loadModel(config.path, this.onModelLoaded, this.onModelProgress);

@@ -8,6 +8,8 @@ import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
 import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 
+export const threeDebugGUI = false;
+
 const homePanel = new HomePanel();
 const aboutMePanel = new AboutMePanel();
 const skillChartsPanel = new SkillChartsPanel();

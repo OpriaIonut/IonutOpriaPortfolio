@@ -5,12 +5,22 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 import { VignetteShader } from "three/examples/jsm/shaders/VignetteShader";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { LUTPass } from "three/examples/jsm/postprocessing/LUTPass";
+import { LUTCubeLoader } from "three/examples/jsm/loaders/LUTCubeLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PostProcessingConfig, ThreeSceneConfig } from "../../types";
 import { ChromaticAberrationsShader } from "./ChromaticAberrationsShader";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
+
+export const lutMap: any = {
+    'Bourbon 64.CUBE': null,
+    'Chemical 168.CUBE': null,
+    // 'Clayton 33.CUBE': null,
+    // 'Cubicle 99.CUBE': null,
+    'Remy 24.CUBE': null
+};
 
 export class CameraManager
 {
@@ -25,6 +35,7 @@ export class CameraManager
     private _fxaaPass: ShaderPass | undefined;
     private _bloomPass: UnrealBloomPass | undefined;
     private _chromaticAberrationsPass: ShaderPass | undefined;
+    private _lutPass: LUTPass | undefined;
     private _vignettePass: ShaderPass | undefined;
 
     private _cameraForward: Vector3 = new Vector3();
@@ -78,12 +89,14 @@ export class CameraManager
         this._fxaaPass = new ShaderPass(FXAAShader);
         this._bloomPass = new UnrealBloomPass(new Vector2(), 0, 0, 1.0);
         this._chromaticAberrationsPass = new ShaderPass(ChromaticAberrationsShader);
+        this._lutPass = new LUTPass({lut: lutMap['Bourbon 64.CUBE'], intensity: 0});
         this._vignettePass = new ShaderPass(VignetteShader);
 
         this._effectComposer.addPass(this._renderPass);
         this._effectComposer.addPass(this._fxaaPass);
         this._effectComposer.addPass(this._bloomPass);
         this._effectComposer.addPass(this._chromaticAberrationsPass);
+        this._effectComposer.addPass(this._lutPass);
         this._effectComposer.addPass(this._vignettePass);
 
         this._controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -92,6 +105,13 @@ export class CameraManager
         window.addEventListener('resize', this.onResize, false);
         this.onResize();
         this.resetCamera();
+
+        //Load all available luts
+        Object.keys(lutMap).forEach(name => {
+            new LUTCubeLoader().load('luts/' + name, (result: any) => {
+                lutMap[name] = result;
+            });
+        });
 
         this.refreshCameraVectors();
     }
@@ -135,6 +155,9 @@ export class CameraManager
 
         this._chromaticAberrationsPass!.uniforms.u_rgbSplitLength.value = config._chromaAberrationLength;
         this._chromaticAberrationsPass!.uniforms.u_redChannelOut.value = config._chromaAberrationRedOut;
+
+        this._lutPass!.intensity = config._lutIntensity;
+        this._lutPass!.lut = lutMap[config._lutName].texture;
     }
 
     public onResize()
