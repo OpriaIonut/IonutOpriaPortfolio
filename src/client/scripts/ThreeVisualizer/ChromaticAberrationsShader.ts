@@ -24,8 +24,6 @@ const ChromaticAberrationsShader = {
 	uniforms: {
 		'tDiffuse': { value: null },
         'u_rgbSplitLength': { value: 0.05 },
-        // 'u_rgbSplitDistFromCenter': { value: 1.0 },
-        'u_rgbSplitBlurSize': { value: 0.0 },
         'u_redChannelOut': { value: false },
 	},
 	vertexShader: `
@@ -59,25 +57,11 @@ const ChromaticAberrationsShader = {
             if(u_redChannelOut)
                 splitDirection *= -1.0;
 
-            vec3 rgbSplitColor = vec3(texture2D(tDiffuse, vUv - splitDirection * splitValue * 0.1).r, texture2D(tDiffuse, vUv).g, texture2D(tDiffuse, vUv + splitDirection * splitValue * 0.1).b);
-
-            rgbSplitColor += vec3(  texture2D(tDiffuse, vUv + vec2(0.0, 0.01 * u_rgbSplitBlurSize) - splitDirection * splitValue * 0.1).r, 
-                                    texture2D(tDiffuse, vUv + vec2(0.0, 0.01 * u_rgbSplitBlurSize)).g, 
-                                    texture2D(tDiffuse, vUv + vec2(0.0, 0.01 * u_rgbSplitBlurSize) + splitDirection * splitValue * 0.1).b);
-
-            rgbSplitColor += vec3(  texture2D(tDiffuse, vUv - vec2(0.0, 0.01 * u_rgbSplitBlurSize) - splitDirection * splitValue * 0.1).r, 
-                                    texture2D(tDiffuse, vUv - vec2(0.0, 0.01 * u_rgbSplitBlurSize)).g, 
-                                    texture2D(tDiffuse, vUv - vec2(0.0, 0.01 * u_rgbSplitBlurSize) + splitDirection * splitValue * 0.1).b);
-
-            rgbSplitColor += vec3(  texture2D(tDiffuse, vUv + vec2(0.01 * u_rgbSplitBlurSize, 0.0) - splitDirection * splitValue * 0.1).r, 
-                                    texture2D(tDiffuse, vUv + vec2(0.01 * u_rgbSplitBlurSize, 0.0)).g, 
-                                    texture2D(tDiffuse, vUv + vec2(0.01 * u_rgbSplitBlurSize, 0.0) + splitDirection * splitValue * 0.1).b);
-
-            rgbSplitColor += vec3(  texture2D(tDiffuse, vUv - vec2(0.01 * u_rgbSplitBlurSize, 0.0) - splitDirection * splitValue * 0.1).r, 
-                                    texture2D(tDiffuse, vUv - vec2(0.01 * u_rgbSplitBlurSize, 0.0)).g, 
-                                    texture2D(tDiffuse, vUv - vec2(0.01 * u_rgbSplitBlurSize, 0.0) + splitDirection * splitValue * 0.1).b);
-            rgbSplitColor = rgbSplitColor / 5.0;
-
+            vec3 rgbSplitColor = vec3(
+                texture2D(tDiffuse, vUv - splitDirection * splitValue * 0.1).r, 
+                texture2D(tDiffuse, vUv).g, 
+                texture2D(tDiffuse, vUv + splitDirection * splitValue * 0.1).b
+            );
             vec3 colorOut = pow(rgbSplitColor, vec3(1.0 / 2.2));
 			gl_FragColor =  vec4( colorOut, 1.0 );
 		}

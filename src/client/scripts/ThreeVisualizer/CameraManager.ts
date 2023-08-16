@@ -1,4 +1,4 @@
-import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color, Vector2, TextureLoader } from "three";
+import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color, Vector2, TextureLoader, AmbientLight, DirectionalLight } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
@@ -31,6 +31,9 @@ export class CameraManager
     private _cameraRight:  Vector3 = new Vector3();
     private _cameraUp: Vector3 = new Vector3();
 
+    private _ambientLight: THREE.AmbientLight;
+    private _directionalLight: THREE.DirectionalLight;
+
     private _controls: OrbitControls | undefined;
 
     public get controls(): OrbitControls { return this._controls as OrbitControls }
@@ -59,14 +62,20 @@ export class CameraManager
             this._scene.background = texture;
         });
 
+        this._ambientLight = new AmbientLight(0xffffff, 0.5);
+        this._directionalLight = new DirectionalLight(0xffffff, 1.0);
+        this._directionalLight.position.set(10, 10, 10);
+
+        this.scene.add(this._ambientLight);
+        this.scene.add(this._directionalLight);
+
         let aspect = window.innerWidth / window.innerHeight;
-        this._camera = new PerspectiveCamera(40, aspect, 1, 100);
+        this._camera = new PerspectiveCamera(40, aspect, 0.01, 100);
 
         this._effectComposer = new EffectComposer(this._renderer);
         
         this._renderPass = new RenderPass(this._scene, this._camera);
         this._fxaaPass = new ShaderPass(FXAAShader);
-        // this._bloomPass = new UnrealBloomPass(new Vector2(), 1.0, 1.0, 0.2);
         this._bloomPass = new UnrealBloomPass(new Vector2(), 0, 0, 1.0);
         this._chromaticAberrationsPass = new ShaderPass(ChromaticAberrationsShader);
         this._vignettePass = new ShaderPass(VignetteShader);
@@ -108,6 +117,11 @@ export class CameraManager
         //this._scene.background = new Color(config._backgroundColor);
         this._controls!.minDistance = config._minZoom;
         this._controls!.maxDistance = config._maxZoom;
+        
+        this._ambientLight.intensity = config._ambientIntensity;
+        this._ambientLight.color.setStyle(config._lightColor.getStyle());
+        this._directionalLight.intensity = config._directionalIntensity;
+        this._directionalLight.color.setStyle(config._lightColor.getStyle());
     }
 
     public applyPostProcessing(config: PostProcessingConfig)
@@ -120,7 +134,6 @@ export class CameraManager
         this._vignettePass!.uniforms.darkness.value = config._vignetteDarkness;
 
         this._chromaticAberrationsPass!.uniforms.u_rgbSplitLength.value = config._chromaAberrationLength;
-        this._chromaticAberrationsPass!.uniforms.u_rgbSplitBlurSize.value = config._chromaAberrationBlur;
         this._chromaticAberrationsPass!.uniforms.u_redChannelOut.value = config._chromaAberrationRedOut;
     }
 

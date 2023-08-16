@@ -1,9 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { CameraManager } from "./CameraManager";
-import { ThreeModelConfig } from "./ThreeModelsConfig";
+import { OutlineMeshes, ThreeModelConfig } from "./ThreeModelsConfig";
 import { ObjectLoader } from "./ObjectLoader";
-import { Asset3D } from "../../types";
+import { Asset3D, PostProcessingConfig, ThreeSceneConfig } from "../../types";
+import { GUI } from "dat.gui";
+import { DebugUI } from "./DebugGUI";
 
 export class ThreeModelView
 {
@@ -15,8 +17,27 @@ export class ThreeModelView
     private _currentModelName: string = "";
     private _currentProgressBar?: HTMLDivElement;
 
-    private _ambientLight: THREE.AmbientLight;
-    private _directionalLight: THREE.DirectionalLight;
+    private _gui!: DebugUI;
+
+    private _postProcessingSettings: PostProcessingConfig = {
+        _bloomRadius: 0.05,
+        _bloomStrength: 1.0,
+        _bloomThreshold: 1.0,
+        _chromaAberrationLength: 0.05,
+        _chromaAberrationRedOut: false,
+        _vignetteOffset: 1.0,
+        _vignetteDarkness: 1.0,
+    }
+
+    private _sceneConfig: ThreeSceneConfig = {
+        _backgroundColor: new THREE.Color(0xffffff),
+        _directionalIntensity: 3.0,
+        _litLighting: true,
+        _maxZoom: 10.0,
+        _minZoom: 0.1,
+        _ambientIntensity: 1.0,
+        _lightColor: new THREE.Color(0xffffff)
+    }
 
     constructor()
     {
@@ -43,12 +64,37 @@ export class ThreeModelView
         this.onModelLoaded = this.onModelLoaded.bind(this);
         this.onModelProgress = this.onModelProgress.bind(this);
 
-        this._ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        this._directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-        this._directionalLight.position.set(10, 10, 10);
+        this.createDebugUI();
+    }
 
-        this._cameraManager.scene.add(this._ambientLight);
-        this._cameraManager.scene.add(this._directionalLight);
+    private createDebugUI()
+    {
+        this.onDebugUIChanged = this.onDebugUIChanged.bind(this);
+        this._gui = new DebugUI();
+
+        this._gui.addSlider("", this._postProcessingSettings, "_bloomRadius", 0.0, 1.0, "Bloom Radius", this.onDebugUIChanged);
+        this._gui.addSlider("", this._postProcessingSettings, "_bloomStrength", 0.0, 3.0, "Bloom Strength", this.onDebugUIChanged);
+        this._gui.addSlider("", this._postProcessingSettings, "_bloomThreshold", 0.0, 1.0, "Bloom Threshold", this.onDebugUIChanged);
+        this._gui.addSlider("", this._postProcessingSettings, "_chromaAberrationLength", 0.0, 0.25, "CHA Length", this.onDebugUIChanged);
+        this._gui.addSlider("", this._postProcessingSettings, "_vignetteOffset", 0.0, 1.0, "Vignette Offset", this.onDebugUIChanged);
+        this._gui.addSlider("", this._postProcessingSettings, "_vignetteDarkness", 0.0, 1.0, "Vignette Darkness", this.onDebugUIChanged);
+
+        this._gui.addCheckbox("", this._postProcessingSettings, "_chromaAberrationRedOut", "Red Out", this.onDebugUIChanged);
+    
+        this._gui.addSlider("", this._sceneConfig, "_ambientIntensity", 0.0, 3.0, "Ambient", this.onDebugUIChanged);
+        this._gui.addSlider("", this._sceneConfig, "_directionalIntensity", 0.0, 10.0, "Directional", this.onDebugUIChanged);
+
+        this._gui.addColorPicker("", this._sceneConfig, "_lightColor", "LightColor", (value: any) => { this._sceneConfig._lightColor.setStyle(value); this.onDebugUIChanged(); });
+        // this._gui.addColorPicker("", this._sceneConfig, "_backgroundColor", "BG Color", (value: any) => { this._sceneConfig._backgroundColor.setStyle(value); this.onDebugUIChanged(); });
+
+        this._gui.addSlider("", this._sceneConfig, "_minZoom", 0.0, 3.0, "MinZoom", this.onDebugUIChanged);
+        this._gui.addSlider("", this._sceneConfig, "_maxZoom", 0.0, 10.0, "MaxZoom", this.onDebugUIChanged);
+    }
+
+    private onDebugUIChanged()
+    {
+        this._cameraManager.applyPostProcessing(this._postProcessingSettings);
+        this._cameraManager.applySceneConfig(this._sceneConfig);
     }
 
     public activateView(modelName: string, targetProgressBar: HTMLDivElement)
@@ -59,10 +105,21 @@ export class ThreeModelView
 
         this._cameraManager.applySceneConfig(config.sceneConfig);
         this._cameraManager.applyPostProcessing(config.postProcessing);
-        this._ambientLight.intensity = config.sceneConfig._ambientIntensity;
-        this._ambientLight.color.setStyle(config.sceneConfig._lightColor);
-        this._directionalLight.intensity = config.sceneConfig._directionalIntensity;
-        this._directionalLight.color.setStyle(config.sceneConfig._lightColor);
+
+        this._postProcessingSettings._bloomRadius = config.postProcessing._bloomRadius;
+        this._postProcessingSettings._bloomStrength = config.postProcessing._bloomStrength;
+        this._postProcessingSettings._bloomThreshold = config.postProcessing._bloomThreshold;
+        this._postProcessingSettings._chromaAberrationLength = config.postProcessing._chromaAberrationLength;
+        this._postProcessingSettings._chromaAberrationRedOut = config.postProcessing._chromaAberrationRedOut;
+        this._postProcessingSettings._vignetteDarkness = config.postProcessing._vignetteDarkness;
+        this._postProcessingSettings._vignetteOffset = config.postProcessing._vignetteOffset;
+        
+        this._sceneConfig._ambientIntensity = config.sceneConfig._ambientIntensity;
+        this._sceneConfig._backgroundColor = config.sceneConfig._backgroundColor;
+        this._sceneConfig._directionalIntensity = config.sceneConfig._directionalIntensity;
+        this._sceneConfig._lightColor = config.sceneConfig._lightColor;
+        this._sceneConfig._minZoom = config.sceneConfig._minZoom;
+        this._sceneConfig._maxZoom = config.sceneConfig._maxZoom;
 
         this._cameraManager.resetCamera();
         this._objectLoader.loadModel(config.path, this.onModelLoaded, this.onModelProgress);

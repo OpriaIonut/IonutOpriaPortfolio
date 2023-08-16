@@ -10,8 +10,10 @@
     "analyze": "webpack --config ./src/webpack/webpack.analyze.js"
   },
   "devDependencies": {
+    "@types/dat.gui": "^0.7.10",
     "@types/three": "^0.155.0",
     "chart.js": "^4.3.3",
+    "dat.gui": "^0.7.9",
     "http-server": "^14.1.1",
     "three": "^0.155.0",
     "ts-loader": "^9.4.2",

@@ -1,4 +1,4 @@
-import { AnimationClip, Object3D } from "three"
+import { AnimationClip, Color, Object3D } from "three"
 
 export declare type ChartColorTheme = 
 {
@@ -40,17 +40,13 @@ export declare type CellGalleryConfig =
 
 export declare type ThreeSceneConfig =
 {
-    _backgroundColor: string,
+    _backgroundColor: Color,
     _minZoom: number,
     _maxZoom: number,
-    _applyBloom: boolean,
-    _bloomIntensity: number,
-    _applyVignette: boolean,
-    _vignetteIntensity: number,
     _litLighting: boolean,
     _ambientIntensity: number,
     _directionalIntensity: number,
-    _lightColor: string
+    _lightColor: Color
 }
 
 export declare type PostProcessingConfig =
@@ -61,7 +57,6 @@ export declare type PostProcessingConfig =
     _vignetteOffset: number,
     _vignetteDarkness: number,
     _chromaAberrationLength: number,
-    _chromaAberrationBlur: number,
     _chromaAberrationRedOut: boolean
 }
 

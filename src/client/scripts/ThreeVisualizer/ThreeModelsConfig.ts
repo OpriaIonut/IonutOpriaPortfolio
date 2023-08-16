@@ -1,45 +1,113 @@
-import { Vector3 } from "three";
+import { Color, Vector3 } from "three";
 import { PostProcessingConfig, ThreeSceneConfig } from "../../types";
 
 const litSceneConfig: ThreeSceneConfig =
 {
-    _backgroundColor: "#555555",
-    _minZoom: 0.1,
+    _backgroundColor: new Color(0xffffff),
+    _minZoom: 1.0,
     _maxZoom: 10,
-    _applyBloom: false,
-    _bloomIntensity: 0.1,
-    _applyVignette: true,
-    _vignetteIntensity: 0.3,
-    _litLighting: false,
-    _ambientIntensity: 1.0,
+    _litLighting: true,
+    _ambientIntensity: 0.5,
     _directionalIntensity: 5.0,
-    _lightColor: "#ffffff"
+    _lightColor: new Color(0xffffff)
 }
 const emissiveSceneConfig: ThreeSceneConfig =
 {
-    _backgroundColor: "#555555",
-    _minZoom: 0.1,
+    _backgroundColor: new Color(0xffffff),
+    _minZoom: 1.0,
     _maxZoom: 10,
-    _applyBloom: false,
-    _bloomIntensity: 0.1,
-    _applyVignette: true,
-    _vignetteIntensity: 0.3,
     _litLighting: false,
     _ambientIntensity: 0,
     _directionalIntensity: 0,
-    _lightColor: "#ffffff"
+    _lightColor: new Color(0xffffff)
+}
+
+const enriSceneConfig: ThreeSceneConfig =
+{
+    _backgroundColor: new Color(0xffffff),
+    _minZoom: 1.0,
+    _maxZoom: 10,
+    _litLighting: true,
+    _ambientIntensity: 1.5,
+    _directionalIntensity: 5.0,
+    _lightColor: new Color(0xffffff)
 }
 
 const zoroPostProccessing: PostProcessingConfig =
 {
-    _bloomThreshold: 0.0,
-    _bloomStrength: 0.0,
-    _bloomRadius: 0.0,
-    _vignetteOffset: 0.0,
-    _vignetteDarkness: 0.0,
-    _chromaAberrationRedOut: false,
+    _bloomRadius: 0.8,
+    _bloomStrength: 0.25,
+    _bloomThreshold: 0.5,
+    _chromaAberrationLength: 0.05,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
+}
+
+const oniGurlPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.8,
+    _bloomStrength: 0.25,
+    _bloomThreshold: 0.9,
     _chromaAberrationLength: 0.0,
-    _chromaAberrationBlur: 0.0
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
+}
+
+const enriPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.5,
+    _bloomStrength: 0.25,
+    _bloomThreshold: 1.0,
+    _chromaAberrationLength: 0.0,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
+}
+
+const mechSpiderPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.8,
+    _bloomStrength: 0.5,
+    _bloomThreshold: 0.75,
+    _chromaAberrationLength: 0.05,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: false,
+}
+
+const godEaterPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.5,
+    _bloomStrength: 0.35,
+    _bloomThreshold: 0.75,
+    _chromaAberrationLength: 0.0,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
+}
+
+const anchorPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.8,
+    _bloomStrength: 0.25,
+    _bloomThreshold: 0.5,
+    _chromaAberrationLength: 0.05,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
+}
+
+const fantasyBowPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.5,
+    _bloomStrength: 0.35,
+    _bloomThreshold: 0.75,
+    _chromaAberrationLength: 0.0,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true
 }
 
 export const ThreeModelConfig: any =
@@ -59,8 +127,8 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3( -0.77, 2.11, 4.15), 
         sceneConfig: emissiveSceneConfig,
-        postProcessing: zoroPostProccessing,
-        totalBytes: 5272396
+        postProcessing: oniGurlPost,
+        totalBytes: 7930156
     },
     OniGurl: { 
         path: "models/OniGurl.glb", 
@@ -68,16 +136,16 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3(-1.096256754139416, 2.24, 3.96), 
         sceneConfig: emissiveSceneConfig,
-        postProcessing: zoroPostProccessing,
-        totalBytes: 3332564
+        postProcessing: oniGurlPost,
+        totalBytes: 4823340
     },
     Enri: { 
         path: "models/Enri.glb", 
         anim: [], 
         scale: 1.0, 
         cameraPos: new Vector3(-0.84, 2.40, 4.09), 
-        sceneConfig: litSceneConfig,
-        postProcessing: zoroPostProccessing,
+        sceneConfig: enriSceneConfig,
+        postProcessing: enriPost,
         totalBytes: 5024536
     },
     MechSpider: { 
@@ -86,8 +154,8 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3(-0.28, 2.40, 8.45), 
         sceneConfig: litSceneConfig,
-        postProcessing: zoroPostProccessing,
-        totalBytes: 3885892
+        postProcessing: mechSpiderPost,
+        totalBytes: 3868788
     },
     GodEater: { 
         path: "models/GodEaterChainsaw.glb", 
@@ -95,7 +163,7 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3(-2.08, -0.70, 1.83), 
         sceneConfig: litSceneConfig,
-        postProcessing: zoroPostProccessing,
+        postProcessing: godEaterPost,
         totalBytes: 7452644
     },
     AnchorSword: { 
@@ -104,7 +172,7 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3(0, 0, 7), 
         sceneConfig: litSceneConfig,
-        postProcessing: zoroPostProccessing,
+        postProcessing: anchorPost,
         totalBytes: 3713600
     },
     FantasyBow: { 
@@ -113,7 +181,9 @@ export const ThreeModelConfig: any =
         scale: 1.0, 
         cameraPos: new Vector3(0, 0, 10), 
         sceneConfig: litSceneConfig,
-        postProcessing: zoroPostProccessing,
+        postProcessing: fantasyBowPost,
         totalBytes: 603952
     }
 };
+
+export const OutlineMeshes = ["MechaGirl", "OniGurl"];
