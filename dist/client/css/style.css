@@ -192,3 +192,58 @@ body{
     height: 3%;
     background-color: rgb(74, 255, 171);
 }
+
+#threeViewSettingsParent
+{
+    position: absolute;
+    right: -1vw;
+    top: 0px;
+    height: 100%;
+    width: 20%;
+    background-color: #1e1e1edd;
+}
+
+.threeViewTrisCounter
+{
+    position: relative;
+    margin: 7px;
+    margin-bottom: 15px;
+}
+
+.buttonsWithSelectionParent
+{
+    width: 100%;
+    height: auto;
+}
+
+.buttonsWithSelection
+{
+    background-color: #121212dd;
+    padding: 8px;
+    margin: 7px;
+}
+
+.buttonsWithSelectionSelected
+{
+    background-color: #33c0c5dd;
+    padding: 8px;
+    margin: 7px;
+}
+
+.closeBtn
+{
+    position: absolute;
+    top: 0px;
+    right: -1vw;
+    background-color: brown;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.buttonsWithSelectionTitle
+{
+    margin: 7px;
+    font-size: 20px;
+    border-bottom: 2px solid #fff;
+}

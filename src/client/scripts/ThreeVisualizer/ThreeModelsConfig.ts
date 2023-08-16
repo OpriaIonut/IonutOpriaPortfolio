@@ -151,7 +151,7 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(-1.096256754139416, 2.24, 3.96), 
         sceneConfig: emissiveSceneConfig,
         postProcessing: oniGurlPost,
-        totalBytes: 4823340
+        totalBytes: 4903116
     },
     Enri: { 
         path: "models/Enri.glb", 

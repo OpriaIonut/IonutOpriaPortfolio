@@ -5,6 +5,7 @@ import { ObjectLoader } from "./ObjectLoader";
 import { Asset3D, PostProcessingConfig, ThreeSceneConfig } from "../../types";
 import { DebugUI } from "./DebugGUI";
 import { threeDebugGUI } from "../../client";
+import { ButtonsWithSelection } from "../Helper/ButtonsWithSelection";
 
 export class ThreeModelView
 {
@@ -12,9 +13,15 @@ export class ThreeModelView
     private _cameraManager: CameraManager;
     private _objectLoader: ObjectLoader;
 
+    private _animMixer?: THREE.AnimationMixer;
     private _currentModel?: THREE.Object3D;
+    private _currentAnimations: Map<string, THREE.AnimationAction> = new Map();
     private _currentModelName: string = "";
     private _currentProgressBar?: HTMLDivElement;
+    private _previousAnim: string = "";
+
+    private _trisCounter!: HTMLDivElement;
+    private _poseSettings!: ButtonsWithSelection;
 
     private _gui!: DebugUI;
 
@@ -64,6 +71,7 @@ export class ThreeModelView
         this.onModelLoaded = this.onModelLoaded.bind(this);
         this.onModelProgress = this.onModelProgress.bind(this);
 
+        this.createSettingsPanel(viewPanel);
         if(threeDebugGUI)
             this.createDebugUI();
     }
@@ -94,6 +102,64 @@ export class ThreeModelView
         let lutNames = Object.keys(lutMap);
         this._gui.addDropdown("", this._debugPostSettings, "_lutName", lutNames, "Lut", this.onDebugUIChanged);
         this._gui.addSlider("", this._debugPostSettings, "_lutIntensity", 0.0, 1.0, "Lut Intensity", this.onDebugUIChanged);
+    }
+
+    private createSettingsPanel(parentNode: HTMLElement)
+    {
+        this.onPoseChanged = this.onPoseChanged.bind(this);
+        this.onModelSettingChanged = this.onModelSettingChanged.bind(this);
+
+        let settingsParent = document.createElement("div");
+        settingsParent.id = "threeViewSettingsParent";
+        parentNode.appendChild(settingsParent);
+
+        //Tris + poly count
+        this._trisCounter = document.createElement("div");
+        this._trisCounter.className = "threeViewTrisCounter";
+        settingsParent.appendChild(this._trisCounter);
+
+        //To do: Light rotation
+
+        this._poseSettings = new ButtonsWithSelection(settingsParent, "Mesh Poses", this.onPoseChanged);
+
+        let meshSettings = new ButtonsWithSelection(settingsParent, "Mesh Rendering", this.onModelSettingChanged);
+        meshSettings.init(["Final Render", "No Post-Processing", "Base Color", "Base Color + Wireframe", "Wireframe", "Normal Map", "Matcap", "UV Checker"], 0);
+
+        //Close button
+        let closeBtn = document.createElement("div");
+        closeBtn.className = "closeBtn";
+        closeBtn.innerHTML = "X";
+        parentNode.appendChild(closeBtn);
+
+        closeBtn.onclick = () => {
+            this.hideView();
+        }
+        closeBtn.addEventListener('mouseenter', () => {
+            closeBtn.style.cursor = 'pointer';
+        });
+        closeBtn.addEventListener('mouseleave', () => {
+            closeBtn.style.cursor = 'default';
+        });
+    }
+
+    private onModelSettingChanged(settingName: string)
+    {
+
+    }
+
+    private onPoseChanged(poseName: string)
+    {
+        if(this._previousAnim != "")
+        {
+            let prevAction = this._currentAnimations.get(this._previousAnim);
+            if(prevAction !== undefined)
+                prevAction.fadeOut(3.0).stop();
+        }
+
+        let action = this._currentAnimations.get(poseName);
+        if(action !== undefined)
+            action.fadeIn(3.0).play();
+        this._previousAnim = poseName;
     }
 
     private onDebugUIChanged()
@@ -147,6 +213,8 @@ export class ThreeModelView
         if(this._panel.style.display == "block")
         {
             this._cameraManager.update(deltaTime);
+            if(this._animMixer !== undefined)
+                this._animMixer.update(deltaTime);
         }
     }
 
@@ -165,6 +233,9 @@ export class ThreeModelView
         bbox.getCenter(center);
         this._cameraManager.controls.target = center;
         this._cameraManager.camera.position.copy(ThreeModelConfig[this._currentModelName].cameraPos);
+
+        this.findModelAnimations(asset);
+        this.findModelStatistics();
     }
 
     private onModelProgress(bytesLoaded: number)
@@ -174,5 +245,68 @@ export class ThreeModelView
 
         if(this._currentProgressBar !== undefined)
             this._currentProgressBar.style.width = `${progress * 100}%`;
+    }
+
+    private findModelAnimations(asset: Asset3D)
+    {
+        this._poseSettings.clear();
+        this._currentAnimations.clear();
+        this._animMixer = undefined;
+        this._previousAnim = "";
+        let animNames = [];
+
+        for(let index = 0; index < asset.animations.length; ++index)
+        {
+            animNames.push(asset.animations[index].name);
+        }
+        if(animNames.length > 1)
+        {
+            this._animMixer = new THREE.AnimationMixer(this._currentModel!);
+
+            this._poseSettings.init(animNames, 0);
+            for(let index = 0; index < animNames.length; ++index)
+            {
+                let animAction = this._animMixer.clipAction(asset.animations[index]);
+                this._currentAnimations.set(animNames[index], animAction);
+            }
+            this.onPoseChanged(animNames[0]);
+        }
+    }
+
+    private findModelStatistics()
+    {
+        let vertices = 0;
+        let triangles = 0;
+        this._currentModel!.traverseVisible((object) => {
+            if ( object instanceof THREE.Mesh || object instanceof THREE.SkinnedMesh ) 
+            {
+                const geometry = object.geometry;
+                vertices += geometry.attributes.position.count;
+                if ( geometry.index !== null )
+                    triangles += geometry.index.count / 3;
+                else
+                    triangles += geometry.attributes.position.count / 3;
+            }
+        });
+        this._trisCounter.innerHTML = `Vertices: ${this.prettyPrintNumber(vertices)}<br>Triangles: ${this.prettyPrintNumber(triangles)}`;
+    }
+
+    private prettyPrintNumber(value: number)
+    {
+        let val = Math.floor(value);
+
+        let unit = "";
+        if(val > 1000)
+        {
+            unit = " K";
+            val /= 1000;
+        }
+        if(val > 1000)
+        {
+            unit = " M";
+            val /= 1000;
+        }
+        let result = parseFloat(val.toFixed(2)) + unit;
+        return result;
     }
 }
