@@ -13,6 +13,7 @@ export class ThreeModelView
 
     private _currentModel?: THREE.Object3D;
     private _currentModelName: string = "";
+    private _currentProgressBar?: HTMLDivElement;
 
     private _ambientLight: THREE.AmbientLight;
     private _directionalLight: THREE.DirectionalLight;
@@ -38,7 +39,9 @@ export class ThreeModelView
 
         this._cameraManager = new CameraManager(canvasElem);
         this._objectLoader = new ObjectLoader();
+
         this.onModelLoaded = this.onModelLoaded.bind(this);
+        this.onModelProgress = this.onModelProgress.bind(this);
 
         this._ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
         this._directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -48,20 +51,21 @@ export class ThreeModelView
         this._cameraManager.scene.add(this._directionalLight);
     }
 
-    public activateView(modelName: string)
+    public activateView(modelName: string, targetProgressBar: HTMLDivElement)
     {
-        this._panel.style.display = "block";
         let config = ThreeModelConfig[modelName];
         this._currentModelName = modelName;
+        this._currentProgressBar = targetProgressBar;
 
         this._cameraManager.applySceneConfig(config.sceneConfig);
+        this._cameraManager.applyPostProcessing(config.postProcessing);
         this._ambientLight.intensity = config.sceneConfig._ambientIntensity;
         this._ambientLight.color.setStyle(config.sceneConfig._lightColor);
         this._directionalLight.intensity = config.sceneConfig._directionalIntensity;
         this._directionalLight.color.setStyle(config.sceneConfig._lightColor);
 
         this._cameraManager.resetCamera();
-        this._objectLoader.loadModel(config.path, this.onModelLoaded);
+        this._objectLoader.loadModel(config.path, this.onModelLoaded, this.onModelProgress);
     }
 
     public hideView()
@@ -74,17 +78,17 @@ export class ThreeModelView
         }
     }
 
-    
     public update(deltaTime: number)
     {
         if(this._panel.style.display == "block")
         {
-            this._cameraManager.update();
+            this._cameraManager.update(deltaTime);
         }
     }
 
     private onModelLoaded(asset: Asset3D)
     {
+        this._panel.style.display = "block";
         this._currentModel = asset.model;
         let scale = ThreeModelConfig[this._currentModelName].scale;
         this._currentModel.scale.set(scale, scale, scale);
@@ -97,5 +101,14 @@ export class ThreeModelView
         bbox.getCenter(center);
         this._cameraManager.controls.target = center;
         this._cameraManager.camera.position.copy(ThreeModelConfig[this._currentModelName].cameraPos);
+    }
+
+    private onModelProgress(bytesLoaded: number)
+    {
+        let totalBytes = ThreeModelConfig[this._currentModelName].totalBytes;
+        let progress = bytesLoaded / totalBytes;
+
+        if(this._currentProgressBar !== undefined)
+            this._currentProgressBar.style.width = `${progress * 100}%`;
     }
 }

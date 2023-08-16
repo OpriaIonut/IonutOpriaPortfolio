@@ -182,3 +182,13 @@ body{
     height: 90%;
     transform: translateX(-50%) translateY(-50%);
 }
+
+.cellWithPreviewProgressBar
+{
+    position: relative;
+    bottom: 4.5%;
+    left: 0px;
+    width: 0px;
+    height: 3%;
+    background-color: rgb(74, 255, 171);
+}

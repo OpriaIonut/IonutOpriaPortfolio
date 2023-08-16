@@ -1,10 +1,13 @@
-import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color } from "three";
+import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color, Vector2, TextureLoader } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
+import { VignetteShader } from "three/examples/jsm/shaders/VignetteShader";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { ThreeSceneConfig } from "../../types";
+import { PostProcessingConfig, ThreeSceneConfig } from "../../types";
+import { ChromaticAberrationsShader } from "./ChromaticAberrationsShader";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
@@ -20,6 +23,9 @@ export class CameraManager
     private _effectComposer: EffectComposer | undefined;
     private _renderPass: RenderPass | undefined;
     private _fxaaPass: ShaderPass | undefined;
+    private _bloomPass: UnrealBloomPass | undefined;
+    private _chromaticAberrationsPass: ShaderPass | undefined;
+    private _vignettePass: ShaderPass | undefined;
 
     private _cameraForward: Vector3 = new Vector3();
     private _cameraRight:  Vector3 = new Vector3();
@@ -49,13 +55,27 @@ export class CameraManager
         this._renderer.toneMapping = NoToneMapping;
         
         this._scene = new Scene();
+        new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
+            this._scene.background = texture;
+        });
 
         let aspect = window.innerWidth / window.innerHeight;
         this._camera = new PerspectiveCamera(40, aspect, 1, 100);
 
         this._effectComposer = new EffectComposer(this._renderer);
+        
         this._renderPass = new RenderPass(this._scene, this._camera);
+        this._fxaaPass = new ShaderPass(FXAAShader);
+        // this._bloomPass = new UnrealBloomPass(new Vector2(), 1.0, 1.0, 0.2);
+        this._bloomPass = new UnrealBloomPass(new Vector2(), 0, 0, 1.0);
+        this._chromaticAberrationsPass = new ShaderPass(ChromaticAberrationsShader);
+        this._vignettePass = new ShaderPass(VignetteShader);
+
         this._effectComposer.addPass(this._renderPass);
+        this._effectComposer.addPass(this._fxaaPass);
+        this._effectComposer.addPass(this._bloomPass);
+        this._effectComposer.addPass(this._chromaticAberrationsPass);
+        this._effectComposer.addPass(this._vignettePass);
 
         this._controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -75,19 +95,33 @@ export class CameraManager
         this._controls!.target.set(0, 0, 0);
     }
 
-    public update()
+    public update(deltaTime: number)
     {
         this.refreshCameraVectors();
         this._controls?.update();
-        // this._effectComposer?.render(gameApp.deltaTime);
-        this._renderer?.render(this._scene, this._camera as Camera);
+        this._effectComposer?.render(deltaTime);
+        // this._renderer?.render(this._scene, this._camera as Camera);
     }
 
     public applySceneConfig(config: ThreeSceneConfig)
     {
-        this._scene.background = new Color(config._backgroundColor);
+        //this._scene.background = new Color(config._backgroundColor);
         this._controls!.minDistance = config._minZoom;
         this._controls!.maxDistance = config._maxZoom;
+    }
+
+    public applyPostProcessing(config: PostProcessingConfig)
+    {
+        this._bloomPass!.strength = config._bloomStrength;
+        this._bloomPass!.threshold = config._bloomThreshold;
+        this._bloomPass!.radius = config._bloomRadius;
+
+        this._vignettePass!.uniforms.offset.value = config._vignetteOffset;
+        this._vignettePass!.uniforms.darkness.value = config._vignetteDarkness;
+
+        this._chromaticAberrationsPass!.uniforms.u_rgbSplitLength.value = config._chromaAberrationLength;
+        this._chromaticAberrationsPass!.uniforms.u_rgbSplitBlurSize.value = config._chromaAberrationBlur;
+        this._chromaticAberrationsPass!.uniforms.u_redChannelOut.value = config._chromaAberrationRedOut;
     }
 
     public onResize()
@@ -108,6 +142,10 @@ export class CameraManager
         {
             this._fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( width * window.devicePixelRatio );
             this._fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( height * window.devicePixelRatio );
+        }
+        if(this._bloomPass !== undefined)
+        {
+            this._bloomPass.resolution.set(width, height);
         }
     }
 

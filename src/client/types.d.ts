@@ -53,6 +53,18 @@ export declare type ThreeSceneConfig =
     _lightColor: string
 }
 
+export declare type PostProcessingConfig =
+{
+    _bloomStrength: number,
+    _bloomRadius: number,
+    _bloomThreshold: number,
+    _vignetteOffset: number,
+    _vignetteDarkness: number,
+    _chromaAberrationLength: number,
+    _chromaAberrationBlur: number,
+    _chromaAberrationRedOut: boolean
+}
+
 export declare type Asset3D =
 {
     model: Object3D,

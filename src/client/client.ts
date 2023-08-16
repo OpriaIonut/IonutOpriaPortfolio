@@ -25,7 +25,7 @@ function gameLoop(timestamp: number)
     requestAnimationFrame(gameLoop);
 
     let frameTime = timestamp;
-    let deltaTime = frameTime - previousFrameTime;
+    let deltaTime = (frameTime - previousFrameTime) * 0.01;
     previousFrameTime = frameTime;
 
     threeModelView.update(deltaTime);

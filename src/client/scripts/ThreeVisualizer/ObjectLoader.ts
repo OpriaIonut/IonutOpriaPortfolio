@@ -1,5 +1,6 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Asset3D } from "../../types";
+import { LoadingManager } from "three";
 
 export class ObjectLoader
 {
@@ -8,10 +9,11 @@ export class ObjectLoader
 
     constructor()
     {
-        this._glbLoader = new GLTFLoader();
+        const loadingManager = new LoadingManager();
+        this._glbLoader = new GLTFLoader(loadingManager);
     }
 
-    public loadModel(path: string, callback: (model: Asset3D) => void)
+    public loadModel(path: string, callback: (model: Asset3D) => void, onProgress: (bytesLoaded: number) => void)
     {
         if(this._pool.has(path))
             callback(this._pool.get(path) as Asset3D);
@@ -24,6 +26,8 @@ export class ObjectLoader
                 };
                 this._pool.set(path, asset);
                 callback(asset);
+            }, (progress: any) => {
+                onProgress(progress.loaded);
             });
         }
     }

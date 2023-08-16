@@ -15,6 +15,10 @@ export class CellWithPreview
         img.src = imagePath;
         cellParent.appendChild(img);
 
+        let progressBar = document.createElement("div");
+        progressBar.className = "cellWithPreviewProgressBar";
+        cellParent.appendChild(progressBar);
+
         cellParent.addEventListener('mouseenter', () => {
             cellParent.style.cursor = 'pointer';
         });
@@ -24,7 +28,7 @@ export class CellWithPreview
         });
 
         cellParent.onclick = () => {
-            threeModelView.activateView(modelName);
+            threeModelView.activateView(modelName, progressBar);
         };
     }
 }
