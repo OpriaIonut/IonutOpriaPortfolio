@@ -67,6 +67,7 @@ export class GameProjectsPanel
         let moreGamesBtn = document.createElement("button");
         moreGamesBtn.className = "middleCenterBtn";
         moreGamesBtn.innerHTML = "More Games";
+        moreGamesBtn.onclick = () => { window.open('https://kirirato.itch.io', '_blank'); };
         parentNode.appendChild(moreGamesBtn);
     }
 }

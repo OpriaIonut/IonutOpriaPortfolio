@@ -47,7 +47,10 @@ export declare type ThreeSceneConfig =
     _bloomIntensity: number,
     _applyVignette: boolean,
     _vignetteIntensity: number,
-    _litLighting: boolean
+    _litLighting: boolean,
+    _ambientIntensity: number,
+    _directionalIntensity: number,
+    _lightColor: string
 }
 
 export declare type Asset3D =

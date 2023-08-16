@@ -52,8 +52,6 @@ export class CameraManager
 
         let aspect = window.innerWidth / window.innerHeight;
         this._camera = new PerspectiveCamera(40, aspect, 1, 100);
-        this._camera.position.set(0, 0, 10);
-        this._camera.lookAt(0, 0, 0);
 
         this._effectComposer = new EffectComposer(this._renderer);
         this._renderPass = new RenderPass(this._scene, this._camera);
@@ -64,10 +62,19 @@ export class CameraManager
         this.onResize = this.onResize.bind(this);
         window.addEventListener('resize', this.onResize, false);
         this.onResize();
+        this.resetCamera();
 
         this.refreshCameraVectors();
     }
     
+    public resetCamera()
+    {
+        this._camera!.position.set(0, 0, 10);
+        this._camera!.lookAt(0, 0, 0);
+        this._controls!.position0.set(0, 0, 10);
+        this._controls!.target.set(0, 0, 0);
+    }
+
     public update()
     {
         this.refreshCameraVectors();
