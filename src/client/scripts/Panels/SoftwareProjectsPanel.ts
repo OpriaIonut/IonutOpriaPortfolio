@@ -20,8 +20,8 @@ export class SoftwareProjectsPanel
             _id: "japoTimeAppCell",
             _title: "Japo Time",
             _description: ``,
-            _tags: ["Java", "Android Studio", "Language Learning", "AWS storage", "Statistics"],
-            _tagColors: ["#6d1aa1", "#6d1aa1", "#1a59a1", "#a11a1a", "#146913"],
+            _tags: ["Java", "Android Studio", "Language Learning", "AWS storage"],
+            _tagColors: ["#6d1aa1", "#6d1aa1", "#1a59a1", "#a11a1a"],
             _moreDetailsPage: "",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 6,
@@ -41,13 +41,13 @@ export class SoftwareProjectsPanel
         });
 
         new MultiCellWithGallery(parentNode, cellsPerWidth, {
-            _id: "mvvmAppsCell",
-            _title: "MVVM Apps",
+            _id: "hangmanCell",
+            _title: "Hangman",
             _description: ``,
-            _tags: ["C#"],
-            _tagColors: ["#6d1aa1"],
+            _tags: ["C#", "MVVM", "Local Storage"],
+            _tagColors: ["#6d1aa1", "#6d1aa1", "#6d1aa1"],
             _moreDetailsPage: "",
-            _imagesPath: "images/gallery/planetquest/",
+            _imagesPath: "images/gallery/hangman/",
             _imageCount: 6,
             _imageDurationMs: 2000
         });

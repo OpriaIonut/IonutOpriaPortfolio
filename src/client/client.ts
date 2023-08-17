@@ -1,5 +1,6 @@
 import { AboutMePanel } from "./scripts/Panels/AbotMePanel";
 import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
+import { EndingPanel } from "./scripts/Panels/EndingPanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
 import { HomePanel } from "./scripts/Panels/HomePanel";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
@@ -18,6 +19,7 @@ const workProjectsPanel = new WorkProjectsPanel();
 const gameProjectsPanel = new GameProjectsPanel();
 const softwareProjectsPanel = new SoftwareProjectsPanel();
 const artProjectsPanel = new ArtProjectsPanel();
+const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
 
