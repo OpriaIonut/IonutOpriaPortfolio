@@ -168,7 +168,7 @@ export class CameraManager
 
     public onResize()
     {
-        let width = window.innerWidth * 0.9;
+        let width = window.innerWidth * 0.89;
         let height = window.innerHeight * 0.9;
 
         this._renderer?.setSize(width, height);

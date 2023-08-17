@@ -292,6 +292,22 @@ export class ThreeModelView
         closeBtn.addEventListener('mouseleave', () => {
             closeBtn.style.cursor = 'default';
         });
+
+        //Dowload btutton
+        let btnElem = document.createElement("div");
+        btnElem.id = "modelDownloadBtn";
+        btnElem.innerHTML = "Download";
+        settingsParent.appendChild(btnElem);
+
+        btnElem.onclick = () => {
+            this.downloadModel();
+        }
+        btnElem.addEventListener('mouseenter', () => {
+            btnElem.style.cursor = 'pointer';
+        });
+        btnElem.addEventListener('mouseleave', () => {
+            btnElem.style.cursor = 'default';
+        });
     }
 
     private onModelSettingChanged(settingName: string)
@@ -386,5 +402,15 @@ export class ThreeModelView
     {
         this._cameraManager.applyPostProcessing(this._debugPostSettings);
         this._cameraManager.applySceneConfig(this._debugSceneConfig);
+    }
+
+    private downloadModel() 
+    {
+        const link = document.createElement('a');
+        link.href = ThreeModelConfig[this._currentModelName].path;
+        link.download = this._currentModelName + ".glb";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }
