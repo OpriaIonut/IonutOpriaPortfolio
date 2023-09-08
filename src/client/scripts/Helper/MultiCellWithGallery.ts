@@ -43,7 +43,7 @@ export class MultiCellWithGallery
         description.innerHTML = config._description;
         downPanel.appendChild(description);
 
-        this._gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs);
+        this._gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs, config._imgExtension);
 
         let moreDetails = document.createElement("button");
         moreDetails.innerHTML = "More Details";

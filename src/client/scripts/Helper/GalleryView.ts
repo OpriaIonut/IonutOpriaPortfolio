@@ -15,7 +15,7 @@ export class GalleryView
     private _currentDuration: number = 10000;
     private _startTime: number = 0;
 
-    constructor(parentNode: HTMLElement, id: string, imagesPath: string, imageCount: number, videoFormatIndices: number[], durationMs: number)
+    constructor(parentNode: HTMLElement, id: string, imagesPath: string, imageCount: number, videoFormatIndices: number[], durationMs: number, imgExtension?: string)
     {
         this.onInputClicked = this.onInputClicked.bind(this);
         this._imageDuration = durationMs;
@@ -80,7 +80,7 @@ export class GalleryView
             {
                 let img = document.createElement("img");
                 img.className = "galleryVisualItem";
-                img.src = imagesPath + index.toString() + ".jpg";
+                img.src = imagesPath + index.toString() + "." + (imgExtension === undefined ? "jpg" : imgExtension);
 
                 slide.appendChild(img);
                 this._actualItems.push(img);
@@ -162,7 +162,7 @@ export class GalleryView
 
     private checkAspectRatio()
     {
-        let applyRatio = true;
+        let applyRatio = false;
         for(let index = 0; index < this._actualItems.length; ++index)
         {
             let currentAspectRatio = this._actualItems[index].clientWidth / this._actualItems[index].clientHeight;

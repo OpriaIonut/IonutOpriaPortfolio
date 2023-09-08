@@ -55,3 +55,11 @@ input[name="r"]
 {
     width: 100%;
 }
+
+.cellButton
+{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 20px;
+}

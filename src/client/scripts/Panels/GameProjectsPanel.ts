@@ -62,14 +62,21 @@ export class GameProjectsPanel
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "legeithielUnaelianCell",
             _title: "Legeithiel Unaelian",
-            _description: ``,
-            _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard"],
-            _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#a11a1a"],
-            _moreDetailsPage: "",
-            _imagesPath: "images/gallery/planetquest-test/",
-            _imageCount: 6,
-            _videoFormatIndices: [],
-            _imageDurationMs: 5000
+            _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br>
+                It contains the following:<br>
+                - 3 playable levels<br>
+                - 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
+                - Pause menu from which you can tweak sound settings<br>
+                - Leaderboard system stored locally<br>
+                - Controller support`,
+            _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
+            _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#a11a1a", "#a11a1a"],
+            _moreDetailsPage: "https://kirirato.itch.io/legeithiel-unaelian",
+            _imagesPath: "images/gallery/legeithiel-unaelian/",
+            _imageCount: 5,
+            _videoFormatIndices: [0],
+            _imageDurationMs: 5000,
+            _imgExtension: "png"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
