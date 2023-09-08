@@ -12,7 +12,7 @@ export class GalleryView
     private _galleryParent: HTMLDivElement;
 
     private _imageDuration: number = 0;
-    private _currentDuration: number = 0;
+    private _currentDuration: number = 10000;
     private _startTime: number = 0;
 
     constructor(parentNode: HTMLElement, id: string, imagesPath: string, imageCount: number, videoFormatIndices: number[], durationMs: number)
@@ -34,10 +34,6 @@ export class GalleryView
         navigation.className = "galleryNavigation";
         this._galleryParent.appendChild(navigation);
 
-        var style = document.createElement('style');
-        style.type = 'text/css';
-
-        let cssRules = "";
         for(let index = 0; index < imageCount; ++index)
         {
             let input = document.createElement("input");
@@ -49,12 +45,8 @@ export class GalleryView
 
             input.onchange = this.onInputClicked;
             this._inputBoxes.push(input);
-            
-            // cssRules += `#gallery${id}R${index}:checked ~ .gallery${id}S0 { margin-left: -${100 / imageCount * index}%; }\n`;
             slidesParent.appendChild(input);
         }
-        style.textContent = cssRules;
-        document.head.appendChild(style);
 
         for(let index = 0; index < imageCount; ++index)
         {
@@ -71,17 +63,25 @@ export class GalleryView
             if(videoFormatIndices.includes(index))
             {
                 let video = document.createElement("video");
-                video.className = "fullres";
+                video.className = "galleryVisualItem";
                 video.src = imagesPath + index.toString() + ".mp4";
+                
                 slide.appendChild(video);
                 this._actualItems.push(video);
                 this._isImageItem.push(false);
+                if(index == 0)
+                {
+                    video.addEventListener("loadedmetadata", () => {
+                        this._currentDuration = video.duration * 1000 + 500;
+                    });
+                }
             }
             else
             {
                 let img = document.createElement("img");
-                img.className = "fullres";
+                img.className = "galleryVisualItem";
                 img.src = imagesPath + index.toString() + ".jpg";
+
                 slide.appendChild(img);
                 this._actualItems.push(img);
                 this._isImageItem.push(true);
@@ -92,7 +92,7 @@ export class GalleryView
             navLabel.htmlFor = "gallery" + id + "R" + index;
             if(index == 0)
                 navLabel.style.backgroundColor = "#999999";
-            
+
             navLabel.onmouseenter = (e) => { (e.target as HTMLElement).style.backgroundColor = "#fff"; };
             navLabel.onmouseleave = (e) => { 
                 let elem = e.target as HTMLLabelElement;
@@ -102,11 +102,13 @@ export class GalleryView
             navigation.appendChild(navLabel);
             this._navLabels.push(navLabel);
         }
+        //To do: check when all images/videos finish loading and then run this function
+        setTimeout(() => { this.checkAspectRatio(); }, 1000);
     }
 
     public update()
     {
-        if(timeStats.currentTime - this._startTime > this._currentDuration)
+        if(timeStats.currentTime > 3000 && timeStats.currentTime - this._startTime > this._currentDuration)
         {
             if(!this.isElementInViewport())
             {
@@ -120,6 +122,19 @@ export class GalleryView
                 this._currentSelectedIndex = 0;
 
             this.applyCurrentSelection();
+        }
+
+        if(!this._isImageItem[this._currentSelectedIndex])
+        {
+            let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
+            if(this.isElementInViewport() && vid.currentTime < vid.duration)
+            {
+                vid.play();
+                this._currentDuration = (vid.duration - vid.currentTime) * 1000 + 500;
+                this._startTime = timeStats.currentTime;
+            }
+            else
+                (this._actualItems[this._currentSelectedIndex] as HTMLVideoElement).pause();
         }
     }
 
@@ -143,6 +158,27 @@ export class GalleryView
         this._galleryItem.style.marginLeft = `-${100 / this._navLabels.length * this._currentSelectedIndex}%`;
         this._navLabels[this._currentSelectedIndex].style.backgroundColor = "#999999";
         this._startTime = timeStats.currentTime;
+    }
+
+    private checkAspectRatio()
+    {
+        let applyRatio = true;
+        for(let index = 0; index < this._actualItems.length; ++index)
+        {
+            let currentAspectRatio = this._actualItems[index].clientWidth / this._actualItems[index].clientHeight;
+            if(currentAspectRatio <= 17.0 / 9.0)
+            {
+                applyRatio = true;
+                break;
+            }
+        }
+        if(applyRatio)
+        {
+            for(let index = 0; index < this._actualItems.length; ++index)
+            {
+                this._actualItems[index].style.height = `${this._actualItems[index].clientWidth * 9.0 / 16.0}px`; 
+            }
+        }
     }
 
     private clearCurrentSelection()

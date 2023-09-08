@@ -48,6 +48,7 @@ export class MultiCellWithGallery
         let moreDetails = document.createElement("button");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton";
+        moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
         moreDetails.classList.add("multiCellWithGalleryMoreDetailsButton");
         downPanel.appendChild(moreDetails);
     }

@@ -1,5 +1,4 @@
 Weekend goal
--Add proper content for Serenity Garden
 -Add proper content for Chicken Invaders
 -Add proper content for Legeithiel Unaelian
 -Add proper content for Ori

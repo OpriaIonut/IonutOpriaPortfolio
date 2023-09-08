@@ -50,3 +50,8 @@ input[name="r"]
     transition: 0.6s;
     display: inline-block;
 }
+
+.galleryVisualItem
+{
+    width: 100%;
+}

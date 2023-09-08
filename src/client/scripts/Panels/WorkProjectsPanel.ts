@@ -29,7 +29,7 @@ export class WorkProjectsPanel
             - Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.`,
             _tags: ["WebGL", "Typescript", "C++", "Procedural", "GameDev"],
             _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#146913", "#853e13"],
-            _moreDetailsPage: "",
+            _moreDetailsPage: "https://planetquest.io",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
             _videoFormatIndices: [5, 6],
