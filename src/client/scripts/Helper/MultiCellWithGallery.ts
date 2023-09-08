@@ -3,6 +3,8 @@ import { GalleryView } from "./GalleryView";
 
 export class MultiCellWithGallery
 {
+    private _gallery: GalleryView;
+
     constructor(parentNode: HTMLElement, cellsPerWidth: number, config: CellGalleryConfig)
     {
         let cellParent = document.createElement("div");
@@ -41,13 +43,17 @@ export class MultiCellWithGallery
         description.innerHTML = config._description;
         downPanel.appendChild(description);
 
-        let gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._imageDurationMs);
+        this._gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs);
 
-        //To do: add more details button
         let moreDetails = document.createElement("button");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton";
         moreDetails.classList.add("multiCellWithGalleryMoreDetailsButton");
         downPanel.appendChild(moreDetails);
+    }
+
+    public update()
+    {
+        this._gallery.update();
     }
 }

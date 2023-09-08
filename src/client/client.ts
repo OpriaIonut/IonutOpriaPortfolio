@@ -10,6 +10,7 @@ import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
 import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 
 export const threeDebugGUI = false;
+export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
 
 const homePanel = new HomePanel();
 const aboutMePanel = new AboutMePanel();
@@ -32,6 +33,12 @@ function gameLoop(timestamp: number)
     let deltaTime = (frameTime - previousFrameTime) * 0.01;
     previousFrameTime = frameTime;
 
+    timeStats.currentTime = timestamp;
+    timeStats.deltaTime = deltaTime;
+
     threeModelView.update(deltaTime);
+    workProjectsPanel.update();
+    gameProjectsPanel.update();
+    softwareProjectsPanel.update();
 }
 requestAnimationFrame(gameLoop);

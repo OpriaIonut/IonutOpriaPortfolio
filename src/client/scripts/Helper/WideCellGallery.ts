@@ -3,6 +3,8 @@ import { GalleryView } from "./GalleryView";
 
 export class WideCellGallery
 {
+    private _gallery: GalleryView;
+
     constructor(parentNode: HTMLElement, config: CellGalleryConfig)
     {
         let cellParent = document.createElement("div");
@@ -40,13 +42,17 @@ export class WideCellGallery
         description.innerHTML = config._description;
         leftPanel.appendChild(description);
 
-        let gallery = new GalleryView(rightPanel, "planetquestGallery", config._imagesPath, config._imageCount, config._imageDurationMs);
+        this._gallery = new GalleryView(rightPanel, "planetquestGallery", config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs);
 
-        //To do: add more details button
         let moreDetails = document.createElement("button");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton";
         moreDetails.classList.add("wideCellGalleryMoreDetailsButton");
         leftPanel.appendChild(moreDetails);
+    }
+
+    public update()
+    {
+        this._gallery.update();
     }
 }

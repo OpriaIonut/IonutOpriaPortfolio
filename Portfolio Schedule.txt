@@ -1,13 +1,4 @@
-Wednesday:
--Add gallery with 3D renders that you did
--Button for more models that forwards to sketchfab
--Loading bar for loading the images
--Add final section + CV
-
-
-
-Thursday:
--Add proper content for PQ
+Weekend goal
 -Add proper content for Serenity Garden
 -Add proper content for Chicken Invaders
 -Add proper content for Legeithiel Unaelian
@@ -15,12 +6,12 @@ Thursday:
 -Add proper content for JapoTimeApp
 -Add proper content for HobbyManagementApp
 -Add proper content for MVVM Apps
-
-
-
 -Find banner for home section
 -Add social links & position home section properly
 -Add separators & headers for each of the sections
+
+
+
 -Make about me section pretty
 -Make skill section pretty
 -Make special skills section pretty
@@ -28,6 +19,10 @@ Thursday:
 -Define proper looks for personal projects section
 -Define proper looks for 3D projects section
 -Define proper looks for farewell & footer
+-Define content to be clear enough
+-Get feedback from people
+
+
 -Add mouse animation effect
 -Add typewriter effect
 -Pick proper fonts to be used
@@ -36,4 +31,4 @@ Thursday:
 -Add more interesting effects to the side (idea: flames to the footer, bars that rise from bottom to front in a specific section, animated circuits in another section, mouse effect changes based on section, etc.)
 -Make it responsive
 -Add animations to the panels
--Add inner pages for the project
+-Add inner pages for the projects

@@ -34,6 +34,7 @@ export declare type CellGalleryConfig =
     _title: string,
     _tags: string[],
     _tagColors: string[],
+    _videoFormatIndices: number[],
     _description: string,
     _moreDetailsPage: string
 }

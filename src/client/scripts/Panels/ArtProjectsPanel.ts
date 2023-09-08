@@ -1,5 +1,4 @@
 import { CellWithPreview } from "../Helper/CellWithPreview";
-import { GalleryView } from "../Helper/GalleryView";
 
 export class ArtProjectsPanel
 {
@@ -29,7 +28,7 @@ export class ArtProjectsPanel
         renderGalleryParent.id = "renderGalleryParent";
         document.body.appendChild(renderGalleryParent);
 
-        new GalleryView(renderGalleryParent, "renderGallery", "images/gallery/renders/", 9, 2000);
+        //new GalleryView(renderGalleryParent, "renderGallery", "images/gallery/renders/", 9, 2000);
 
         let moreGamesBtn = document.createElement("button");
         moreGamesBtn.className = "middleCenterBtn";
