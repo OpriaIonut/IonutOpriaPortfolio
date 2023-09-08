@@ -39,13 +39,23 @@ export class GameProjectsPanel
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "chickenInvadersCell",
             _title: "Chicken Invaders DX",
-            _description: ``,
+            _description: `Replica of the initial Chicken Invaders DX game, which contains the following:<br>
+                - 10 playable levels that repeat endlessly<br>
+                - Local leaderboard system<br>
+                - Weapon utility with 8 different levels, each having a different attack pattern<br>
+                - Rocket that fries all chickens and skips the level<br>
+                - Assistant spaceship that helps with shooting enemies<br>
+                <br>
+                Main Contributions:<br>
+                - Implemented asteroid belt & waves 4 & 5<br>
+                - Created the spritesheets for all non-ui elements in the game (spaceship, chickens, weapons, etc.)<br>
+                - Optimized resource loading using multithreaded programming`,
             _tags: ["C++", "SFML", "Bullet Hell", "Endless", "Leaderboard"],
             _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#146913", "#146913"],
-            _moreDetailsPage: "",
-            _imagesPath: "images/gallery/planetquest-test/",
+            _moreDetailsPage: "https://kirirato.itch.io/chicken-invaders-dx",
+            _imagesPath: "images/gallery/chicken-invaders/",
             _imageCount: 6,
-            _videoFormatIndices: [],
+            _videoFormatIndices: [0],
             _imageDurationMs: 5000
         }));
 
