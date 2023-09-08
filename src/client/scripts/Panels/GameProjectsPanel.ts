@@ -82,13 +82,19 @@ export class GameProjectsPanel
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "oriCloneCell",
             _title: "Ori Gameplay Clone",
-            _description: ``,
+            _description: `Gameplay replica of the game Ori and the Blind Forest<br>
+                It contains the following mechanics:<br>
+                - Normal attack that can target up to 3 enemies + charge attack that deals a lot of damage<br>
+                - Dynamic movement with double jump, dashing, charged jump, wall climbing, propulsion dodge<br>
+                - 8 different enemy types<br>
+                - 4 kinds of different traps that each require different interactions<br>
+                - Minimap functionality that shows the objective for the game`,
             _tags: ["Unity", "C#", "Platformer", "WIP"],
             _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#a11a1a"],
-            _moreDetailsPage: "",
-            _imagesPath: "images/gallery/planetquest-test/",
+            _moreDetailsPage: "https://kirirato.itch.io/origameplayclone",
+            _imagesPath: "images/gallery/ori/",
             _imageCount: 6,
-            _videoFormatIndices: [],
+            _videoFormatIndices: [0],
             _imageDurationMs: 5000
         }));
 

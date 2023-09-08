@@ -120,7 +120,6 @@ body{
 {
     display: inline-block;
     margin: 10px;
-    background-color: brown;
     vertical-align: top;
 }
 .multiCellWithGalleryTopPanel
@@ -132,7 +131,6 @@ body{
 {
     width: 100%;
     height: 20vw;
-    background-color: blueviolet;
 }
 .multiCellWithGalleryTitle
 {

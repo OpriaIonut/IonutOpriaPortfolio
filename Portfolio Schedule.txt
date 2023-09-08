@@ -1,5 +1,4 @@
 Weekend goal
--Add proper content for Ori
 -Add proper content for JapoTimeApp
 -Add proper content for HobbyManagementApp
 -Add proper content for MVVM Apps
