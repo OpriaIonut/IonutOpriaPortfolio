@@ -11,6 +11,7 @@ import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 
 export const threeDebugGUI = false;
 export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
+export const userInteractedWithPage = { value: false }
 
 const homePanel = new HomePanel();
 const aboutMePanel = new AboutMePanel();
@@ -42,3 +43,7 @@ function gameLoop(timestamp: number)
     softwareProjectsPanel.update();
 }
 requestAnimationFrame(gameLoop);
+
+window.addEventListener("click", () => {
+    userInteractedWithPage.value = true;
+});

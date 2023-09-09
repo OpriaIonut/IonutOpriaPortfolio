@@ -1,4 +1,4 @@
-import { timeStats } from "../../client";
+import { timeStats, userInteractedWithPage } from "../../client";
 
 export class GalleryView
 {
@@ -9,6 +9,7 @@ export class GalleryView
     private _galleryItem!: HTMLDivElement;
     private _currentSelectedIndex: number = 0;
 
+    private _pauseBtn: HTMLDivElement;
     private _galleryParent: HTMLDivElement;
 
     private _imageDuration: number = 0;
@@ -33,6 +34,11 @@ export class GalleryView
         let navigation = document.createElement("div");
         navigation.className = "galleryNavigation";
         this._galleryParent.appendChild(navigation);
+
+        this._pauseBtn = document.createElement("div");
+        this._pauseBtn.className = "pauseBtn";
+        this._pauseBtn.style.display = "none";
+        this._galleryParent.appendChild(this._pauseBtn);
 
         for(let index = 0; index < imageCount; ++index)
         {
@@ -127,15 +133,20 @@ export class GalleryView
         if(!this._isImageItem[this._currentSelectedIndex])
         {
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
+            this._pauseBtn.style.display = vid.paused ? "block" : "none";
+
             if(this.isElementInViewport() && vid.currentTime < vid.duration)
             {
-                vid.play();
+                if(userInteractedWithPage.value)
+                    vid.play();
                 this._currentDuration = (vid.duration - vid.currentTime) * 1000 + 500;
                 this._startTime = timeStats.currentTime;
             }
             else
                 (this._actualItems[this._currentSelectedIndex] as HTMLVideoElement).pause();
         }
+        else
+            this._pauseBtn.style.display = "none";
     }
 
     private isElementInViewport() 
@@ -151,7 +162,8 @@ export class GalleryView
         else
         {
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
-            vid.play();
+            if(userInteractedWithPage.value)
+                vid.play();
             this._currentDuration = vid.duration * 1000 + 500;
         }
 
