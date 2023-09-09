@@ -5,6 +5,9 @@
 body{
     background-color: rgb(50, 50, 50);
     color: aliceblue;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
 }
 
 .fullres
@@ -18,14 +21,47 @@ body{
     width: 100%;
 }
 
+#banner
+{
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+#homePanelTitleParent
+{
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+}
+
+#homePanelTitle
+{
+    font-size: 4vw;
+}
+
+#homePanelSubtitle
+{
+    font-size: 2.4vw;
+    color: var(--tertiary-color);
+}
+
+#homePanelContact
+{
+    font-size: 1vw;
+    color: var(--secondary-color);
+}
+
 .homePageReferalLink
 {
     border-radius: 100%;
-    background-color: brown;
-    width: 25px;
-    height: 25px;
+    width: 2.75vw;
+    height: 2.75vw;
     display: inline-block;
-    margin: 5px;
+    margin: 0.25vw;
 }
 
 #skillCharts

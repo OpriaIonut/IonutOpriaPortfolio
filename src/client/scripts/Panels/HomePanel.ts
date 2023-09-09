@@ -12,33 +12,62 @@ export class HomePanel
         parentNode.className = "fullwidth";
         document.body.appendChild(parentNode);
 
+        let banner = document.createElement("img");
+        banner.id = "banner";
+        banner.src = "./images/banners/0.jpg";
+        parentNode.appendChild(banner);
+
+        let titleParent = document.createElement("div");
+        titleParent.id = "homePanelTitleParent";
+        parentNode.appendChild(titleParent);
+
         let title = document.createElement("div");
-        title.id = "title";
-        title.innerHTML = "Ionut Opria";
-        parentNode.appendChild(title);
+        title.id = "homePanelTitle";
+        title.innerHTML = "Ionu&#x021b; Opria";
+        titleParent.appendChild(title);
 
         let subtitle = document.createElement("div");
-        subtitle.id = "subtitle";
+        subtitle.id = "homePanelSubtitle";
         subtitle.innerHTML = "Game Programmer";
-        parentNode.appendChild(subtitle);
+        titleParent.appendChild(subtitle);
 
         let linksParent = document.createElement("div");
         linksParent.id = "linksParent";
-        parentNode.appendChild(linksParent);
+        titleParent.appendChild(linksParent);
 
-        this.createCellLink(linksParent, "", "https://www.linkedin.com/in/ionut-opria-6164b5150/");
-        this.createCellLink(linksParent, "", "https://kirirato.itch.io");
-        this.createCellLink(linksParent, "", "https://twitter.com/Kirirato");
-        this.createCellLink(linksParent, "", "https://sketchfab.com/kirirato");
-        this.createCellLink(linksParent, "", "https://www.artstation.com/kirirato16");
-        this.createCellLink(linksParent, "", "email");
-        this.createCellLink(linksParent, "", "CV");
+        this.createCellLink(linksParent, "./images/icons/linkedin.png", "https://www.linkedin.com/in/ionut-opria-6164b5150/");
+        this.createCellLink(linksParent, "./images/icons/itch.png", "https://kirirato.itch.io");
+        this.createCellLink(linksParent, "./images/icons/github.png", "https://github.com/OpriaIonut");
+        this.createCellLink(linksParent, "./images/icons/artstation.png", "https://www.artstation.com/kirirato16");
+        this.createCellLink(linksParent, "./images/icons/twitter.png", "https://twitter.com/Kirirato");
+        this.createCellLink(linksParent, "./images/icons/PDF.png", "CV");
+
+        let contact = document.createElement("div");
+        contact.innerHTML = "Contact: opriaionut14@gmail.com";
+        contact.id = "homePanelContact";
+        titleParent.appendChild(contact);
     }
 
     private createCellLink(parentNode: HTMLElement, imageSrc: string, link: string)
     {
-        let cell = document.createElement("div");
+        let cell = document.createElement("img");
         cell.className = "homePageReferalLink";
+        cell.src = imageSrc;
+        if(link == "CV")
+            cell.onclick = () => { this.downloadFile("CV Ionut Opria.pdf", "CV Ionut Opria.pdf"); };
+        else
+            cell.onclick = () => { window.open(link, '_blank'); };
+        cell.style.cursor = "pointer";
         parentNode.appendChild(cell);
+    }
+
+    private downloadFile(filePath: string, fileName: string) 
+    {
+        const link = document.createElement('a');
+        link.href = filePath;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }

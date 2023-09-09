@@ -1,18 +1,15 @@
 Weekend goal
--Find banner for home section
--Add social links & position home section properly
 -Add separators & headers for each of the sections
-
-
-
 -Make about me section pretty
 -Make skill section pretty
 -Make special skills section pretty
+
 -Define proper looks for PlanetQuest section
 -Define proper looks for personal projects section
 -Define proper looks for 3D projects section
 -Define proper looks for farewell & footer
 -Define content to be clear enough
+-Make god eater sword prettier & make mehcagirl sfw
 -Get feedback from people
 
 
