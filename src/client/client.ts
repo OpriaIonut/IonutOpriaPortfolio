@@ -19,7 +19,7 @@ const skillChartsPanel = new SkillChartsPanel();
 const specialSkillsPanel = new SpecialSkillsPanel();
 const workProjectsPanel = new WorkProjectsPanel();
 const gameProjectsPanel = new GameProjectsPanel();
-const softwareProjectsPanel = new SoftwareProjectsPanel();
+// const softwareProjectsPanel = new SoftwareProjectsPanel();
 const artProjectsPanel = new ArtProjectsPanel();
 const endingPanel = new EndingPanel();
 
@@ -40,7 +40,7 @@ function gameLoop(timestamp: number)
     threeModelView.update(deltaTime);
     workProjectsPanel.update();
     gameProjectsPanel.update();
-    softwareProjectsPanel.update();
+    // softwareProjectsPanel.update();
 }
 requestAnimationFrame(gameLoop);
 

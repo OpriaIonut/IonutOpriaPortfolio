@@ -1,7 +1,4 @@
 Weekend goal
--Add proper content for JapoTimeApp
--Add proper content for HobbyManagementApp
--Add proper content for MVVM Apps
 -Find banner for home section
 -Add social links & position home section properly
 -Add separators & headers for each of the sections
@@ -28,3 +25,7 @@ Weekend goal
 -Make it responsive
 -Add animations to the panels
 -Add inner pages for the projects
+
+
+To do at some point:
+-Add software projects
