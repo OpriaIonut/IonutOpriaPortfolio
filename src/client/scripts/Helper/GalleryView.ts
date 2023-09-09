@@ -11,6 +11,7 @@ export class GalleryView
 
     private _pauseBtn: HTMLDivElement;
     private _galleryParent: HTMLDivElement;
+    private _isMouseOverGallery: boolean = false;
 
     private _imageDuration: number = 0;
     private _currentDuration: number = 10000;
@@ -110,6 +111,7 @@ export class GalleryView
         }
         //To do: check when all images/videos finish loading and then run this function
         setTimeout(() => { this.checkAspectRatio(); }, 1000);
+        window.addEventListener('mousemove', (event) => { this.onMouseMove(event); });
     }
 
     public update()
@@ -135,7 +137,7 @@ export class GalleryView
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
             this._pauseBtn.style.display = vid.paused ? "block" : "none";
 
-            if(this.isElementInViewport() && vid.currentTime < vid.duration)
+            if(this._isMouseOverGallery && vid.currentTime < vid.duration)
             {
                 if(userInteractedWithPage.value)
                     vid.play();
@@ -143,17 +145,29 @@ export class GalleryView
                 this._startTime = timeStats.currentTime;
             }
             else
-                (this._actualItems[this._currentSelectedIndex] as HTMLVideoElement).pause();
+                vid.pause();
         }
         else
             this._pauseBtn.style.display = "none";
     }
 
-    private isElementInViewport() 
+    private onMouseMove(event: any)
+    {
+        const divRect = this._galleryParent.getBoundingClientRect();
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+      
+        if (mouseX >= divRect.left && mouseX <= divRect.right && mouseY >= divRect.top && mouseY <= divRect.bottom) 
+            this._isMouseOverGallery = true;
+        else
+            this._isMouseOverGallery = false;
+    }
+
+    private isElementInViewport()
     {
         var rect = this._galleryParent.getBoundingClientRect();
         return rect.top >= -window.innerHeight * 0.1 && rect.bottom <= (window.innerHeight + window.innerHeight * 0.1);
-      }
+    }
 
     private applyCurrentSelection()
     {
@@ -162,8 +176,6 @@ export class GalleryView
         else
         {
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
-            if(userInteractedWithPage.value)
-                vid.play();
             this._currentDuration = vid.duration * 1000 + 500;
         }
 
