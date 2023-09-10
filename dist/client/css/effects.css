@@ -1,0 +1,22 @@
+#mouseMoveInner
+{
+    position: fixed;
+    width: 0.75vw;
+    height: 0.75vw;
+    background-color: var(--secondary-color);
+    z-index: 100;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 100%;
+    pointer-events: none;
+}
+
+#mouseMoveOuter
+{
+    position: fixed;
+    width: 2.5vw;
+    height: 2.5vw;
+    border: 0.15vw solid var(--secondary-color);
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 100%;
+    pointer-events: none;
+}

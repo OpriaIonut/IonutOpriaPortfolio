@@ -1,3 +1,4 @@
+import { MouseAnimation } from "./scripts/Effects/MouseAnimation";
 import { AboutMePanel } from "./scripts/Panels/AboutMePanel";
 import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
 import { EndingPanel } from "./scripts/Panels/EndingPanel";
@@ -30,6 +31,8 @@ const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
 
+const mouseAnim = new MouseAnimation(0.75, 0.4);
+
 let previousFrameTime = 0;
 function gameLoop(timestamp: number)
 {
@@ -46,6 +49,8 @@ function gameLoop(timestamp: number)
     workProjectsPanel.update();
     gameProjectsPanel.update();
     // softwareProjectsPanel.update();
+
+    mouseAnim.update();
 }
 requestAnimationFrame(gameLoop);
 

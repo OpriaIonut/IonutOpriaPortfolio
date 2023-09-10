@@ -17,8 +17,8 @@ export const chartGreenColorTheme: ChartColorTheme = {
 }
 export const chartPurpleColorTheme: ChartColorTheme = {
     fill: true,
-    backgroundColor: 'rgba(130, 38, 150, 0.5)',
-    borderColor: 'rgb(179, 50, 207)'
+    backgroundColor: 'rgba(197, 76, 224, 0.5)',
+    borderColor: 'rgb(226, 92, 255)'
 }
 
 export const tagColors = {
