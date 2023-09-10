@@ -1,0 +1,33 @@
+.wideCellWithDesc
+{
+    background-color: var(--skill-cell-color);
+    margin: 10px;
+    padding: 3x;
+    border-radius: 1.5vw;
+    font-size: 1.25vw;
+}
+
+.wideCellWithDescTitle, .wideCellWithDescText
+{
+    position: relative;
+    display: inline-block;
+    width: 90%;
+    padding: 0.5vw;
+}
+.wideCellWithDescTitle
+{
+    font-size: 1.5vw;
+}
+.wideCellWithDescText
+{
+    text-align: left;
+    padding: 0.5vw 1.5vw 1.5vw 1.5vw;
+}
+.wideCellWithDescBtn
+{
+    position: relative;
+    width: 5%;
+    height: 100%;
+    right: 0px;
+    top: 0px;
+}

@@ -33,7 +33,7 @@ export class SpecialSkillsPanel
         new WideCellWithDesc(programmingParent, "", "Multithreaded Programming", "Worked on a couple of projects that made use of multithreading and learned about the rules & best practices that you need to follow when implementing a multithreaded app. Built a worker system which is responsible for building resources in a separate thread & returns them in the main thread.");
         new WideCellWithDesc(programmingParent, "", "Android, Desktop, WebGL & VR Deployment", "Deployed multiple applications to the mentioned platforms and have knowledge about what are the hurdles that you have to get through in each of the platforms metioned.");
         new WideCellWithDesc(programmingParent, "", "Optimizations", "Spent a lot of time learning how to properly optimize aplications (how textures should be packed, how to combine assets in asset bundles, what settings you should use for each platform, how to profile an app for efficiency, memory management, pre-loading resources, etc.)");
-        new WideCellWithDesc(programmingParent, "", "Web Development", "Made this site from scratch using Node.js, Typescript & Three.js for the 3D Visualizer.");
+        new WideCellWithDesc(programmingParent, "", "Web Development", "Made this site from scratch using Node.js, Typescript & Three.js for the 3D Visualizer. Build a couple of websites that each made use of Three.js to achieve interesting & unique experiences dirrectly in the browser.");
 
         //ART: modelling, sculpting, UV unwrapping, texturing, rigging, Understanding of game ready pipeline
         const artParent = document.createElement("div");
@@ -55,6 +55,7 @@ export class SpecialSkillsPanel
         
         let separator = document.createElement("div");
         separator.className = "separator";
+        separator.style.marginTop = "2vw";
         parentNode.appendChild(separator);
     }
 }

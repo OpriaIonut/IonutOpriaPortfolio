@@ -22,7 +22,7 @@ document.body.appendChild(pageParent);
 const aboutMePanel = new AboutMePanel(pageParent);
 const skillChartsPanel = new SkillChartsPanel(pageParent);
 const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
-const workProjectsPanel = new WorkProjectsPanel();
+const workProjectsPanel = new WorkProjectsPanel(pageParent);
 const gameProjectsPanel = new GameProjectsPanel();
 // const softwareProjectsPanel = new SoftwareProjectsPanel();
 const artProjectsPanel = new ArtProjectsPanel();

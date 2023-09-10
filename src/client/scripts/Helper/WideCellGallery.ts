@@ -44,11 +44,10 @@ export class WideCellGallery
 
         this._gallery = new GalleryView(rightPanel, "planetquestGallery", config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs);
 
-        let moreDetails = document.createElement("button");
+        let moreDetails = document.createElement("div");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton"; 
         moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
-        moreDetails.classList.add("wideCellGalleryMoreDetailsButton");
         leftPanel.appendChild(moreDetails);
     }
 

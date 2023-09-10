@@ -54,49 +54,29 @@ body{
     background-color: aliceblue;
 }
 
-
-
-
-
-
-.wideCellWithDesc
+.cellButton
 {
-    background-color: var(--skill-cell-color);
-    margin: 10px;
-    padding: 3x;
-    border-radius: 1.5vw;
+    background-color: var(--button-color);
     font-size: 1.25vw;
+    width: 10vw;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5vw;
+    border-radius: 3vw;
+}
+.cellButton:hover
+{
+    background-color: var(--button-hover-color);
 }
 
-.wideCellWithDescTitle, .wideCellWithDescText
-{
-    position: relative;
-    display: inline-block;
-    width: 90%;
-    padding: 0.5vw;
-}
-.wideCellWithDescTitle
-{
-    font-size: 1.5vw;
-}
-.wideCellWithDescText
-{
-    text-align: left;
-    padding: 0.5vw 1.5vw 1.5vw 1.5vw;
-}
-.wideCellWithDescBtn
-{
-    position: relative;
-    width: 5%;
-    height: 100%;
-    right: 0px;
-    top: 0px;
-}
+
+
 
 
 .wideCellGallery
 {
-    width: 90%;
+    width: 98%;
+    padding: 1vw;
 }
 
 .wideCellGalleryLeftPanel
@@ -127,6 +107,12 @@ body{
     padding: 5px;
     margin: 3px;
     border-radius: 10px;
+}
+
+.wideCellGalleryDescription
+{
+    font-size: 1.1vw;
+    padding-right: 1vw;
 }
 
 
