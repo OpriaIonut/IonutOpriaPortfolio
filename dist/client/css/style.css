@@ -30,6 +30,7 @@ body{
     margin: 2vw;
     padding: 1vw;
     background-color: var(--secondary-background-color);
+    text-align: center;
 }
 
 .sectionTitle
@@ -69,87 +70,6 @@ body{
     background-color: var(--button-hover-color);
 }
 
-
-
-
-
-.wideCellGallery
-{
-    width: 98%;
-    padding: 1vw;
-}
-
-.wideCellGalleryLeftPanel
-{
-    display: inline-block;
-    width: 35%;
-    height: 100%;
-    vertical-align: top;
-}
-
-.wideCellGalleryRightPanel
-{
-    display: inline-block;
-    width: 65%;
-    height: auto;
-}
-
-.wideCellGalleryTitle
-{
-    font-size: 2.5vw;
-    text-align: center;
-}
-
-.wideCellGalleryTag, .multiCellWithGalleryTag
-{
-    width: auto;
-    display: inline-block;
-    padding: 5px;
-    margin: 3px;
-    border-radius: 10px;
-}
-
-.wideCellGalleryDescription
-{
-    font-size: 1.1vw;
-    padding-right: 1vw;
-}
-
-
-
-.multiCellWithGallery
-{
-    display: inline-block;
-    margin: 10px;
-    vertical-align: top;
-    /* background-color: brown; */
-}
-.multiCellWithGalleryTopPanel
-{
-    width: 100%;
-    height: 100%;
-}
-.multiCellWithGalleryDownPanel
-{
-    width: 100%;
-    height: 20vw;
-    /* background-color: blueviolet; */
-}
-.multiCellWithGalleryTitle
-{
-    font-size: 2.5vw;
-    text-align: center;
-}
-.multiCellWithGalleryTagsList
-{
-    text-align: center;
-}
-.multiCellWithGalleryDescription
-{
-    font-size: 1.1vw;
-    padding-top: 1vw;
-}
-
 .middleCenterBtn
 {
     position: relative;
@@ -178,28 +98,7 @@ body{
 .cellWithPreview
 {
     display: inline-block;
-    margin: 10px;
-    border: 3px solid #fff;
-}
-
-#threeModelViewParent
-{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: #00000099;
-}
-
-#threeModelView
-{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 90%;
-    height: 90%;
-    transform: translateX(-50%) translateY(-50%);
+    margin: 0.5vw;
     border: 3px solid #fff;
 }
 
@@ -211,111 +110,4 @@ body{
     width: 0px;
     height: 3%;
     background-color: rgb(74, 255, 171);
-}
-
-#threeViewSettingsParent
-{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    height: 100%;
-    width: 20%;
-    background-color: #1e1e1edd;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.threeViewTrisCounter
-{
-    position: relative;
-    margin: 7px;
-}
-
-.buttonsWithSelectionParent
-{
-    width: 100%;
-    height: auto;
-}
-
-.buttonsWithSelection
-{
-    background-color: #121212dd;
-    padding: 8px;
-    margin: 7px;
-}
-
-.buttonsWithSelectionSelected
-{
-    background-color: #33c0c5dd;
-    padding: 8px;
-    margin: 7px;
-}
-
-.closeBtn
-{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: brown;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.buttonsWithSelectionTitle
-{
-    margin: 7px;
-    font-size: 20px;
-    border-bottom: 2px solid #fff;
-}
-
-.horizontalSliderParent
-{
-    width: 100%;
-    margin: 5px;   
-}
-
-.horizontalSliderTitle
-{
-    width: auto;
-    display: inline-block;
-    padding: 7px;
-}
-
-.horizontalSliderBtn
-{
-    width: 40%;
-    height: 100%;
-    border-radius: 3vw;
-    display: inline-block;
-    background-color: rgb(62, 76, 78);
-    text-align: center;
-    border: 2px solid #fff;
-    user-select: none;
-}
-
-.horizontalSliderText
-{
-    pointer-events: none;
-}
-
-#renderGalleryParent
-{
-    position: relative;
-    width: 80%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-#modelDownloadBtn
-{
-    position: relative;
-    width: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 7px;
-    padding: 10px;
-    bottom: 0px;
-    text-align: center;
-    background-color: #33c0c5dd;
 }

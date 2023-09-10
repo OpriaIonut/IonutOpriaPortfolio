@@ -25,7 +25,7 @@ const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
 const workProjectsPanel = new WorkProjectsPanel(pageParent);
 const gameProjectsPanel = new GameProjectsPanel(pageParent);
 // const softwareProjectsPanel = new SoftwareProjectsPanel();
-const artProjectsPanel = new ArtProjectsPanel();
+const artProjectsPanel = new ArtProjectsPanel(pageParent);
 const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();

@@ -1,0 +1,44 @@
+.wideCellGallery
+{
+    width: 98%;
+    padding: 1vw;
+}
+
+.wideCellGalleryLeftPanel
+{
+    display: inline-block;
+    width: 35%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.wideCellGalleryRightPanel
+{
+    display: inline-block;
+    width: 65%;
+    height: auto;
+}
+
+.wideCellGalleryTitle
+{
+    font-size: 2.5vw;
+    text-align: center;
+    padding-bottom: 0.25vw;
+    color: var(--tertiary-color);
+}
+
+.wideCellGalleryTag, .multiCellWithGalleryTag
+{
+    width: auto;
+    display: inline-block;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 10px;
+}
+
+.wideCellGalleryDescription
+{
+    font-size: 1.1vw;
+    padding-right: 1vw;
+    text-align: left;
+}

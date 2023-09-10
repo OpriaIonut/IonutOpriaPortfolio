@@ -2,20 +2,25 @@ import { CellWithPreview } from "../Helper/CellWithPreview";
 
 export class ArtProjectsPanel
 {
-    constructor()
+    constructor(pageParent: HTMLDivElement)
     {
-        this.createElements();
+        this.createElements(pageParent);
     }
 
-    private createElements()
+    private createElements(pageParent: HTMLDivElement)
     {
         const parentNode = document.createElement("div");
         parentNode.id = "artProjectsPanel";
         parentNode.className = "fullwidth";
-        document.body.appendChild(parentNode);
+        pageParent.appendChild(parentNode);
+
+        let title = document.createElement("div");
+        title.className = "sectionTitle";
+        title.innerHTML = "3D Models";
+        parentNode.appendChild(title);
 
         const cellsPerWidth = 4;
-        new CellWithPreview(parentNode, cellsPerWidth, "Zoro", "images/gallery/planetquest/5.jpg");
+        new CellWithPreview(parentNode, cellsPerWidth, "Zoro", "images/gallery/planetquest-test/5.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg");
@@ -30,10 +35,12 @@ export class ArtProjectsPanel
 
         //new GalleryView(renderGalleryParent, "renderGallery", "images/gallery/renders/", 9, 2000);
 
-        let moreGamesBtn = document.createElement("button");
+        let moreGamesBtn = document.createElement("div");
         moreGamesBtn.className = "middleCenterBtn";
+        moreGamesBtn.style.marginTop = "2vw";
+        moreGamesBtn.style.marginBottom = "1vw";
         moreGamesBtn.innerHTML = "More Models";
         moreGamesBtn.onclick = () => { window.open('https://sketchfab.com/kirirato', '_blank'); };
-        document.body.appendChild(moreGamesBtn);
+        parentNode.appendChild(moreGamesBtn);
     }
 }

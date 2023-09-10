@@ -67,7 +67,7 @@ export class SkillChartsPanel
             _chartID: "selfAssesmentChart",
             _units: "",
             _dataSets: [
-                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [5, 7, 7, 4, 9, 8, 1, 8, 5] }
+                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [5, 7, 7, 4, 8, 7, 1, 7, 5] }
             ]
         });
 

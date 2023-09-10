@@ -6,13 +6,14 @@ export class CellWithPreview
     {
         let cellParent = document.createElement("div");
         cellParent.className = "cellWithPreview";
-        cellParent.style.width = `${90 / cellsPerWidth}vw`;
-        cellParent.style.height = `${(90 / cellsPerWidth) * 9.0 / 16.0}vw`;
+        cellParent.style.width = `${80 / cellsPerWidth}vw`;
+        cellParent.style.height = `${(80 / cellsPerWidth) * 9.0 / 16.0}vw`;
         parentNode.appendChild(cellParent);
 
         let img = document.createElement("img");
         img.className = "fullres";
         img.src = imagePath;
+        img.style.objectFit = "cover";
         cellParent.appendChild(img);
 
         let progressBar = document.createElement("div");

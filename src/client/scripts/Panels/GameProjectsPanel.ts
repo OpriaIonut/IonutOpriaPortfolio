@@ -17,6 +17,11 @@ export class GameProjectsPanel
         parentNode.className = "fullwidth";
         pageParent.appendChild(parentNode);
 
+        let title = document.createElement("div");
+        title.className = "sectionTitle";
+        title.innerHTML = "Personal Projects";
+        parentNode.appendChild(title);
+
         let cellsPerWidth = 2;
         
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
