@@ -20,7 +20,7 @@ pageParent.id = "pageParent";
 document.body.appendChild(pageParent);
 
 const aboutMePanel = new AboutMePanel(pageParent);
-const skillChartsPanel = new SkillChartsPanel();
+const skillChartsPanel = new SkillChartsPanel(pageParent);
 const specialSkillsPanel = new SpecialSkillsPanel();
 const workProjectsPanel = new WorkProjectsPanel();
 const gameProjectsPanel = new GameProjectsPanel();

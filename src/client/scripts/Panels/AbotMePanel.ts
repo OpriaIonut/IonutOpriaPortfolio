@@ -13,7 +13,7 @@ export class AboutMePanel
         parentElem.appendChild(parentNode);
 
         let title = document.createElement("div");
-        title.id = "aboutMeTitle";
+        title.className = "sectionTitle";
         title.innerHTML = "About Me";
         parentNode.appendChild(title);
 

@@ -1,0 +1,26 @@
+#skillCharts
+{
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.skillChartItem
+{
+    width: 45%;
+    margin: 1vw;
+    height: auto;
+    display: inline-block;
+}
+
+#specialSkillsPanel
+{
+    width: 100%;
+}
+
+#specialSkillsArt, #specialSkillsProgramming
+{
+    vertical-align: top;
+    width: 45vw;
+    display: inline-block;
+}

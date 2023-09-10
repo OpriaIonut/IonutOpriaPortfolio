@@ -1,6 +1,5 @@
 Weekend goal
 -Add separators & headers for each of the sections
--Make skill section pretty
 -Make special skills section pretty
 
 -Define proper looks for PlanetQuest section

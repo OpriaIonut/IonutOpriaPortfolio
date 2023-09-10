@@ -27,7 +27,16 @@ body{
     width: 90%;
     left: 50%;
     transform: translateX(-50%);
+    margin: 1vw;
     padding: 1vw;
+    background-color: var(--secondary-background-color);
+}
+
+.sectionTitle
+{
+    font-size: 5vw;
+    color: var(--secondary-color);
+    text-align: center;
 }
 
 .separator
@@ -40,31 +49,6 @@ body{
 
 
 
-#skillCharts
-{
-    width: 100%;
-    height: auto;
-}
-
-.skillChartItem
-{
-    width: 30vw;
-    margin: 1vw;
-    height: auto;
-    display: inline-block;
-}
-
-#specialSkillsPanel
-{
-    width: 100%;
-}
-
-#specialSkillsArt, #specialSkillsProgramming
-{
-    vertical-align: top;
-    width: 45vw;
-    display: inline-block;
-}
 
 
 .wideCellWithDesc

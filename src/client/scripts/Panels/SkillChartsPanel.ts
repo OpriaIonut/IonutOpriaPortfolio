@@ -1,20 +1,26 @@
 import Chart from 'chart.js/auto';
 import { ChartConfig } from '../../types';
-import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme } from '../Themes/ChartThemes';
+import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme } from '../Themes/ChartThemes';
 
 export class SkillChartsPanel
 {
-    constructor()
+    constructor(parentElem: HTMLDivElement)
     {
-        this.createElements();
+        this.createElements(parentElem);
     }
 
-    private createElements()
+    private createElements(parentElem: HTMLDivElement)
     {
         const parentNode = document.createElement("div");
         parentNode.id = "skillCharts";
         parentNode.className = "fullwidth";
-        document.body.appendChild(parentNode);
+        parentElem.appendChild(parentNode);
+
+        let title = document.createElement("div");
+        title.className = "sectionTitle";
+        title.innerHTML = "Skills";
+        parentNode.appendChild(title);
+
 
         //Languages Date: 14.08.2023
         //C++                       prof 4 month, hobby 5 years
@@ -61,9 +67,13 @@ export class SkillChartsPanel
             _chartID: "selfAssesmentChart",
             _units: "",
             _dataSets: [
-                { _label: "Proficiency", _colorTheme: chartGreenColorTheme, _data: [5, 7, 7, 4, 9, 8, 1, 8, 5] }
+                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [5, 7, 7, 4, 9, 8, 1, 8, 5] }
             ]
         });
+
+        let separator = document.createElement("div");
+        separator.className = "separator";
+        parentNode.appendChild(separator);
     }
 
     private createChart(parentNode: HTMLElement, config: ChartConfig)
@@ -101,9 +111,15 @@ export class SkillChartsPanel
                         max: config._maxScale,
                         beginAtZero: true,
                         ticks: {
+                            color: "#ffffff",
                             callback: function(value: any, index: any, values: any) {
                                 return value + config._units;
                             }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: "#ffffff"
                         }
                     }
                 },
@@ -111,7 +127,8 @@ export class SkillChartsPanel
                     line: {
                         borderWidth: 3
                     }
-                }
+                },
+                color: "#ffffff"
             }
         });
     }

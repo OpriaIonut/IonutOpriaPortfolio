@@ -4,11 +4,7 @@ export declare type ChartColorTheme =
 {
     fill: boolean,
     backgroundColor: string,
-    borderColor: string,
-    pointBackgroundColor: string,
-    pointBorderColor: string,
-    pointHoverBackgroundColor: string,
-    pointHoverBorderColor: string
+    borderColor: string
 }
 
 export declare type ChartConfig =
