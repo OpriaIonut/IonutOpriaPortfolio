@@ -3,6 +3,7 @@
     display: inline-block;
     margin: 10px;
     vertical-align: top;
+    padding-bottom: 2vw;
     /* background-color: brown; */
 }
 .multiCellWithGalleryTopPanel

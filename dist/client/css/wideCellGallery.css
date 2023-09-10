@@ -7,7 +7,7 @@
 .wideCellGalleryLeftPanel
 {
     display: inline-block;
-    width: 35%;
+    width: 40%;
     height: 100%;
     vertical-align: top;
 }
@@ -15,7 +15,7 @@
 .wideCellGalleryRightPanel
 {
     display: inline-block;
-    width: 65%;
+    width: 60%;
     height: auto;
 }
 
@@ -38,7 +38,7 @@
 
 .wideCellGalleryDescription
 {
-    font-size: 1.1vw;
+    font-size: 1.0vw;
     padding-right: 1vw;
     text-align: left;
 }

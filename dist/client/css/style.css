@@ -1,6 +1,11 @@
-/* *{
-    user-select: none;
-} */
+@font-face {
+    font-family: Montserrat;
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf");
+  }
+
+*{
+    font-family: Montserrat;
+}
 
 body{
     background-color: var(--primary-color);
@@ -35,7 +40,7 @@ body{
 
 .sectionTitle
 {
-    font-size: 5vw;
+    font-size: 4vw;
     color: var(--secondary-color);
     text-align: center;
 }
