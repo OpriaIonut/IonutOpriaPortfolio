@@ -16,11 +16,12 @@
 #specialSkillsPanel
 {
     width: 100%;
+    text-align: center;
 }
 
 #specialSkillsArt, #specialSkillsProgramming
 {
     vertical-align: top;
-    width: 45vw;
+    width: 50%;
     display: inline-block;
 }

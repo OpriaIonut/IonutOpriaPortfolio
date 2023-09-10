@@ -27,7 +27,7 @@ body{
     width: 90%;
     left: 50%;
     transform: translateX(-50%);
-    margin: 1vw;
+    margin: 2vw;
     padding: 1vw;
     background-color: var(--secondary-background-color);
 }
@@ -37,6 +37,14 @@ body{
     font-size: 5vw;
     color: var(--secondary-color);
     text-align: center;
+}
+
+.subtitle
+{
+    font-size: 2.5vw;
+    color: var(--tertiary-color);
+    text-align: center;
+    padding: 1vw;
 }
 
 .separator
@@ -53,9 +61,11 @@ body{
 
 .wideCellWithDesc
 {
-    background-color: rgb(20, 20, 20);
+    background-color: var(--skill-cell-color);
     margin: 10px;
     padding: 3x;
+    border-radius: 1.5vw;
+    font-size: 1.25vw;
 }
 
 .wideCellWithDescTitle, .wideCellWithDescText
@@ -63,7 +73,16 @@ body{
     position: relative;
     display: inline-block;
     width: 90%;
-    padding: 5px;
+    padding: 0.5vw;
+}
+.wideCellWithDescTitle
+{
+    font-size: 1.5vw;
+}
+.wideCellWithDescText
+{
+    text-align: left;
+    padding: 0.5vw 1.5vw 1.5vw 1.5vw;
 }
 .wideCellWithDescBtn
 {

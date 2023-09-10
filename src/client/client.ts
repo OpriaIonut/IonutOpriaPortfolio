@@ -1,4 +1,4 @@
-import { AboutMePanel } from "./scripts/Panels/AbotMePanel";
+import { AboutMePanel } from "./scripts/Panels/AboutMePanel";
 import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
 import { EndingPanel } from "./scripts/Panels/EndingPanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
@@ -21,7 +21,7 @@ document.body.appendChild(pageParent);
 
 const aboutMePanel = new AboutMePanel(pageParent);
 const skillChartsPanel = new SkillChartsPanel(pageParent);
-const specialSkillsPanel = new SpecialSkillsPanel();
+const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
 const workProjectsPanel = new WorkProjectsPanel();
 const gameProjectsPanel = new GameProjectsPanel();
 // const softwareProjectsPanel = new SoftwareProjectsPanel();

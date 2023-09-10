@@ -71,9 +71,9 @@ export class SkillChartsPanel
             ]
         });
 
-        let separator = document.createElement("div");
-        separator.className = "separator";
-        parentNode.appendChild(separator);
+        // let separator = document.createElement("div");
+        // separator.className = "separator";
+        // parentNode.appendChild(separator);
     }
 
     private createChart(parentNode: HTMLElement, config: ChartConfig)

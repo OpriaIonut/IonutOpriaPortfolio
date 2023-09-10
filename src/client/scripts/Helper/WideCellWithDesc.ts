@@ -8,6 +8,8 @@ export class WideCellWithDesc
         let cellDiv = document.createElement("div");
         cellDiv.id = cellID;
         cellDiv.className = "wideCellWithDesc";
+        cellDiv.style.cursor = "pointer";
+        cellDiv.onclick = () => { this.toggleVisibility(); };
         parentNode.appendChild(cellDiv);
 
         let cellTitle = document.createElement("div");
@@ -15,11 +17,11 @@ export class WideCellWithDesc
         cellTitle.innerHTML = title;
         cellDiv.appendChild(cellTitle);
 
-        let cellBtn = document.createElement("button");
-        cellBtn.className = "wideCellWithDescBtn";
-        cellBtn.innerHTML = "^"
-        cellBtn.onclick = () => { this.toggleVisibility(); };
-        cellDiv.appendChild(cellBtn);
+        // let cellBtn = document.createElement("button");
+        // cellBtn.className = "wideCellWithDescBtn";
+        // cellBtn.innerHTML = "^"
+        // cellBtn.onclick = () => { this.toggleVisibility(); };
+        // cellDiv.appendChild(cellBtn);
 
         this._cellDesc = document.createElement("div");
         this._cellDesc.className = "wideCellWithDescText";
