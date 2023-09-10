@@ -1,4 +1,5 @@
 import { WideCellGallery } from "../Helper/WideCellGallery";
+import { tagColors } from "../Themes/ChartThemes";
 
 export class WorkProjectsPanel
 {
@@ -32,14 +33,18 @@ export class WorkProjectsPanel
             &#149; Played a big role in each of the product launches. <br> 
             &#149; Helped out in building a procedural volumetric terrain system that is also able to also generate underground caves. <br>
             &#149; Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.`,
-            _tags: ["WebGL", "Typescript", "C++", "Procedural", "GameDev"],
-            _tagColors: ["#6d1aa1", "#1a59a1", "#a11a1a", "#146913", "#853e13"],
+            _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Engine"],
+            _tagColors: [tagColors.language, tagColors.language, tagColors.language, tagColors.gameType, tagColors.software],
             _moreDetailsPage: "https://planetquest.io",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
             _videoFormatIndices: [5, 6],
             _imageDurationMs: 5000
         });
+
+        let separator = document.createElement("div");
+        separator.className = "separator";
+        parentNode.appendChild(separator);
     }
 
     public update()

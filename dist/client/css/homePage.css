@@ -45,4 +45,9 @@
     height: 2.75vw;
     display: inline-block;
     margin: 0.25vw;
+    border: 0.15vw solid #74a7ff;
+}
+.homePageReferalLink:hover
+{
+    border: 0.15vw solid #283956;
 }

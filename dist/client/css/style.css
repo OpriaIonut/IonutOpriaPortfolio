@@ -82,7 +82,7 @@ body{
 .wideCellGalleryLeftPanel
 {
     display: inline-block;
-    width: 30%;
+    width: 35%;
     height: 100%;
     vertical-align: top;
 }
@@ -90,7 +90,7 @@ body{
 .wideCellGalleryRightPanel
 {
     display: inline-block;
-    width: 70%;
+    width: 65%;
     height: auto;
 }
 
@@ -144,16 +144,30 @@ body{
 {
     text-align: center;
 }
+.multiCellWithGalleryDescription
+{
+    font-size: 1.1vw;
+    padding-top: 1vw;
+}
 
 .middleCenterBtn
 {
-    width: 15vw;
-    height: 3vw;
-    background-color: rgb(165, 195, 195);
-    border-radius: 3vw;
     position: relative;
+    width: 15vw;
+    height: auto;
     left: 50%;
     transform: translateX(-50%);
+
+    border-radius: 3vw;
+    padding: 1vw;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.5vw;
+    background-color: var(--skill-cell-color);
+}
+.middleCenterBtn:hover
+{
+    background-color: var(--skill-cell-hover-color);
 }
 
 #softwareProjectsPanel

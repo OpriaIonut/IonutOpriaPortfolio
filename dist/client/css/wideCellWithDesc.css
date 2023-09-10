@@ -6,6 +6,10 @@
     border-radius: 1.5vw;
     font-size: 1.25vw;
 }
+.wideCellWithDesc:hover
+{
+    background-color: var(--skill-cell-hover-color);
+}
 
 .wideCellWithDescTitle, .wideCellWithDescText
 {
@@ -30,4 +34,8 @@
     height: 100%;
     right: 0px;
     top: 0px;
+}
+.wideCellGalleryTagsList
+{
+    text-align: center;
 }

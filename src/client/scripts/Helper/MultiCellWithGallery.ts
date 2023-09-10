@@ -10,7 +10,7 @@ export class MultiCellWithGallery
         let cellParent = document.createElement("div");
         cellParent.id = config._id;
         cellParent.className = "multiCellWithGallery";
-        cellParent.style.width = `${90 / cellsPerWidth}%`;
+        cellParent.style.width = `${96 / cellsPerWidth}%`;
         parentNode.appendChild(cellParent);
 
         let topPanel = document.createElement("div");
@@ -45,11 +45,10 @@ export class MultiCellWithGallery
 
         this._gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs, config._imgExtension);
 
-        let moreDetails = document.createElement("button");
+        let moreDetails = document.createElement("div");
         moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton";
         moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
-        moreDetails.classList.add("multiCellWithGalleryMoreDetailsButton");
         downPanel.appendChild(moreDetails);
     }
 

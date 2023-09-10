@@ -20,3 +20,10 @@ export const chartPurpleColorTheme: ChartColorTheme = {
     backgroundColor: 'rgba(130, 38, 150, 0.5)',
     borderColor: 'rgb(179, 50, 207)'
 }
+
+export const tagColors = {
+    language: "#9e1c1c",
+    software: "#245e8c",
+    gameType: "#299648",
+    extra: "#bd572b"
+}
