@@ -20,6 +20,9 @@ const pageParent = document.createElement("div");
 pageParent.id = "pageParent";
 document.body.appendChild(pageParent);
 
+const mouseAnim = new MouseAnimation(0.75, 0.4);
+
+
 const aboutMePanel = new AboutMePanel(pageParent);
 const skillChartsPanel = new SkillChartsPanel(pageParent);
 const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
@@ -30,8 +33,6 @@ const artProjectsPanel = new ArtProjectsPanel(pageParent);
 const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
-
-const mouseAnim = new MouseAnimation(0.75, 0.4);
 
 let previousFrameTime = 0;
 function gameLoop(timestamp: number)

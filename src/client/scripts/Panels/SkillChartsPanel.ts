@@ -67,8 +67,9 @@ export class SkillChartsPanel
             _chartID: "selfAssesmentChart",
             _units: "",
             _dataSets: [
-                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [5, 7, 7, 4, 8, 7, 1, 7, 5] }
-            ]
+                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [4, 6, 7, 4, 8, 7, 1, 7, 5] }
+            ],
+            _maxScale: 10
         });
 
         // let separator = document.createElement("div");
@@ -115,11 +116,17 @@ export class SkillChartsPanel
                             callback: function(value: any, index: any, values: any) {
                                 return value + config._units;
                             }
+                        },
+                        grid: {
+                            color: "rgba(100, 100, 100, 0.5)"
                         }
                     },
                     x: {
                         ticks: {
                             color: "#ffffff"
+                        },
+                        grid: {
+                            color: "rgba(100, 100, 100, 0.5)"
                         }
                     }
                 },
