@@ -36,8 +36,8 @@ export class HomePanel
         titleParent.appendChild(linksParent);
 
         this.createCellLink(linksParent, "./images/icons/linkedin.png", "https://www.linkedin.com/in/ionut-opria-6164b5150/");
-        this.createCellLink(linksParent, "./images/icons/itch.png", "https://kirirato.itch.io");
         this.createCellLink(linksParent, "./images/icons/github.png", "https://github.com/OpriaIonut");
+        this.createCellLink(linksParent, "./images/icons/itch.png", "https://kirirato.itch.io");
         this.createCellLink(linksParent, "./images/icons/artstation.png", "https://www.artstation.com/kirirato16");
         this.createCellLink(linksParent, "./images/icons/twitter.png", "https://twitter.com/Kirirato");
         this.createCellLink(linksParent, "./images/icons/PDF.png", "CV");

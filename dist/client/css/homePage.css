@@ -1,0 +1,48 @@
+#homePanelParent
+{
+    position: relative;
+    top: 0px;
+}
+
+#banner
+{
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+#homePanelTitleParent
+{
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+}
+
+#homePanelTitle
+{
+    font-size: 4vw;
+}
+
+#homePanelSubtitle
+{
+    font-size: 2.4vw;
+    color: var(--tertiary-color);
+}
+
+#homePanelContact
+{
+    font-size: 1vw;
+    color: var(--secondary-color);
+}
+
+.homePageReferalLink
+{
+    border-radius: 100%;
+    width: 2.75vw;
+    height: 2.75vw;
+    display: inline-block;
+    margin: 0.25vw;
+}

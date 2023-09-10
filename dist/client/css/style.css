@@ -3,7 +3,7 @@
 } */
 
 body{
-    background-color: rgb(50, 50, 50);
+    background-color: var(--primary-color);
     color: aliceblue;
     margin: 0px;
     padding: 0px;
@@ -21,48 +21,24 @@ body{
     width: 100%;
 }
 
-#banner
+#pageParent
+{
+    position: relative;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1vw;
+}
+
+.separator
 {
     width: 100%;
-    height: auto;
-    position: relative;
+    height: 0.25vh;
+    background-color: aliceblue;
 }
 
-#homePanelTitleParent
-{
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translateX(-50%) translateY(-50%);
-    text-align: center;
-}
 
-#homePanelTitle
-{
-    font-size: 4vw;
-}
 
-#homePanelSubtitle
-{
-    font-size: 2.4vw;
-    color: var(--tertiary-color);
-}
-
-#homePanelContact
-{
-    font-size: 1vw;
-    color: var(--secondary-color);
-}
-
-.homePageReferalLink
-{
-    border-radius: 100%;
-    width: 2.75vw;
-    height: 2.75vw;
-    display: inline-block;
-    margin: 0.25vw;
-}
 
 #skillCharts
 {

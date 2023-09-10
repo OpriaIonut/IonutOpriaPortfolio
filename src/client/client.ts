@@ -14,7 +14,12 @@ export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
 export const userInteractedWithPage = { value: false }
 
 const homePanel = new HomePanel();
-const aboutMePanel = new AboutMePanel();
+
+const pageParent = document.createElement("div");
+pageParent.id = "pageParent";
+document.body.appendChild(pageParent);
+
+const aboutMePanel = new AboutMePanel(pageParent);
 const skillChartsPanel = new SkillChartsPanel();
 const specialSkillsPanel = new SpecialSkillsPanel();
 const workProjectsPanel = new WorkProjectsPanel();

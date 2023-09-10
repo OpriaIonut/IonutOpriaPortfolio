@@ -1,6 +1,5 @@
 Weekend goal
 -Add separators & headers for each of the sections
--Make about me section pretty
 -Make skill section pretty
 -Make special skills section pretty
 

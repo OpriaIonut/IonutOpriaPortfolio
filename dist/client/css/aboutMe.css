@@ -1,0 +1,21 @@
+#aboutMeParent
+{
+    background-color: var(--secondary-background-color);
+}
+
+#aboutMeTitle
+{
+    font-size: 5vw;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+#aboutMeDescription
+{
+    font-size: 1.25vw;
+    padding: 3vw;
+    /* position: relative;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%); */
+}
