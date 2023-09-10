@@ -4,7 +4,7 @@ import { ThreeModelConfig } from "./ThreeModelsConfig";
 import { ObjectLoader } from "./ObjectLoader";
 import { Asset3D, PostProcessingConfig, ThreeSceneConfig } from "../../types";
 import { DebugUI } from "./DebugGUI";
-import { threeDebugGUI } from "../../client";
+import { mouseAnim, threeDebugGUI } from "../../client";
 import { ButtonsWithSelection } from "../Helper/ButtonsWithSelection";
 import { MaterialCache } from "./MaterialCache";
 import { HorizontalSliderWithTitle } from "../Helper/HorizontalSliderWithTitle";
@@ -110,6 +110,8 @@ export class ThreeModelView
 
         this._cameraManager.resetCamera();
         this._objectLoader.loadModel(config.path, this.onModelLoaded, this.onModelProgress);
+
+        mouseAnim.setActive(false);
     }
 
     public hideView()
@@ -120,6 +122,7 @@ export class ThreeModelView
             this._cameraManager.scene.remove(this._currentModel);
             this._currentModel = undefined;
         }
+        mouseAnim.setActive(true);
     }
 
     public update(deltaTime: number)

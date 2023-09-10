@@ -49,4 +49,10 @@ export class MouseAnimation
         this._lastMousePos.x = e.clientX;
         this._lastMousePos.y = e.clientY;
     }
+
+    public setActive(value: boolean)
+    {
+        this._innerElem.style.display = value ? "block" : "none";
+        this._outerElem.style.display = value ? "block" : "none";
+    }
 }

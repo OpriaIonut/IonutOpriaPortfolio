@@ -20,7 +20,7 @@ const pageParent = document.createElement("div");
 pageParent.id = "pageParent";
 document.body.appendChild(pageParent);
 
-const mouseAnim = new MouseAnimation(0.75, 0.4);
+export const mouseAnim = new MouseAnimation(0.75, 0.4);
 
 
 const aboutMePanel = new AboutMePanel(pageParent);
