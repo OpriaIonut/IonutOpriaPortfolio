@@ -24,10 +24,10 @@ export class ArtProjectsPanel
         new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "MechSpider", "images/models/MechSpider.png");
+        new CellWithPreview(parentNode, cellsPerWidth, "MechSpider", "images/models/MechSpider.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "GodEater", "images/models/GodEaterChainsaw.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "AnchorSword", "images/models/AnchorSword.png");
-        new CellWithPreview(parentNode, cellsPerWidth, "FantasyBow", "images/models/FantasyBow.png");
+        new CellWithPreview(parentNode, cellsPerWidth, "AnchorSword", "images/models/AnchorSword.jpg");
+        new CellWithPreview(parentNode, cellsPerWidth, "FantasyBow", "images/models/FantasyBow.jpg");
 
         let renderGalleryParent = document.createElement("div");
         renderGalleryParent.id = "renderGalleryParent";
