@@ -24,6 +24,7 @@
 }
 .wideCellWithDescText
 {
+    font-size: 1vw;
     text-align: left;
     padding: 0.5vw 1.5vw 1.5vw 1.5vw;
 }
