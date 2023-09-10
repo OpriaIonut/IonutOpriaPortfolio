@@ -10,7 +10,7 @@ export class MultiCellWithGallery
         let cellParent = document.createElement("div");
         cellParent.id = config._id;
         cellParent.className = "multiCellWithGallery";
-        cellParent.style.width = `${96 / cellsPerWidth}%`;
+        cellParent.style.width = `${94 / cellsPerWidth}%`;
         parentNode.appendChild(cellParent);
 
         let topPanel = document.createElement("div");

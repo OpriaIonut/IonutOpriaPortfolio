@@ -19,7 +19,7 @@ export class WorkProjectsPanel
 
         let title = document.createElement("div");
         title.className = "sectionTitle";
-        title.innerHTML = "Work Projects";
+        title.innerHTML = "Professional Projects";
         parentNode.appendChild(title);
 
         this._gallery = new WideCellGallery(parentNode, {

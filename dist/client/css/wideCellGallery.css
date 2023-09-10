@@ -1,7 +1,9 @@
 .wideCellGallery
 {
-    width: 98%;
+    width: 96%;
     padding: 1vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 .wideCellGalleryLeftPanel

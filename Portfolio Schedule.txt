@@ -1,8 +1,6 @@
 Weekend goal
 -add footer
--check separators & try different looks for it
 -Add mouse animation effect
--Pick proper fonts to be used
 
 
 -place more details buttons on the same row

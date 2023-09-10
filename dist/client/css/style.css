@@ -33,9 +33,10 @@ body{
     left: 50%;
     transform: translateX(-50%);
     margin: 2vw;
-    padding: 1vw;
     background-color: var(--secondary-background-color);
     text-align: center;
+    padding-bottom: 2vw;
+    box-shadow: 0 0 1.0vw rgba(0, 0, 0, 0.5);
 }
 
 .sectionTitle
@@ -43,6 +44,7 @@ body{
     font-size: 4vw;
     color: var(--secondary-color);
     text-align: center;
+    padding-top: 2vw;
 }
 
 .subtitle
@@ -115,4 +117,9 @@ body{
     width: 0px;
     height: 3%;
     background-color: rgb(74, 255, 171);
+}
+
+#gameProjectsPanel
+{
+    background-color: var(--tertiary-background-color);
 }

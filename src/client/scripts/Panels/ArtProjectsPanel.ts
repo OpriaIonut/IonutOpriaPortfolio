@@ -17,6 +17,7 @@ export class ArtProjectsPanel
         let title = document.createElement("div");
         title.className = "sectionTitle";
         title.innerHTML = "3D Models";
+        title.style.paddingBottom = "2vw";
         parentNode.appendChild(title);
 
         const cellsPerWidth = 4;
