@@ -61,16 +61,16 @@ export class SkillChartsPanel
             ]
         });
 
-        this.createChart(parentNode, {
-            _chartType: "line",
-            _labels: ["C++", "C#", "Typescript", "GLSL", "Three.js", "Unity", "Unreal Engine", "Blender", "Substance Painter"],
-            _chartID: "selfAssesmentChart",
-            _units: "",
-            _dataSets: [
-                { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [4, 6, 7, 4, 8, 7, 1, 7, 5] }
-            ],
-            _maxScale: 10
-        });
+        // this.createChart(parentNode, {
+        //     _chartType: "line",
+        //     _labels: ["C++", "C#", "Typescript", "GLSL", "Three.js", "Unity", "Unreal Engine", "Blender", "Substance Painter"],
+        //     _chartID: "selfAssesmentChart",
+        //     _units: "",
+        //     _dataSets: [
+        //         { _label: "Proficiency", _colorTheme: chartPurpleColorTheme, _data: [4, 6, 7, 4, 8, 7, 1, 7, 5] }
+        //     ],
+        //     _maxScale: 10
+        // });
 
         // let separator = document.createElement("div");
         // separator.className = "separator";

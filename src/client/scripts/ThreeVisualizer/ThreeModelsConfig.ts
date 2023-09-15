@@ -127,13 +127,36 @@ const fantasyBowPost: PostProcessingConfig =
 export const ThreeModelConfig: any =
 {
     Zoro: { 
-        path: "models/AnchorSword.glb", 
+        path: "models/Ori.glb", 
         anim: [], 
         scale: 1.0, 
         cameraPos: new Vector3(0, 0, 7), 
         sceneConfig: litSceneConfig,
         postProcessing: zoroPostProccessing,
-        totalBytes: 3713600
+        animations: {
+            firstAnimation: "Default",
+            Death: {
+                speed: 1.0,
+                looping: false
+            },
+            Default: {
+                speed: 1.0,
+                looping: false
+            },
+            Idle: {
+                speed: 0.1,
+                looping: true
+            },
+            SecondJump: {
+                speed: 0.1,
+                looping: true
+            },
+            Walk: {
+                speed: 0.1,
+                looping: true
+            }
+        },
+        totalBytes: 3367424
     },
     MechaGirl: { 
         path: "models/MechaGirl.glb", 
@@ -142,7 +165,7 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3( -0.77, 2.11, 4.15), 
         sceneConfig: emissiveSceneConfig,
         postProcessing: oniGurlPost,
-        totalBytes: 7930156
+        totalBytes: 8175088
     },
     OniGurl: { 
         path: "models/OniGurl.glb", 

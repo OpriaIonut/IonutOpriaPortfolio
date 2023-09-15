@@ -21,7 +21,7 @@ export class ArtProjectsPanel
         parentNode.appendChild(title);
 
         const cellsPerWidth = 4;
-        new CellWithPreview(parentNode, cellsPerWidth, "Zoro", "images/gallery/planetquest-test/5.jpg");
+        new CellWithPreview(parentNode, cellsPerWidth, "Zoro", "images/models/Ori.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg");
         new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg");

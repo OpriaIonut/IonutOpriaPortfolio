@@ -176,6 +176,9 @@ export class ThreeModelView
         this._previousAnim = "";
         let animNames = [];
 
+        let animSettings = ThreeModelConfig[this._currentModelName].animations;
+        let firstAnimIndex = 0;
+
         for(let index = 0; index < asset.animations.length; ++index)
         {
             animNames.push(asset.animations[index].name);
@@ -184,13 +187,24 @@ export class ThreeModelView
         {
             this._animMixer = new THREE.AnimationMixer(this._currentModel!);
 
-            this._poseSettings.init(animNames, 0);
             for(let index = 0; index < animNames.length; ++index)
             {
                 let animAction = this._animMixer.clipAction(asset.animations[index]);
+                if(animSettings !== undefined)
+                {
+                    if(animSettings.firstAnimation !== undefined && animNames[index] == animSettings.firstAnimation)
+                        firstAnimIndex = index;
+                    if(animSettings[animNames[index]] !== undefined)
+                    {
+                        animAction.setLoop(animSettings[animNames[index]].looping ? THREE.LoopRepeat : THREE.LoopOnce, 100);
+                        animAction.clampWhenFinished = true;
+                        animAction.timeScale = animSettings[animNames[index]].speed;
+                    }
+                }
                 this._currentAnimations.set(animNames[index], animAction);
             }
-            this.onPoseChanged(animNames[0]);
+            this._poseSettings.init(animNames, firstAnimIndex);
+            this.onPoseChanged(animNames[firstAnimIndex]);
         }
     }
 
