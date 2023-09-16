@@ -1,7 +1,13 @@
+import { timeStats } from "../../client";
+import { TypewriterElement } from "../Effects/TypewriterElement";
+
 export class WideCellWithDesc
 {
     private _cellDesc: HTMLDivElement;
     private _isVisible: boolean = false;
+
+    private _typewriter: TypewriterElement;
+    private _description: string;
 
     constructor(parentNode: HTMLDivElement, cellID: string, title: string, description: string)
     {
@@ -25,14 +31,30 @@ export class WideCellWithDesc
 
         this._cellDesc = document.createElement("div");
         this._cellDesc.className = "wideCellWithDescText";
-        this._cellDesc.innerHTML = description;
         this._cellDesc.style.display = "none";
         cellDiv.appendChild(this._cellDesc);
+
+        this._typewriter = new TypewriterElement(this._cellDesc);
+        this._description = description;
     }
 
     public toggleVisibility()
     {
         this._isVisible = !this._isVisible;
-        this._cellDesc.style.display = this._isVisible ? "block" : "none";
+        if(this._isVisible)
+        {
+            this._cellDesc.style.display = "block";
+            this._typewriter.displayText(this._description, 0.1, 0, 0, true, null);
+        }
+        else
+        {
+            this._cellDesc.innerHTML = "";
+            this._cellDesc.style.display = "none";
+        }
+    }
+
+    public update()
+    {
+        this._typewriter.update(timeStats.currentTime, timeStats.deltaTime);
     }
 }

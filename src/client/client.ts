@@ -47,6 +47,7 @@ function gameLoop(timestamp: number)
     threeModelView.update(deltaTime);
     workProjectsPanel.update();
     gameProjectsPanel.update();
+    specialSkillsPanel.update();
 
     mouseAnim.update();
 }

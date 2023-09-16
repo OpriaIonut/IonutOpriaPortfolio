@@ -1,12 +1,8 @@
 -----This weekend
--add project download button
--Add animations to the special skill cells
--Add typewriter effect (for special skill cells & maybe about me)
 -add multiple color themes
--Make god eater sword prettier
+-Make it responsive
 
 -Get feedback from Claudiu
--Make it responsive
--Add navbar
 -Get permision from Loren
+-Add navbar?
 -Publish

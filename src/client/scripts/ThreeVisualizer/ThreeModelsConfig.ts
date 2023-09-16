@@ -11,6 +11,16 @@ const litSceneConfig: ThreeSceneConfig =
     _directionalIntensity: 5.0,
     _lightColor: new Color(0xffffff)
 }
+const godEaterScene: ThreeSceneConfig =
+{
+    _backgroundColor: new Color(0xffffff),
+    _minZoom: 1.0,
+    _maxZoom: 10,
+    _litLighting: true,
+    _ambientIntensity: 2.5,
+    _directionalIntensity: 5.0,
+    _lightColor: new Color(0xffffff)
+}
 const emissiveSceneConfig: ThreeSceneConfig =
 {
     _backgroundColor: new Color(0xffffff),
@@ -94,8 +104,8 @@ const godEaterPost: PostProcessingConfig =
     _vignetteOffset: 1.0,
     _vignetteDarkness: 1.0,
     _chromaAberrationRedOut: true,
-    _lutName: "Bourbon 64.CUBE",
-    _lutIntensity: 0.0
+    _lutName: "Chemical 168.CUBE",
+    _lutIntensity: 1.0
 }
 
 const anchorPost: PostProcessingConfig =
@@ -199,7 +209,7 @@ export const ThreeModelConfig: any =
         anim: [], 
         scale: 1.0, 
         cameraPos: new Vector3(-2.08, -0.70, 1.83), 
-        sceneConfig: litSceneConfig,
+        sceneConfig: godEaterScene,
         postProcessing: godEaterPost,
         totalBytes: 7452644
     },
