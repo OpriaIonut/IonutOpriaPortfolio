@@ -1,3 +1,4 @@
+import { ColorThemeButtons } from "./scripts/Effects/ColorThemeButtons";
 import { MouseAnimation } from "./scripts/Effects/MouseAnimation";
 import { AboutMePanel } from "./scripts/Panels/AboutMePanel";
 import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
@@ -13,13 +14,14 @@ export const threeDebugGUI = false;
 export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
 export const userInteractedWithPage = { value: false }
 
-const homePanel = new HomePanel();
+export const homePanel = new HomePanel();
 
 const pageParent = document.createElement("div");
 pageParent.id = "pageParent";
 document.body.appendChild(pageParent);
 
 export const mouseAnim = new MouseAnimation(0.75, 0.4);
+const colorThemeButtons = new ColorThemeButtons();
 
 
 const aboutMePanel = new AboutMePanel(pageParent);

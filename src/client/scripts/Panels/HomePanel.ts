@@ -1,5 +1,14 @@
+const bannersPerTheme: any = 
+{
+    blueTheme: "./images/banners/0.jpg",
+    purpleTheme: "./images/banners/purple.jpg",
+    orangeTheme: "./images/banners/orange.jpg"
+}
+
 export class HomePanel
 {
+    private _banner!: HTMLImageElement;
+
     constructor()
     {
         this.createElements();
@@ -12,10 +21,10 @@ export class HomePanel
         parentNode.className = "fullwidth";
         document.body.appendChild(parentNode);
 
-        let banner = document.createElement("img");
-        banner.id = "banner";
-        banner.src = "./images/banners/0.jpg";
-        parentNode.appendChild(banner);
+        this._banner = document.createElement("img");
+        this._banner.id = "banner";
+        parentNode.appendChild(this._banner);
+        this.updateBanner();
 
         let titleParent = document.createElement("div");
         titleParent.id = "homePanelTitleParent";
@@ -69,5 +78,10 @@ export class HomePanel
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    public updateBanner()
+    {
+        this._banner.src = bannersPerTheme[document.documentElement.className];
     }
 }

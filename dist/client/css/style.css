@@ -202,3 +202,19 @@ body{
    left: 0px;
    padding-bottom: 3vw;
 }
+
+#colorThemeBtnParent
+{
+    position: fixed;
+    bottom: 2vw;
+    left: 1vw;
+    width: 1.5vw;
+    height: 10vw;
+}
+
+.colorThemeBtn
+{
+    width: 1.5vw;
+    height: 1.5vw;
+    margin-bottom: 0.5vw;
+}

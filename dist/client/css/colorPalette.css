@@ -1,4 +1,4 @@
-:root {
+.blueTheme {
     --primary-color: #282a35;
     --secondary-color: #189C9B;
     --tertiary-color: #FF7658;
@@ -9,3 +9,27 @@
     --secondary-background-color: #1a2025;
     --tertiary-background-color: #011321;
   }
+
+.purpleTheme {
+    --primary-color: #2a2835;
+    --secondary-color: #ca18cd;
+    --tertiary-color: #2b51c2;
+    --button-color: #1e3d98;
+    --button-hover-color: #10235c;
+    --skill-cell-color: #36293c;
+    --skill-cell-hover-color: #2d202e;
+    --secondary-background-color: #251a24;
+    --tertiary-background-color: #200420;
+}
+
+.orangeTheme {
+  --primary-color: #282c35;
+  --secondary-color: #cd4b18;
+  --tertiary-color: #2b9ac2;
+  --button-color: #1e3d98;
+  --button-hover-color: #10235c;
+  --skill-cell-color: #292d3c;
+  --skill-cell-hover-color: #2e2420;
+  --secondary-background-color: #1a1c25;
+  --tertiary-background-color: #2c1504;
+}
