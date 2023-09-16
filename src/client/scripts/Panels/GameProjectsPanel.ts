@@ -41,7 +41,9 @@ export class GameProjectsPanel
             _imagesPath: "images/gallery/serenity-garden/",
             _imageCount: 7,
             _videoFormatIndices: [0],
-            _imageDurationMs: 5000
+            _imageDurationMs: 5000,
+            _downloadPath: "games/Serenity Garden TD.rar",
+            _downloadName: "Serenity Garden TD.rar"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -66,7 +68,9 @@ export class GameProjectsPanel
             _imagesPath: "images/gallery/chicken-invaders/",
             _imageCount: 6,
             _videoFormatIndices: [0],
-            _imageDurationMs: 5000
+            _imageDurationMs: 5000,
+            _downloadPath: "games/Chicken Invaders DX.rar",
+            _downloadName: "Chicken Invaders DX.rar"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -88,7 +92,9 @@ export class GameProjectsPanel
             _imageCount: 5,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _imgExtension: "png"
+            _imgExtension: "png",
+            _downloadPath: "games/Legeithiel Unaelian.rar",
+            _downloadName: "Legeithiel Unaelian.rar"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -109,7 +115,9 @@ export class GameProjectsPanel
             _imagesPath: "images/gallery/ori/",
             _imageCount: 6,
             _videoFormatIndices: [0],
-            _imageDurationMs: 5000
+            _imageDurationMs: 5000,
+            _downloadPath: "games/Ori Gameplay Clone.rar",
+            _downloadName: "Ori Gameplay Clone.rar"
         }));
 
         let moreGamesBtn = document.createElement("div");

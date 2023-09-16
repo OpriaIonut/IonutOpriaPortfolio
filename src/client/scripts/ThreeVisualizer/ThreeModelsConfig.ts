@@ -126,7 +126,7 @@ const fantasyBowPost: PostProcessingConfig =
 
 export const ThreeModelConfig: any =
 {
-    Zoro: { 
+    Ori: { 
         path: "models/Ori.glb", 
         anim: [], 
         scale: 1.0, 

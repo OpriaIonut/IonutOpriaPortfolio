@@ -5,7 +5,6 @@ import { EndingPanel } from "./scripts/Panels/EndingPanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
 import { HomePanel } from "./scripts/Panels/HomePanel";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
-import { SoftwareProjectsPanel } from "./scripts/Panels/SoftwareProjectsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
 import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
@@ -28,7 +27,6 @@ const skillChartsPanel = new SkillChartsPanel(pageParent);
 const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
 const workProjectsPanel = new WorkProjectsPanel(pageParent);
 const gameProjectsPanel = new GameProjectsPanel(pageParent);
-// const softwareProjectsPanel = new SoftwareProjectsPanel();
 const artProjectsPanel = new ArtProjectsPanel(pageParent);
 const endingPanel = new EndingPanel();
 
@@ -49,7 +47,6 @@ function gameLoop(timestamp: number)
     threeModelView.update(deltaTime);
     workProjectsPanel.update();
     gameProjectsPanel.update();
-    // softwareProjectsPanel.update();
 
     mouseAnim.update();
 }

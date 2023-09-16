@@ -41,7 +41,9 @@ export class WorkProjectsPanel
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
             _videoFormatIndices: [5, 6],
-            _imageDurationMs: 5000
+            _imageDurationMs: 5000,
+            _downloadPath: "",
+            _downloadName: ""
         });
 
         let separator = document.createElement("div");

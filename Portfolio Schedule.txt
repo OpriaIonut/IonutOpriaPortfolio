@@ -1,5 +1,4 @@
 -----This weekend
--place more details buttons on the same row
 -add project download button
 -Add animations to the special skill cells
 -Add typewriter effect (for special skill cells & maybe about me)

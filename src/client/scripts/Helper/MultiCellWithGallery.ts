@@ -45,15 +45,41 @@ export class MultiCellWithGallery
 
         this._gallery = new GalleryView(topPanel, config._id, config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs, config._imgExtension);
 
+        // let moreDetails = document.createElement("div");
+        // moreDetails.innerHTML = "More Details";
+        // moreDetails.className = "cellButton";
+        // moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
+        // downPanel.appendChild(moreDetails);
+
+        let combinedBtnParent = document.createElement("div");
+        combinedBtnParent.className = "combinedBtnParent";
+        downPanel.appendChild(combinedBtnParent);
+
         let moreDetails = document.createElement("div");
         moreDetails.innerHTML = "More Details";
-        moreDetails.className = "cellButton";
+        moreDetails.className = "combinedBtnLeft";
         moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
-        downPanel.appendChild(moreDetails);
+        combinedBtnParent.appendChild(moreDetails);
+
+        let downloadBtn = document.createElement("div");
+        downloadBtn.innerHTML = "Download";
+        downloadBtn.className = "combinedBtnRight";
+        downloadBtn.onclick = () => { this.downloadFile(config._downloadPath, config._downloadName); };
+        combinedBtnParent.appendChild(downloadBtn);
     }
 
     public update()
     {
         this._gallery.update();
+    }
+
+    private downloadFile(filePath: string, fileName: string) 
+    {
+        const link = document.createElement('a');
+        link.href = filePath;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }
