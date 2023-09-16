@@ -64,13 +64,22 @@ body{
 
 .cellButton
 {
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    width: 10vw;
+    transform: translateX(-50%) translateY(25%);
+
+    padding: 0.5vw;
+    margin: 20px;
+    border: 2px solid #fff;
+    border-radius: 3vw;
+    box-shadow: 0 0 0.25em rgba(0, 0, 0, 1);
+
     background-color: var(--button-color);
     font-size: 1.25vw;
-    width: 10vw;
     text-align: center;
     cursor: pointer;
-    padding: 0.5vw;
-    border-radius: 3vw;
 }
 .cellButton:hover
 {
@@ -91,6 +100,8 @@ body{
     text-align: center;
     font-size: 1.5vw;
     background-color: var(--skill-cell-color);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0.35em rgba(0, 0, 0, 1);
 }
 .middleCenterBtn:hover
 {
@@ -134,7 +145,7 @@ body{
 #endingPanelText
 {
     font-size: 1vw;
-    margin-top: 2vw;
+    margin-top: 1vw;
     margin-bottom: 1vw;
 }
 
@@ -144,4 +155,13 @@ body{
     padding: 1vw;
     margin-top: 2vw;
     background-color: var(--tertiary-background-color);
+}
+
+.bulletPointList
+{
+   position: relative;
+   float: right;
+   width: 97%;
+   left: 0px;
+   padding-bottom: 3vw;
 }

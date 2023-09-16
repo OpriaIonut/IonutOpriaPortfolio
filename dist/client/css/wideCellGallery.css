@@ -8,6 +8,7 @@
 
 .wideCellGalleryLeftPanel
 {
+    position: relative;
     display: inline-block;
     width: 40%;
     height: 100%;

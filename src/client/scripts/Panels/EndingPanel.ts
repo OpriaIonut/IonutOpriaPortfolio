@@ -16,7 +16,7 @@ export class EndingPanel
         text.id = "endingPanelText";
         text.innerHTML = `
         Thank you for spending the time to look through my portfolio!<br>
-        In case you want to contact me you can do so here: opriaionut@gmailcom<br>
+        In case you want to contact me you can do so here: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut@gmailcom</div><br>
         `;
         parentNode.appendChild(text);
 

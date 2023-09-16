@@ -28,11 +28,13 @@ export class WorkProjectsPanel
             _description: `<br>
             Planetquest is a Blockchain game in which you can explore procedurally generated planets dirrectly in your browser. I was one of the first persons that joined the team and played a big role during the entire development of the project.<br><br>
             Key contributions: <br>
-            <b>&#149;</b> Developed a 3D engine that is able to procedurally generate planets dirrectly in the browser. <br>
-            <b>&#149;</b> Played a big role in the gameplay aspect of the project, by developing a lot of the core gameplay mechanics. <br>
-            <b>&#149;</b> Played a big role in each of the product launches. <br> 
-            <b>&#149;</b> Helped out in building a procedural volumetric terrain system that is also able to also generate underground caves. <br>
-            <b>&#149;</b> Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.`,
+            <div class='bulletPointList'>
+                <b>&#149;</b> Developed a 3D engine that is able to procedurally generate planets dirrectly in the browser. <br>
+                <b>&#149;</b> Played a big role in the gameplay aspect of the project, by developing a lot of the core gameplay mechanics. <br>
+                <b>&#149;</b> Played a big role in each of the product launches. <br> 
+                <b>&#149;</b> Helped out in building a procedural volumetric terrain system that is also able to also generate underground caves. <br>
+                <b>&#149;</b> Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.
+            </div>`,
             _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Engine"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.language, tagColors.gameType, tagColors.software],
             _moreDetailsPage: "https://planetquest.io",

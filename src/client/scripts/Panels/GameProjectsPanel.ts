@@ -28,12 +28,14 @@ export class GameProjectsPanel
             _id: "serenityGardenCell",
             _title: "Serenity Garden",
             _description: `Tower defense game in which you can:<br>
+            <div class='bulletPointList'>
                 <b>&#149;</b> Construct & upgrade 6 different types of turrets<br>
                 <b>&#149;</b> Control a playable character that shoots enemies & can empower the turrets<br>
                 <b>&#149;</b> Play 30 different PvE levels on 6 different maps<br>
                 <b>&#149;</b> Buy permanent upgrades for your turrets<br>
-                <b>&#149;</b> Play a co-op boss-fight arena mode with a friend on 3 different difficulties`,
-            _tags: ["Unity", "Photon 2", "C#", "Tower Defense", "Multi-user", "Multi-platform"],
+                <b>&#149;</b> Play a co-op boss-fight arena mode with a friend on 3 different difficulties
+            </div>`,
+                _tags: ["Unity", "Photon 2", "C#", "Tower Defense", "Multi-user", "Multi-platform"],
             _tagColors: [tagColors.software, tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
             _moreDetailsPage: "https://kirirato.itch.io/serenity-garden",
             _imagesPath: "images/gallery/serenity-garden/",
@@ -46,6 +48,7 @@ export class GameProjectsPanel
             _id: "chickenInvadersCell",
             _title: "Chicken Invaders DX",
             _description: `Replica of the initial Chicken Invaders DX game, which contains the following:<br>
+            <div class='bulletPointList'>
                 <b>&#149;</b> 10 playable levels that repeat endlessly<br>
                 <b>&#149;</b> Local leaderboard system<br>
                 <b>&#149;</b> Weapon utility with 8 different levels, each having a different attack pattern<br>
@@ -55,7 +58,8 @@ export class GameProjectsPanel
                 Main Contributions:<br>
                 <b>&#149;</b> Implemented asteroid belt and waves 4-5<br>
                 <b>&#149;</b> Created the spritesheets for all non-ui elements in the game (spaceship, chickens, etc.)<br>
-                <b>&#149;</b> Optimized resource loading using multithreaded programming`,
+                <b>&#149;</b> Optimized resource loading using multithreaded programming
+                </div>`,
             _tags: ["C++", "SFML", "Bullet Hell", "Endless", "Leaderboard"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
             _moreDetailsPage: "https://kirirato.itch.io/chicken-invaders-dx",
@@ -70,11 +74,13 @@ export class GameProjectsPanel
             _title: "Legeithiel Unaelian",
             _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br><br>
                 It contains the following:<br>
+            <div class='bulletPointList'>
                 <b>&#149;</b> 3 playable levels<br>
                 <b>&#149;</b> 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
                 <b>&#149;</b> Pause menu from which you can tweak sound settings<br>
                 <b>&#149;</b> Leaderboard system stored locally<br>
-                <b>&#149;</b> Controller support`,
+                <b>&#149;</b> Controller support
+            </div>`,
             _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
             _moreDetailsPage: "https://kirirato.itch.io/legeithiel-unaelian",
@@ -90,11 +96,13 @@ export class GameProjectsPanel
             _title: "Ori Gameplay Clone",
             _description: `Gameplay replica of the game Ori and the Blind Forest<br><br>
                 It contains the following mechanics:<br>
+            <div class='bulletPointList'>
                 <b>&#149;</b> Normal attack that can target up to 3 enemies + charge attack that deals a lot of damage<br>
                 <b>&#149;</b> Dynamic movement with double jump, dashing, charged jump, wall climbing, propulsion dodge<br>
                 <b>&#149;</b> 8 different enemy types<br>
                 <b>&#149;</b> 4 kinds of traps that each require different interactions<br>
-                <b>&#149;</b> Minimap functionality that shows the objective for the game`,
+                <b>&#149;</b> Minimap functionality that shows the objective for the game
+            </div>`,
             _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra],
             _moreDetailsPage: "https://kirirato.itch.io/origameplayclone",

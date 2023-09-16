@@ -1,6 +1,6 @@
 -----This weekend
 -place more details buttons on the same row
--add borders around the buttons & maybe shadow effect
+-add project download button
 -Add animations to the special skill cells
 -Add typewriter effect (for special skill cells & maybe about me)
 -add multiple color themes
