@@ -1,10 +1,9 @@
 -----This weekend
--add footer
 -place more details buttons on the same row
--add multiple color themes
+-add borders around the buttons & maybe shadow effect
 -Add animations to the special skill cells
 -Add typewriter effect (for special skill cells & maybe about me)
--Make text glow effects
+-add multiple color themes
 -Make god eater sword prettier
 
 -Get feedback from Claudiu

@@ -123,3 +123,25 @@ body{
 {
     background-color: var(--tertiary-background-color);
 }
+
+#endingPanelParent
+{
+    margin-top: 5vw;
+    border-top: 3px solid #fff;
+    text-align: center;
+}
+
+#endingPanelText
+{
+    font-size: 1vw;
+    margin-top: 2vw;
+    margin-bottom: 1vw;
+}
+
+#copyright
+{
+    font-size: 0.75vw;
+    padding: 1vw;
+    margin-top: 2vw;
+    background-color: var(--tertiary-background-color);
+}
