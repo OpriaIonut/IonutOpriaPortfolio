@@ -50,7 +50,7 @@ export class GalleryView
             if(index == 0)
                 input.checked = true;
 
-            input.onchange = this.onInputClicked;
+            input.onclick = this.onInputClicked;
             this._inputBoxes.push(input);
             slidesParent.appendChild(input);
         }

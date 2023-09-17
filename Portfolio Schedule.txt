@@ -1,8 +1,8 @@
------This weekend
--fix gallery auto-play
--Make it responsive
-
 -Get feedback from Claudiu
+
+-Make it responsive
+-Make it show up properly for mobile
+-Make 3D view different for mobile aspect ratio (also remove or fix the post processing)
 -Get permision from Loren
 -Add navbar?
 -Publish
