@@ -27,13 +27,16 @@ export class GameProjectsPanel
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "serenityGardenCell",
             _title: "Serenity Garden",
-            _description: `Tower defense game in which you can:<br>
+            _description: `Tower defense game that I build as part of my Bachelor's Degree assessment.<br><br>
+            The game has the following features:<br>
             <div class='bulletPointList'>
                 <b>&#149;</b> Construct & upgrade 6 different types of turrets<br>
                 <b>&#149;</b> Control a playable character that shoots enemies & can empower the turrets<br>
                 <b>&#149;</b> Play 30 different PvE levels on 6 different maps<br>
                 <b>&#149;</b> Buy permanent upgrades for your turrets<br>
-                <b>&#149;</b> Play a co-op boss-fight arena mode with a friend on 3 different difficulties
+                <b>&#149;</b> Play a co-op boss-fight arena mode with a friend on 3 different difficulties<br>
+                <b>&#149;</b> Windows & Android executables<br>
+                <b>&#149;</b> Multi-platform co-op (Android devices can match with Windows devices)
             </div>`,
                 _tags: ["Unity", "Photon 2", "C#", "Tower Defense", "Multi-user", "Multi-platform"],
             _tagColors: [tagColors.software, tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
@@ -59,7 +62,7 @@ export class GameProjectsPanel
                 <br>
                 Main Contributions:<br>
                 <b>&#149;</b> Implemented asteroid belt and waves 4-5<br>
-                <b>&#149;</b> Created the spritesheets for all non-ui elements in the game (spaceship, chickens, etc.)<br>
+                <b>&#149;</b> Created the spritesheets for all non-ui elements in the game (spaceship, chickens, weapons, asteroids, etc.)<br>
                 <b>&#149;</b> Optimized resource loading using multithreaded programming
                 </div>`,
             _tags: ["C++", "SFML", "Bullet Hell", "Endless", "Leaderboard"],
@@ -107,10 +110,11 @@ export class GameProjectsPanel
                 <b>&#149;</b> Dynamic movement with double jump, dashing, charged jump, wall climbing, propulsion dodge<br>
                 <b>&#149;</b> 8 different enemy types<br>
                 <b>&#149;</b> 4 kinds of traps that each require different interactions<br>
-                <b>&#149;</b> Minimap functionality that shows the objective for the game
+                <b>&#149;</b> Minimap functionality that shows the objective for the game<br>
+                <b>&#149;</b> Checkpoints that save your progress when you reach them
             </div>`,
-            _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay"],
-            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra],
+            _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay", "Checkpoints"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
             _moreDetailsPage: "https://kirirato.itch.io/origameplayclone",
             _imagesPath: "images/gallery/ori/",
             _imageCount: 6,

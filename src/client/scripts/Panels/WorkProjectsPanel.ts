@@ -32,7 +32,7 @@ export class WorkProjectsPanel
                 <b>&#149;</b> Developed a 3D engine that is able to procedurally generate planets directly in the browser. <br>
                 <b>&#149;</b> Played a big role in the gameplay aspect of the project, by developing a lot of the core gameplay mechanics. <br>
                 <b>&#149;</b> Played a big role in each of the product launches. <br> 
-                <b>&#149;</b> Helped out in building a procedural volumetric terrain system that is also able to also generate underground caves. <br>
+                <b>&#149;</b> Helped out in building a procedural volumetric terrain system that is also able to generate underground caves. <br>
                 <b>&#149;</b> Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.
             </div>`,
             _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Engine"],

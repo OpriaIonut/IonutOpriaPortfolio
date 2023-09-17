@@ -14,22 +14,34 @@
     --primary-color: #2a2835;
     --secondary-color: #ca18cd;
     --tertiary-color: #2b51c2;
-    --button-color: #1e3d98;
-    --button-hover-color: #10235c;
+    --button-color: #2f4999;
+    --button-hover-color: #1a2b5c;
     --skill-cell-color: #36293c;
-    --skill-cell-hover-color: #2d202e;
+    --skill-cell-hover-color: #281d29;
     --secondary-background-color: #251a24;
     --tertiary-background-color: #200420;
 }
 
 .orangeTheme {
-  --primary-color: #282c35;
+  --primary-color: #332e2b;
   --secondary-color: #cd4b18;
   --tertiary-color: #2b9ac2;
-  --button-color: #1e3d98;
-  --button-hover-color: #10235c;
-  --skill-cell-color: #292d3c;
-  --skill-cell-hover-color: #2e2420;
-  --secondary-background-color: #1a1c25;
-  --tertiary-background-color: #2c1504;
+  --button-color: #a94317;
+  --button-hover-color: #6b2c11;
+  --skill-cell-color: #403a35;
+  --skill-cell-hover-color: #332e2a;
+  --secondary-background-color: #25221d;
+  --tertiary-background-color: #322114;
+}
+
+.greenTheme {
+  --primary-color: #283529;
+  --secondary-color: #27cd18;
+  --tertiary-color: #c2b02b;
+  --button-color: #6e7918;
+  --button-hover-color: #44480c;
+  --skill-cell-color: #293c29;
+  --skill-cell-hover-color: #212e20;
+  --secondary-background-color: #1b281a;
+  --tertiary-background-color: #061f03;
 }

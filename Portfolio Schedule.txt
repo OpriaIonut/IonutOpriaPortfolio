@@ -1,5 +1,5 @@
 -----This weekend
--add multiple color themes
+-fix gallery auto-play
 -Make it responsive
 
 -Get feedback from Claudiu

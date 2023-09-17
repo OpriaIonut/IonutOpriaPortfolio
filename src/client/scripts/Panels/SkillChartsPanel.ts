@@ -1,9 +1,11 @@
 import Chart from 'chart.js/auto';
 import { ChartConfig } from '../../types';
-import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme } from '../Themes/ChartThemes';
+import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme } from '../Themes/ChartThemes';
 
 export class SkillChartsPanel
 {
+    private _charts: Chart[] = [];
+
     constructor(parentElem: HTMLDivElement)
     {
         this.createElements(parentElem);
@@ -75,6 +77,7 @@ export class SkillChartsPanel
         // let separator = document.createElement("div");
         // separator.className = "separator";
         // parentNode.appendChild(separator);
+        this.updateChartColors();
     }
 
     private createChart(parentNode: HTMLElement, config: ChartConfig)
@@ -100,7 +103,7 @@ export class SkillChartsPanel
         let chartCanvas = document.createElement("canvas");
         canvasParent.appendChild(chartCanvas);
 
-        let chart = new Chart(chartCanvas, {
+        this._charts.push(new Chart(chartCanvas, {
             type: config._chartType as any,
             data: data,
             options: {
@@ -137,6 +140,36 @@ export class SkillChartsPanel
                 },
                 color: "#ffffff"
             }
-        });
+        }));
+    }
+
+    public updateChartColors()
+    {
+        let primaryColor = chartRedColorTheme;
+        let secondaryColor = chartBlueColorTheme;
+        switch(document.documentElement.className)
+        {
+            case "greenTheme":
+                primaryColor = chartYellowColorTheme;
+                secondaryColor = chartGreenColorTheme;
+            break;
+            case "orangeTheme":
+                primaryColor = chartBlueColorTheme;
+                secondaryColor = chartOrangeColorTheme;
+            break;
+            case "purpleTheme":
+                primaryColor = chartDarkBlueColorTheme;
+                secondaryColor = chartPurpleColorTheme;
+            break;
+        }
+
+        for(let index = 0; index < this._charts.length; ++index)
+        {
+            this._charts[index].data.datasets[0].backgroundColor = primaryColor.backgroundColor;
+            this._charts[index].data.datasets[0].borderColor = primaryColor.borderColor;
+            this._charts[index].data.datasets[1].backgroundColor = secondaryColor.backgroundColor;
+            this._charts[index].data.datasets[1].borderColor = secondaryColor.borderColor;
+            this._charts[index].update();
+        }
     }
 }

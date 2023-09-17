@@ -25,7 +25,7 @@ const colorThemeButtons = new ColorThemeButtons();
 
 
 const aboutMePanel = new AboutMePanel(pageParent);
-const skillChartsPanel = new SkillChartsPanel(pageParent);
+export const skillChartsPanel = new SkillChartsPanel(pageParent);
 const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
 const workProjectsPanel = new WorkProjectsPanel(pageParent);
 const gameProjectsPanel = new GameProjectsPanel(pageParent);

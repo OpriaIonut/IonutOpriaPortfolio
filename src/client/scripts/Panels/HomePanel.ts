@@ -2,7 +2,8 @@ const bannersPerTheme: any =
 {
     blueTheme: "./images/banners/0.jpg",
     purpleTheme: "./images/banners/purple.jpg",
-    orangeTheme: "./images/banners/orange.jpg"
+    orangeTheme: "./images/banners/orange.jpg",
+    greenTheme: "./images/banners/green.jpg"
 }
 
 export class HomePanel
