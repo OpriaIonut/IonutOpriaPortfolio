@@ -1,8 +1,15 @@
--Get feedback from Claudiu
+-Make buttons sharper
+-Lower color saturations
+-Add highcharts
+-Try to add icons for each of the technologies
 
 -Make it responsive
--Make it show up properly for mobile
--Make 3D view different for mobile aspect ratio (also remove or fix the post processing)
+-Add a check for mobile and display "unavailable"
+
+-Send an email to the school for the license project
 -Get permision from Loren
--Add navbar?
 -Publish
+
+-Add navbar?
+-Add Three.js animation for banner
+-Make website work for mobile

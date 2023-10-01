@@ -7,9 +7,29 @@
 {
     font-size: 1.0vw;
     padding: 3vw;
+    padding-top: 0px;
     text-align: left;
     /* position: relative;
     width: 90%;
     left: 50%;
     transform: translateX(-50%); */
+}
+
+#firstDescription
+{
+    font-size: 1.0vw;
+    padding: 3vw;
+    padding-bottom: 0px;
+    text-align: left;
+    width: 75%;
+}
+
+#aboutMePhoto
+{
+    position: absolute;
+    top: 1.5vw;
+    right: 3.5vw;
+    width: 15vw;
+    border-radius: 100%;
+    border: 3px solid #fff;
 }

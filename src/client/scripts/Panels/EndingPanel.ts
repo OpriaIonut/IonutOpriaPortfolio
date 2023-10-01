@@ -12,11 +12,15 @@ export class EndingPanel
         parentNode.className = "fullwidth";
         document.body.appendChild(parentNode);
 
+        let separator = document.createElement("div");
+        separator.className = "separator";
+        parentNode.appendChild(separator);
+
         let text = document.createElement("div");
         text.id = "endingPanelText";
         text.innerHTML = `
         Thank you for spending the time to look through my portfolio!<br>
-        In case you want to contact me you can do so here: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut@gmailcom</div><br>
+        Feel free to contact me at the following address: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut@gmailcom</div><br>
         `;
         parentNode.appendChild(text);
 
@@ -29,7 +33,7 @@ export class EndingPanel
         this.createCellLink(linksParent, "./images/icons/itch.jpg", "https://kirirato.itch.io");
         this.createCellLink(linksParent, "./images/icons/artstation.jpg", "https://www.artstation.com/kirirato16");
         this.createCellLink(linksParent, "./images/icons/twitter.jpg", "https://twitter.com/Kirirato");
-        this.createCellLink(linksParent, "./images/icons/PDF.jpg", "CV");
+        this.createCellLink(linksParent, "./images/icons/CV3.jpg", "CV");
 
         let copyright = document.createElement("div");
         copyright.id = "copyright";

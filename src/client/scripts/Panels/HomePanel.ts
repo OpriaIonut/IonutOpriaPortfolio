@@ -50,7 +50,7 @@ export class HomePanel
         this.createCellLink(linksParent, "./images/icons/itch.jpg", "https://kirirato.itch.io");
         this.createCellLink(linksParent, "./images/icons/artstation.jpg", "https://www.artstation.com/kirirato16");
         this.createCellLink(linksParent, "./images/icons/twitter.jpg", "https://twitter.com/Kirirato");
-        this.createCellLink(linksParent, "./images/icons/PDF.jpg", "CV");
+        this.createCellLink(linksParent, "./images/icons/CV3.jpg", "CV");
 
         let contact = document.createElement("div");
         contact.innerHTML = "Contact: opriaionut14@gmail.com";

@@ -166,7 +166,8 @@ export const ThreeModelConfig: any =
                 looping: true
             }
         },
-        totalBytes: 3367424
+        totalBytes: 3367424,
+        artist: ""
     },
     MechaGirl: { 
         path: "models/MechaGirl.glb", 
@@ -175,7 +176,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3( -0.77, 2.11, 4.15), 
         sceneConfig: emissiveSceneConfig,
         postProcessing: oniGurlPost,
-        totalBytes: 8175088
+        totalBytes: 8175088,
+        artist: "Please credit <a href='https://www.artstation.com/artwork/qAzZky'>Alfredo Candelaresi</a> for his original concept"
     },
     OniGurl: { 
         path: "models/OniGurl.glb", 
@@ -184,7 +186,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(-1.096256754139416, 2.24, 3.96), 
         sceneConfig: emissiveSceneConfig,
         postProcessing: oniGurlPost,
-        totalBytes: 4903116
+        totalBytes: 4903116,
+        artist: "Please credit <a href='https://www.youtube.com/c/shionmgr'>Shion Mgr</a> for her original concept"
     },
     Enri: { 
         path: "models/Enri.glb", 
@@ -193,7 +196,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(-0.84, 2.40, 4.09), 
         sceneConfig: enriSceneConfig,
         postProcessing: enriPost,
-        totalBytes: 5024536
+        totalBytes: 5024536,
+        artist: "Please credit <a href='https://twitter.com/nama41228652'>Nama</a> for his original concept"
     },
     MechSpider: { 
         path: "models/MechSpider.glb", 
@@ -202,7 +206,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(-0.28, 2.40, 8.45), 
         sceneConfig: litSceneConfig,
         postProcessing: mechSpiderPost,
-        totalBytes: 3868788
+        totalBytes: 3868788,
+        artist: "Please credit <a href='https://www.artstation.com/artwork/D5y5mR'>Christoph Stryczek</a> for his original concept"
     },
     GodEater: { 
         path: "models/GodEaterChainsaw.glb", 
@@ -211,7 +216,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(-2.08, -0.70, 1.83), 
         sceneConfig: godEaterScene,
         postProcessing: godEaterPost,
-        totalBytes: 7452644
+        totalBytes: 7452644,
+        artist: ""
     },
     AnchorSword: { 
         path: "models/AnchorSword.glb", 
@@ -220,7 +226,8 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(0, 0, 7), 
         sceneConfig: litSceneConfig,
         postProcessing: anchorPost,
-        totalBytes: 3713600
+        totalBytes: 3713600,
+        artist: "Please credit <a href='https://www.artstation.com/artwork/48WzV8'>Baldi Konijin</a> for his original concept"
     },
     FantasyBow: { 
         path: "models/FantasyBow.glb", 
@@ -229,6 +236,7 @@ export const ThreeModelConfig: any =
         cameraPos: new Vector3(0, 0, 10), 
         sceneConfig: litSceneConfig,
         postProcessing: fantasyBowPost,
-        totalBytes: 603952
+        totalBytes: 603952,
+        artist: ""
     }
 };

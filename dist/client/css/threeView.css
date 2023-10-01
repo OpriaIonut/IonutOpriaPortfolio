@@ -13,7 +13,7 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 90%;
+    width: 89.8%;
     height: 90%;
     transform: translateX(-50%) translateY(-50%);
     border: 3px solid #fff;
@@ -124,4 +124,25 @@
     bottom: 0px;
     text-align: center;
     background-color: #33c0c5dd;
+}
+
+#artistCredits
+{
+    position: absolute;
+    bottom: 1vw;
+    right: 1vw;
+    width: 16vw;
+    text-align: center;
+}
+
+#artistCredits > a
+{
+    color: yellow;
+    text-decoration: none;
+}
+
+#artistCredits > a:visited
+{
+    color: yellow;
+    text-decoration: none;
 }

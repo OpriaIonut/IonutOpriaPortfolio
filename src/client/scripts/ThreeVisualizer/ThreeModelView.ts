@@ -27,6 +27,7 @@ export class ThreeModelView
     private _poseSettings!: ButtonsWithSelection;
     private _meshSettings!: ButtonsWithSelection;
     private _lightSettings!: HorizontalSliderWithTitle;
+    private _artistCredits!: HTMLDivElement;
 
     private _gui!: DebugUI;
 
@@ -110,6 +111,14 @@ export class ThreeModelView
 
         this._cameraManager.resetCamera();
         this._objectLoader.loadModel(config.path, this.onModelLoaded, this.onModelProgress);
+
+        if(ThreeModelConfig[modelName].artist == "")
+            this._artistCredits.style.display = "none";
+        else
+        {
+            this._artistCredits.style.display = "block";
+            this._artistCredits.innerHTML = ThreeModelConfig[modelName].artist;
+        }
 
         mouseAnim.setActive(false);
     }
@@ -325,6 +334,10 @@ export class ThreeModelView
         btnElem.addEventListener('mouseleave', () => {
             btnElem.style.cursor = 'default';
         });
+
+        this._artistCredits = document.createElement("div");
+        this._artistCredits.id = "artistCredits";
+        parentNode.appendChild(this._artistCredits);
     }
 
     private onModelSettingChanged(settingName: string)

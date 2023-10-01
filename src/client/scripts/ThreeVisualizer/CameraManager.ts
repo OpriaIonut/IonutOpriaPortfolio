@@ -1,4 +1,4 @@
-import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color, Vector2, TextureLoader, AmbientLight, DirectionalLight } from "three";
+import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, NoToneMapping, Camera, Color, Vector2, TextureLoader, AmbientLight, DirectionalLight, Texture } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
@@ -66,7 +66,7 @@ export class CameraManager
         this._canvas = canvas;
         this._renderer = new WebGLRenderer({
             canvas: canvas,
-            powerPreference: "high-performance",
+            powerPreference: "high-performance"
         });
         this._renderer.shadowMap.enabled = false;
         this._renderer.toneMapping = NoToneMapping;
