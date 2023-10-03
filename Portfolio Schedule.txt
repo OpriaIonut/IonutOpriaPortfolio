@@ -1,5 +1,4 @@
 -Make buttons sharper
--Lower color saturations
 
 -Add highcharts (https://www.highcharts.com/demo/highcharts/column-stacked)
 -Try to add icons for each of the technologies

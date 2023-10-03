@@ -2,6 +2,8 @@ import { CellWithPreview } from "../Helper/CellWithPreview";
 
 export class ArtProjectsPanel
 {
+    private _cells: CellWithPreview[] = [];
+
     constructor(pageParent: HTMLDivElement)
     {
         this.createElements(pageParent);
@@ -21,14 +23,14 @@ export class ArtProjectsPanel
         parentNode.appendChild(title);
 
         const cellsPerWidth = 4;
-        new CellWithPreview(parentNode, cellsPerWidth, "Ori", "images/models/Ori.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "MechSpider", "images/models/MechSpider.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "GodEater", "images/models/GodEaterChainsaw.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "AnchorSword", "images/models/AnchorSword.jpg");
-        new CellWithPreview(parentNode, cellsPerWidth, "FantasyBow", "images/models/FantasyBow.jpg");
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Ori", "images/models/Ori.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechSpider", "images/models/MechSpider.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "GodEater", "images/models/GodEaterChainsaw.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "AnchorSword", "images/models/AnchorSword.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "FantasyBow", "images/models/FantasyBow.jpg"));
 
         let renderGalleryParent = document.createElement("div");
         renderGalleryParent.id = "renderGalleryParent";
@@ -43,5 +45,13 @@ export class ArtProjectsPanel
         moreGamesBtn.innerHTML = "More Models";
         moreGamesBtn.onclick = () => { window.open('https://sketchfab.com/kirirato', '_blank'); };
         parentNode.appendChild(moreGamesBtn);
+    }
+
+    public updateColorTheme()
+    {
+        for(let index = 0; index < this._cells.length; ++index)
+        {
+            this._cells[index].updateColorTheme();
+        }
     }
 }

@@ -24,13 +24,13 @@ export const mouseAnim = new MouseAnimation(0.75, 0.4);
 const colorThemeButtons = new ColorThemeButtons();
 
 
-const aboutMePanel = new AboutMePanel(pageParent);
+export const aboutMePanel = new AboutMePanel(pageParent);
 export const skillChartsPanel = new SkillChartsPanel(pageParent);
-const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
-const workProjectsPanel = new WorkProjectsPanel(pageParent);
-const gameProjectsPanel = new GameProjectsPanel(pageParent);
-const artProjectsPanel = new ArtProjectsPanel(pageParent);
-const endingPanel = new EndingPanel();
+export const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
+export const workProjectsPanel = new WorkProjectsPanel(pageParent);
+export const gameProjectsPanel = new GameProjectsPanel(pageParent);
+export const artProjectsPanel = new ArtProjectsPanel(pageParent);
+export const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
 

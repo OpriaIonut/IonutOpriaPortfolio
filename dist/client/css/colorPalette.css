@@ -1,47 +1,59 @@
 .blueTheme {
-    --primary-color: #282a35;
-    --secondary-color: #189C9B;
-    --tertiary-color: #FF7658;
-    --button-color: #056e6e;
-    --button-hover-color: #055151;
-    --skill-cell-color: #29333c;
-    --skill-cell-hover-color: #20272e;
-    --secondary-background-color: #1a2025;
-    --tertiary-background-color: #011321;
+    --primary-color: #2c2e35;
+    --secondary-color: #20a5a5;
+    --tertiary-color: #fc7152;
+    --button-color: #1b7474;
+    --button-hover-color: #124848;
+    --skill-cell-color: #31383e;
+    --skill-cell-hover-color: #272c31;
+    --secondary-background-color: #1e2225;
+    --tertiary-background-color: #0e1b27;
   }
 
 .purpleTheme {
     --primary-color: #2a2835;
     --secondary-color: #ca18cd;
-    --tertiary-color: #2b51c2;
+    --tertiary-color: #4162c5;
     --button-color: #2f4999;
     --button-hover-color: #1a2b5c;
     --skill-cell-color: #36293c;
     --skill-cell-hover-color: #281d29;
-    --secondary-background-color: #251a24;
-    --tertiary-background-color: #200420;
+    --secondary-background-color: #282127;
+    --tertiary-background-color: #221022;
 }
 
 .orangeTheme {
-  --primary-color: #332e2b;
-  --secondary-color: #cd4b18;
+  --primary-color: #33312f;
+  --secondary-color: #ce6136;
   --tertiary-color: #2b9ac2;
-  --button-color: #a94317;
-  --button-hover-color: #6b2c11;
+  --button-color: #a75634;
+  --button-hover-color: #693721;
   --skill-cell-color: #403a35;
   --skill-cell-hover-color: #332e2a;
-  --secondary-background-color: #25221d;
-  --tertiary-background-color: #322114;
+  --secondary-background-color: #292623;
+  --tertiary-background-color: #32261d;
 }
 
 .greenTheme {
-  --primary-color: #283529;
-  --secondary-color: #27cd18;
-  --tertiary-color: #c2b02b;
-  --button-color: #6e7918;
+  --primary-color: #2f352f;
+  --secondary-color: #41cd35;
+  --tertiary-color: #d7c222;
+  --button-color: #888a19;
   --button-hover-color: #44480c;
   --skill-cell-color: #293c29;
   --skill-cell-hover-color: #212e20;
-  --secondary-background-color: #1b281a;
-  --tertiary-background-color: #061f03;
+  --secondary-background-color: #20281f;
+  --tertiary-background-color: #152514;
+}
+
+.grayscaleTheme {
+  --primary-color: #333333;
+  --secondary-color: #c8c8c8;
+  --tertiary-color: #8d8d8d;
+  --button-color: #676767;
+  --button-hover-color: #3f3f3f;
+  --skill-cell-color: #3c3c3c;
+  --skill-cell-hover-color: #2d2d2d;
+  --secondary-background-color: #292929;
+  --tertiary-background-color: #1d1d1d;
 }

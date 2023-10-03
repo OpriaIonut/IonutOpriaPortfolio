@@ -3,6 +3,7 @@ import { GalleryView } from "./GalleryView";
 
 export class WideCellGallery
 {
+    private _tags: HTMLDivElement[] = [];
     private _gallery: GalleryView;
 
     constructor(parentNode: HTMLElement, config: CellGalleryConfig)
@@ -35,6 +36,7 @@ export class WideCellGallery
             tag.innerHTML = config._tags[index];
             tag.style.backgroundColor = config._tagColors[index];
             tagsList.appendChild(tag);
+            this._tags.push(tag);
         }
 
         let description = document.createElement("div");
@@ -54,5 +56,17 @@ export class WideCellGallery
     public update()
     {
         this._gallery.update();
+    }
+    
+    public updateColorTheme()
+    {
+        for(let index = 0; index < this._tags.length; ++index)
+        {
+            if(document.documentElement.className == "grayscaleTheme")
+                this._tags[index].classList.add("grayscale");
+            else
+                this._tags[index].classList.remove("grayscale");
+        }
+        this._gallery.updateColorTheme();
     }
 }

@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto';
 import { ChartConfig } from '../../types';
-import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme } from '../Themes/ChartThemes';
+import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme, chartLightGrayColorTheme, chartDarkGrayColorTheme } from '../Themes/ChartThemes';
 
 export class SkillChartsPanel
 {
@@ -152,15 +152,19 @@ export class SkillChartsPanel
             case "greenTheme":
                 primaryColor = chartYellowColorTheme;
                 secondaryColor = chartGreenColorTheme;
-            break;
+                break;
             case "orangeTheme":
                 primaryColor = chartBlueColorTheme;
                 secondaryColor = chartOrangeColorTheme;
-            break;
+                break;
             case "purpleTheme":
                 primaryColor = chartDarkBlueColorTheme;
                 secondaryColor = chartPurpleColorTheme;
-            break;
+                break;
+            case "grayscaleTheme":
+                primaryColor = chartLightGrayColorTheme;
+                secondaryColor = chartDarkGrayColorTheme;
+                break;
         }
 
         for(let index = 0; index < this._charts.length; ++index)

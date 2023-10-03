@@ -1,5 +1,7 @@
 export class EndingPanel
 {
+    private _icons: HTMLDivElement[] = [];
+
     constructor()
     {
         this.createElements();
@@ -52,6 +54,7 @@ export class EndingPanel
             cell.onclick = () => { window.open(link, '_blank'); };
         cell.style.cursor = "pointer";
         parentNode.appendChild(cell);
+        this._icons.push(cell);
     }
 
     private downloadFile(filePath: string, fileName: string) 
@@ -62,5 +65,16 @@ export class EndingPanel
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    public updateColorTheme()
+    {
+        for(let index = 0; index < this._icons.length; ++index)
+        {
+            if(document.documentElement.className == "grayscaleTheme")
+                this._icons[index].classList.add("grayscale");
+            else
+                this._icons[index].classList.remove("grayscale");
+        }
     }
 }

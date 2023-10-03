@@ -55,4 +55,9 @@ export class WorkProjectsPanel
     {
         this._gallery.update();
     }
+
+    public updateColorTheme()
+    {
+        this._gallery.updateColorTheme();
+    }
 }

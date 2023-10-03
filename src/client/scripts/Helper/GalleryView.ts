@@ -230,4 +230,15 @@ export class GalleryView
             }
         }
     }
+
+    public updateColorTheme()
+    {
+        for(let index = 0; index < this._actualItems.length; ++index)
+        {
+            if(document.documentElement.className == "grayscaleTheme")
+                this._actualItems[index].classList.add("grayscale");
+            else
+                this._actualItems[index].classList.remove("grayscale");
+        }
+    }
 }

@@ -1,10 +1,11 @@
-import { homePanel, skillChartsPanel } from "../../client";
+import { aboutMePanel, artProjectsPanel, endingPanel, gameProjectsPanel, homePanel, skillChartsPanel, workProjectsPanel } from "../../client";
 
 const colorThemes: any = {
     blueTheme: "#189C9B", 
     purpleTheme: "#ca18cd", 
     orangeTheme: "#cd4b18",
-    greenTheme: "#27cd18"
+    greenTheme: "#27cd18",
+    grayscaleTheme: "#777777"
 };
 
 export class ColorThemeButtons
@@ -26,9 +27,18 @@ export class ColorThemeButtons
             elem.style.backgroundColor = colorThemes[keys[index]];
 
             elem.onclick = () => { 
+                if(keys[index] == document.documentElement.className)
+                    return;
+
                 document.documentElement.className = keys[index]; 
                 homePanel.updateBanner(); 
+                aboutMePanel.updateColorTheme();
                 skillChartsPanel.updateChartColors();
+                workProjectsPanel.updateColorTheme();
+                gameProjectsPanel.updateColorTheme();
+                artProjectsPanel.updateColorTheme();
+                endingPanel.updateColorTheme();
+                
                 this.setActiveBorder();
             };
             parentElem.appendChild(elem);

@@ -204,7 +204,7 @@ body{
 #colorThemeBtnParent
 {
     position: fixed;
-    bottom: 2vw;
+    bottom: 4vw;
     left: 1vw;
     width: 1.5vw;
     height: 10vw;
@@ -216,4 +216,9 @@ body{
     width: 1.5vw;
     height: 1.5vw;
     margin-bottom: 0.5vw;
+}
+
+.grayscale
+{
+    filter: grayscale(100%);
 }

@@ -35,6 +35,16 @@ export const chartOrangeColorTheme: ChartColorTheme = {
     backgroundColor: 'rgba(204, 106, 41, 0.75)',
     borderColor: 'rgb(226, 92, 255)'
 }
+export const chartLightGrayColorTheme: ChartColorTheme = {
+    fill: true,
+    backgroundColor: 'rgba(200, 200, 200, 0.75)',
+    borderColor: 'rgb(226, 92, 255)'
+}
+export const chartDarkGrayColorTheme: ChartColorTheme = {
+    fill: true,
+    backgroundColor: 'rgba(75, 75, 75, 0.75)',
+    borderColor: 'rgb(226, 92, 255)'
+}
 
 
 export const tagColors = {

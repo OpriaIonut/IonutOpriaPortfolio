@@ -143,4 +143,12 @@ export class GameProjectsPanel
             this._galleries[index].update();
         }
     }
+
+    public updateColorTheme()
+    {
+        for(let index = 0; index < this._galleries.length; ++index)
+        {
+            this._galleries[index].updateColorTheme();
+        }
+    }
 }

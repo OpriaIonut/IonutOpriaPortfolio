@@ -1,14 +1,16 @@
 const bannersPerTheme: any = 
 {
     blueTheme: "./images/banners/0.jpg",
-    purpleTheme: "./images/banners/purple.jpg",
-    orangeTheme: "./images/banners/orange.jpg",
-    greenTheme: "./images/banners/green.jpg"
+    purpleTheme: "./images/banners/purpleLighter.jpg",
+    orangeTheme: "./images/banners/orangeLighter.jpg",
+    greenTheme: "./images/banners/green.jpg",
+    grayscaleTheme: "./images/banners/grayscale.jpg"
 }
 
 export class HomePanel
 {
     private _banner!: HTMLImageElement;
+    private _icons: HTMLImageElement[] = [];
 
     constructor()
     {
@@ -69,6 +71,7 @@ export class HomePanel
             cell.onclick = () => { window.open(link, '_blank'); };
         cell.style.cursor = "pointer";
         parentNode.appendChild(cell);
+        this._icons.push(cell);
     }
 
     private downloadFile(filePath: string, fileName: string) 
@@ -84,5 +87,12 @@ export class HomePanel
     public updateBanner()
     {
         this._banner.src = bannersPerTheme[document.documentElement.className];
+        for(let index = 0; index < this._icons.length; ++index)
+        {
+            if(document.documentElement.className == "grayscaleTheme")
+                this._icons[index].classList.add("grayscale");
+            else
+                this._icons[index].classList.remove("grayscale");
+        }
     }
 }

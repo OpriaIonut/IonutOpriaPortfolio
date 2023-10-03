@@ -1,5 +1,7 @@
 export class AboutMePanel
 {
+    private _aboutMePhoto!: HTMLImageElement;
+
     constructor(parentElem: HTMLDivElement)
     {
         this.createElements(parentElem);
@@ -17,10 +19,10 @@ export class AboutMePanel
         title.innerHTML = "About Me";
         parentNode.appendChild(title);
 
-        let aboutMePhoto = document.createElement("img");
-        aboutMePhoto.id = "aboutMePhoto";
-        aboutMePhoto.src = "./images/ui/MePhoto.jpg";
-        parentElem.appendChild(aboutMePhoto);
+        this._aboutMePhoto = document.createElement("img");
+        this._aboutMePhoto.id = "aboutMePhoto";
+        this._aboutMePhoto.src = "./images/ui/MePhoto.jpg";
+        parentElem.appendChild(this._aboutMePhoto);
 
         let firstDescription = document.createElement("div");
         firstDescription.id = "firstDescription";
@@ -42,5 +44,13 @@ export class AboutMePanel
         let separator = document.createElement("div");
         separator.className = "separator";
         parentNode.appendChild(separator);
+    }
+
+    public updateColorTheme()
+    {
+        if(document.documentElement.className == "grayscaleTheme")
+            this._aboutMePhoto.classList.add("grayscale");
+        else
+            this._aboutMePhoto.classList.remove("grayscale");
     }
 }
