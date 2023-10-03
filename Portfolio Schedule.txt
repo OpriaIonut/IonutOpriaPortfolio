@@ -1,5 +1,4 @@
--Make buttons sharper
-
+-Find out how to add border to the sharp buttons
 -Add highcharts (https://www.highcharts.com/demo/highcharts/column-stacked)
 -Try to add icons for each of the technologies
 -Put the skill bars in the proper order

@@ -72,9 +72,10 @@ body{
 
     padding: 0.5vw;
     margin: 20px;
-    border: 2px solid #fff;
-    border-radius: 3vw;
-    box-shadow: 0 0 0.25em rgba(0, 0, 0, 1);
+    /* border: 2px solid #fff; */
+    /* border-radius: 3vw; */
+    clip-path: polygon(0 0, 100% 0, 100% 65%, 85% 100%, 15% 100%, 0% 65%);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 1);
 
     background-color: var(--button-color);
     font-size: 1.25vw;
@@ -102,8 +103,8 @@ body{
     width: 35%;
     margin: 0.25em;
     padding: 0.5vw;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0.25em rgba(0, 0, 0, 1);
+    /* border: 2px solid #fff; */
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 1);
 
     background-color: var(--button-color);
     font-size: 1vw;
@@ -112,11 +113,13 @@ body{
 }
 .combinedBtnLeft
 {
-    border-radius: 3vw 0 0 3vw; 
+    /* border-radius: 3vw 0 0 3vw;  */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 85% 100%, 15% 100%, 0% 65%);
 }
 .combinedBtnRight
 {
-    border-radius: 0 3vw 3vw 0;
+    /* border-radius: 0 3vw 3vw 0; */
+    clip-path: polygon(0 0, 100% 0, 100% 65%, 85% 100%, 0% 100%, 0% 65%);
 }
 .combinedBtnRight:hover, .combinedBtnLeft:hover
 {
@@ -131,14 +134,15 @@ body{
     left: 50%;
     transform: translateX(-50%);
 
-    border-radius: 3vw;
+    /* border-radius: 3vw; */
     padding: 1vw;
     cursor: pointer;
     text-align: center;
     font-size: 1.5vw;
     background-color: var(--skill-cell-color);
-    border: 2px solid #fff;
-    box-shadow: 0 0 0.35em rgba(0, 0, 0, 1);
+    /* border: 2px solid #fff; */
+    clip-path: polygon(0 0, 100% 0, 100% 65%, 85% 100%, 15% 100%, 0% 65%);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 1);
 }
 .middleCenterBtn:hover
 {
