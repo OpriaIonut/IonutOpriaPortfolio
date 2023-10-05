@@ -1,10 +1,14 @@
 import Chart from 'chart.js/auto';
-import { ChartConfig } from '../../types';
+import { ChartConfig, HighChartConfig } from '../../types';
 import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme, chartLightGrayColorTheme, chartDarkGrayColorTheme } from '../Themes/ChartThemes';
+import * as Highcharts from 'highcharts';
 
 export class SkillChartsPanel
 {
+    private _useHighCharts: boolean = true;
+
     private _charts: Chart[] = [];
+    private _highCharts: Highcharts.Chart[] = [];
 
     constructor(parentElem: HTMLDivElement)
     {
@@ -41,27 +45,61 @@ export class SkillChartsPanel
         //Three.js                  prof 2 years, hobby 6 months
         //Android Studio            hobby 6 months
 
-        this.createChart(parentNode, {
-            _chartType: "bar",
-            _labels: ["C++", "C#", "Typescript", "Python", "Java", "SQL", "GLSL"],
-            _chartID: "languageChart",
-            _units: " years",
-            _dataSets: [
-                { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [0.4, 2, 2, 0, 0, 0, 2] },
-                { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [5, 7, 0.6, 0.3, 0.4, 0.6, 0.6] }
-            ]
-        });
+        if(this._useHighCharts)
+        {
+            this.createHighChart(parentNode, {
+                _chartType: "column",
+                _title: "Languages",
+                _categories: ["C#", "C++", "Typescript", "GLSL", "SQL", "Java", "Python"],
+                _chartID: "languageChart",
+                _units: " years",
+                _dataSets: [
+                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2, 0.4, 2, 2, 0, 0, 0] },
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [7, 5, 0.6, 0.6, 0.6, 0.4, 0.3] }
+                ]
+            });
+        }
+        else
+        {
+            this.createChart(parentNode, {
+                _chartType: "bar",
+                _labels: ["C++", "C#", "Typescript", "Python", "Java", "SQL", "GLSL"],
+                _chartID: "languageChart",
+                _units: " years",
+                _dataSets: [
+                    { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [0.4, 2, 2, 0, 0, 0, 2] },
+                    { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [5, 7, 0.6, 0.3, 0.4, 0.6, 0.6] }
+                ]
+            });
+        }
 
-        this.createChart(parentNode, {
-            _chartType: "bar",
-            _labels: ["Unity", "Unreal Engine", "Blender", "Substance Painter", "Three.js", "Android Studio"],
-            _chartID: "softwareChart",
-            _units: " years",
-            _dataSets: [
-                { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [2, 0, 0, 0, 2, 0] },
-                { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [7, 0.2, 6, 3, 0.6, 0.6] }
-            ]
-        });
+        if(this._useHighCharts)
+        {
+            this.createHighChart(parentNode, {
+                _chartType: "column",
+                _title: "Software",
+                _categories: ["Unity", "Blender", "Substance Painter", "Three.js", "Android Studio", "Unreal Engine"],
+                _chartID: "softwareChart",
+                _units: " years",
+                _dataSets: [
+                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2, 0, 0, 2, 0, 0] },
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [7, 6, 3, 0.6, 0.6, 0.2] }
+                ]
+            });
+        }
+        else
+        {
+            this.createChart(parentNode, {
+                _chartType: "bar",
+                _labels: ["Unity", "Blender", "Substance Painter", "Three.js", "Android Studio", "Unreal Engine"],
+                _chartID: "softwareChart",
+                _units: " years",
+                _dataSets: [
+                    { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [2, 0, 0, 0, 2, 0] },
+                    { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [7, 0.2, 6, 3, 0.6, 0.6] }
+                ]
+            });
+        }
 
         // this.createChart(parentNode, {
         //     _chartType: "line",
@@ -78,6 +116,78 @@ export class SkillChartsPanel
         // separator.className = "separator";
         // parentNode.appendChild(separator);
         this.updateChartColors();
+    }
+
+    private createHighChart(parentNode: HTMLElement, config: HighChartConfig)
+    {
+        let chartParent = document.createElement("div");
+        chartParent.id = config._chartID;
+        parentNode.appendChild(chartParent);
+
+        let createdChart = Highcharts.chart(chartParent, {
+            chart: {
+                type: config._chartType,
+                backgroundColor: "rgba(0, 0, 0, 0)"
+            },
+            title: {
+                text: config._title,
+                align: 'left',
+                style: {
+                    color: "aliceblue"
+                }
+            },
+            xAxis: {
+                categories: config._categories,
+                labels: {
+                    style: {
+                        color: "aliceblue"
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                },
+                stackLabels: {
+                    enabled: true
+                },
+                labels: {
+                    style: {
+                        color: "aliceblue"
+                    },
+                    formatter: function() {
+                        return this.value + config._units;
+                    }
+                }
+            },
+            legend: {
+                align: 'left',
+                x: 0,
+                verticalAlign: 'top',
+                y: 0,
+                floating: false,
+                backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                shadow: false,
+                itemStyle: {
+                    color: "aliceblue"
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}' + config._units + '<br/>Total: {point.stackTotal}' + config._units
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: config._dataSets
+        });
+        this._highCharts.push(createdChart);
     }
 
     private createChart(parentNode: HTMLElement, config: ChartConfig)
@@ -167,13 +277,28 @@ export class SkillChartsPanel
                 break;
         }
 
-        for(let index = 0; index < this._charts.length; ++index)
+        if(this._useHighCharts)
         {
-            this._charts[index].data.datasets[0].backgroundColor = primaryColor.backgroundColor;
-            this._charts[index].data.datasets[0].borderColor = primaryColor.borderColor;
-            this._charts[index].data.datasets[1].backgroundColor = secondaryColor.backgroundColor;
-            this._charts[index].data.datasets[1].borderColor = secondaryColor.borderColor;
-            this._charts[index].update();
+            for(let index = 0; index < this._highCharts.length; ++index)
+            {
+                this._highCharts[index].series[0].update({
+                    color: primaryColor.backgroundColor,
+                    type: 'column'
+                });
+                this._highCharts[index].series[1].update({
+                    color: secondaryColor.backgroundColor,
+                    type: 'column'
+                });
+            }
+        }
+        else
+        {
+            for(let index = 0; index < this._charts.length; ++index)
+            {
+                this._charts[index].data.datasets[0].backgroundColor = primaryColor.backgroundColor;
+                this._charts[index].data.datasets[1].backgroundColor = secondaryColor.backgroundColor;
+                this._charts[index].update();
+            }
         }
     }
 }

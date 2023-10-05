@@ -38,13 +38,24 @@ export class ArtProjectsPanel
 
         //new GalleryView(renderGalleryParent, "renderGallery", "images/gallery/renders/", 9, 2000);
 
+        let moreDetailsBorder = document.createElement("div");
+        moreDetailsBorder.className = "middleCenterBtnBorder";
+        moreDetailsBorder.style.marginTop = "2vw";
+        moreDetailsBorder.style.marginBottom = "1vw";
+        parentNode.appendChild(moreDetailsBorder);
+
         let moreGamesBtn = document.createElement("div");
         moreGamesBtn.className = "middleCenterBtn";
-        moreGamesBtn.style.marginTop = "2vw";
-        moreGamesBtn.style.marginBottom = "1vw";
-        moreGamesBtn.innerHTML = "More Models";
-        moreGamesBtn.onclick = () => { window.open('https://sketchfab.com/kirirato', '_blank'); };
-        parentNode.appendChild(moreGamesBtn);
+        moreGamesBtn.addEventListener('mousedown', () => { window.open('https://sketchfab.com/kirirato', '_blank'); });
+        moreDetailsBorder.appendChild(moreGamesBtn);
+
+        let moreDetailsText = document.createElement("div");
+        moreDetailsText.className = "centerText";
+        moreDetailsText.innerHTML = "More Models";
+        moreGamesBtn.appendChild(moreDetailsText);
+
+
+
     }
 
     public updateColorTheme()

@@ -20,6 +20,15 @@ export declare type ChartConfig =
         _colorTheme: ChartColorTheme
     }[]
 }
+export declare type HighChartConfig =
+{
+    _chartType: string,
+    _title: string,
+    _chartID: string,
+    _units: string,
+    _categories: string[],
+    _dataSets: any[]
+}
 
 export declare type CellGalleryConfig =
 {

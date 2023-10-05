@@ -57,17 +57,33 @@ export class MultiCellWithGallery
         combinedBtnParent.className = "combinedBtnParent";
         downPanel.appendChild(combinedBtnParent);
 
+        let moreDetailsBorder = document.createElement("div");
+        moreDetailsBorder.className = "combinedBtnLeftBorder";
+        combinedBtnParent.appendChild(moreDetailsBorder);
+
+        let downloadBtnBorder = document.createElement("div");
+        downloadBtnBorder.className = "combinedBtnRightBorder";
+        combinedBtnParent.appendChild(downloadBtnBorder);
+
         let moreDetails = document.createElement("div");
-        moreDetails.innerHTML = "More Details";
         moreDetails.className = "combinedBtnLeft";
-        moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
-        combinedBtnParent.appendChild(moreDetails);
+        moreDetails.addEventListener('mousedown', () => { window.open(config._moreDetailsPage, '_blank'); });
+        moreDetailsBorder.appendChild(moreDetails);
 
         let downloadBtn = document.createElement("div");
-        downloadBtn.innerHTML = "Download";
         downloadBtn.className = "combinedBtnRight";
-        downloadBtn.onclick = () => { this.downloadFile(config._downloadPath, config._downloadName); };
-        combinedBtnParent.appendChild(downloadBtn);
+        downloadBtn.addEventListener('mousedown', () => { this.downloadFile(config._downloadPath, config._downloadName); });
+        downloadBtnBorder.appendChild(downloadBtn);
+
+        let moreDetailsText = document.createElement("div");
+        moreDetailsText.className = "centerText";
+        moreDetailsText.innerHTML = "More Details";
+        moreDetails.appendChild(moreDetailsText);
+        
+        let downloadBtnText = document.createElement("div");
+        downloadBtnText.className = "centerText";
+        downloadBtnText.innerHTML = "Download";
+        downloadBtn.appendChild(downloadBtnText);
     }
 
     public update()

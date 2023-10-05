@@ -1,8 +1,3 @@
--Find out how to add border to the sharp buttons
--Add highcharts (https://www.highcharts.com/demo/highcharts/column-stacked)
--Try to add icons for each of the technologies
--Put the skill bars in the proper order
-
 -Make it responsive
 -Add a check for mobile and display "unavailable"
 

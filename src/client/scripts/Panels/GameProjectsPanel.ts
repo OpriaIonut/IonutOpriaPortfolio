@@ -124,11 +124,20 @@ export class GameProjectsPanel
             _downloadName: "Ori Gameplay Clone.rar"
         }));
 
+
+        let moreDetailsBorder = document.createElement("div");
+        moreDetailsBorder.className = "middleCenterBtnBorder";
+        parentNode.appendChild(moreDetailsBorder);
+
         let moreGamesBtn = document.createElement("div");
         moreGamesBtn.className = "middleCenterBtn";
-        moreGamesBtn.innerHTML = "More Games";
-        moreGamesBtn.onclick = () => { window.open('https://kirirato.itch.io', '_blank'); };
-        parentNode.appendChild(moreGamesBtn);
+        moreGamesBtn.addEventListener('mousedown', () => { window.open('https://kirirato.itch.io', '_blank'); });
+        moreDetailsBorder.appendChild(moreGamesBtn);
+
+        let moreDetailsText = document.createElement("div");
+        moreDetailsText.className = "centerText";
+        moreDetailsText.innerHTML = "More Games";
+        moreGamesBtn.appendChild(moreDetailsText);
         
         let separator = document.createElement("div");
         separator.className = "separator";

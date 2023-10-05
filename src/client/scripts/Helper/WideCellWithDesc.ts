@@ -15,7 +15,7 @@ export class WideCellWithDesc
         cellDiv.id = cellID;
         cellDiv.className = "wideCellWithDesc";
         cellDiv.style.cursor = "pointer";
-        cellDiv.onclick = () => { this.toggleVisibility(); };
+        cellDiv.addEventListener('mousedown', () => { this.toggleVisibility(); });
         parentNode.appendChild(cellDiv);
 
         let cellTitle = document.createElement("div");

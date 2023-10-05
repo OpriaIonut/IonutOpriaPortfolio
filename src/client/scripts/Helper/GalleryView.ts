@@ -136,6 +136,10 @@ export class GalleryView
         {
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
             this._pauseBtn.style.display = vid.paused ? "block" : "none";
+            if(document.documentElement.className == "grayscaleTheme")
+                this._pauseBtn.style.filter = "grayscale(100%)";
+            else
+                this._pauseBtn.style.filter = "";
 
             if(this._isMouseOverGallery && vid.currentTime < vid.duration)
             {

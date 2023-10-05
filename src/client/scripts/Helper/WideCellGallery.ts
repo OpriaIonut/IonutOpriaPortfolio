@@ -46,11 +46,19 @@ export class WideCellGallery
 
         this._gallery = new GalleryView(rightPanel, "planetquestGallery", config._imagesPath, config._imageCount, config._videoFormatIndices, config._imageDurationMs);
 
+        let moreDetailsBorder = document.createElement("div");
+        moreDetailsBorder.className = "cellButtonBorder";
+        leftPanel.appendChild(moreDetailsBorder);
+        
         let moreDetails = document.createElement("div");
-        moreDetails.innerHTML = "More Details";
         moreDetails.className = "cellButton"; 
-        moreDetails.onclick = () => { window.open(config._moreDetailsPage, '_blank'); };
-        leftPanel.appendChild(moreDetails);
+        moreDetails.addEventListener('mousedown', () => { window.open(config._moreDetailsPage, '_blank'); });
+        moreDetailsBorder.appendChild(moreDetails);
+
+        let moreDetailsText = document.createElement("div");
+        moreDetailsText.className = "centerText";
+        moreDetailsText.innerHTML = "More Details";
+        moreDetails.appendChild(moreDetailsText);
     }
 
     public update()
