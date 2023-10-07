@@ -26,7 +26,7 @@ export class WorkProjectsPanel
             _id: "planetquestCell",
             _title: "Planet Quest",
             _description: `<br>
-            Planetquest is a Blockchain game in which you can explore procedurally generated planets directly in your browser. I was one of the first persons that joined the team and played a big role during the entire development of the project.<br><br>
+            PlanetQuest is a Blockchain game in which you can explore procedurally generated planets directly in your browser. I was one of the first persons that joined the team and played a big role during the entire development of the project.<br><br>
             Key contributions: <br>
             <div class='bulletPointList'>
                 <b>&#149;</b> Developed a 3D engine that is able to procedurally generate planets directly in the browser. <br>

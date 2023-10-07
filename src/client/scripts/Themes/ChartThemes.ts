@@ -22,7 +22,7 @@ export const chartPurpleColorTheme: ChartColorTheme = {
 }
 export const chartYellowColorTheme: ChartColorTheme = {
     fill: true,
-    backgroundColor: 'rgba(212, 149, 34, 0.75)',
+    backgroundColor: 'rgba(232, 188, 30, 0.75)',
     borderColor: 'rgb(226, 92, 255)'
 }
 export const chartDarkBlueColorTheme: ChartColorTheme = {
@@ -38,6 +38,11 @@ export const chartOrangeColorTheme: ChartColorTheme = {
 export const chartLightGrayColorTheme: ChartColorTheme = {
     fill: true,
     backgroundColor: 'rgba(200, 200, 200, 0.75)',
+    borderColor: 'rgb(226, 92, 255)'
+}
+export const chartGrayColorTheme: ChartColorTheme = {
+    fill: true,
+    backgroundColor: 'rgba(110, 110, 110, 0.75)',
     borderColor: 'rgb(226, 92, 255)'
 }
 export const chartDarkGrayColorTheme: ChartColorTheme = {

@@ -1,9 +1,9 @@
 const bannersPerTheme: any = 
 {
     blueTheme: "./images/banners/0.jpg",
-    purpleTheme: "./images/banners/purpleLighter.jpg",
-    orangeTheme: "./images/banners/orangeLighter.jpg",
-    greenTheme: "./images/banners/green.jpg",
+    purpleTheme: "./images/banners/alter_purple.jpg",
+    orangeTheme: "./images/banners/alter_orange.jpg",
+    greenTheme: "./images/banners/alter_green.jpg",
     grayscaleTheme: "./images/banners/grayscale.jpg"
 }
 

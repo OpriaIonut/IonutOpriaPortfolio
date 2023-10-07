@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto';
 import { ChartConfig, HighChartConfig } from '../../types';
-import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme, chartLightGrayColorTheme, chartDarkGrayColorTheme } from '../Themes/ChartThemes';
+import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme, chartLightGrayColorTheme, chartDarkGrayColorTheme, chartGrayColorTheme } from '../Themes/ChartThemes';
 import * as Highcharts from 'highcharts';
 
 export class SkillChartsPanel
@@ -29,21 +29,21 @@ export class SkillChartsPanel
 
 
         //Languages Date: 14.08.2023
-        //C++                       prof 4 month, hobby 5 years
-        //C#                        prof 2 years, hobby 7 years
-        //Javascript & Typescript   prof 2 years, hobby 6 months
-        //Python                    hobby 3 months
-        //Java                      hobby 4 months
-        //SQL                       hobby 6 months
-        //GLSL                      prof 2 years, hobby 6 months
+        //C#                        prof 2020-2022, school 6 months, hobby 2016-2020
+        //C++                       prof: 05.2023-present, school 2015-2017, 2018, hobby: 2019-2021 
+        //Javascript & Typescript   prof 2021-05.2023, hobby 06.2023-present
+        //GLSL                      prof: 2021-2022, hobby 06.2023-present
+        //SQL                       school 1 year, prof 2 months (planet launch)
+        //Java                      school 6 months, hobby 3 months
+        //Python                    school 6 months
 
         //Softwares
-        //Unity                     prof 2 years, hobby 7 years
-        //Unreal Engine             hobby 2 months
-        //Blender                   hobby 6 years
-        //Substance Painter         hobby 3 years
-        //Three.js                  prof 2 years, hobby 6 months
-        //Android Studio            hobby 6 months
+        //Unity                     prof 2020-2022, hobby 2016-2020
+        //Blender                   hobby 2016-present
+        //Substance Painter         hobby 2020-present
+        //Three.js                  prof 2021-2022, hobby 06.2023-present
+        //Android Studio            school 1 year, hobby 3 months (JapoTimeApp)
+        //Unreal Engine             hobby 2 months (in 2023)
 
         if(this._useHighCharts)
         {
@@ -54,8 +54,9 @@ export class SkillChartsPanel
                 _chartID: "languageChart",
                 _units: " years",
                 _dataSets: [
-                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2, 0.4, 2, 2, 0, 0, 0] },
-                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [7, 5, 0.6, 0.6, 0.6, 0.4, 0.3] }
+                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data:    [3.0, 0.4, 2.0, 2.0, 0.2, 0.0, 0.0] },
+                    { name: "School", color: chartRedColorTheme.backgroundColor, data:          [0.5, 4.0, 0.0, 0.0, 1.0, 0.5, 0.5]},
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data:          [5.0, 3.0, 0.6, 0.6, 0.0, 0.2, 0.0] }
                 ]
             });
         }
@@ -67,7 +68,7 @@ export class SkillChartsPanel
                 _chartID: "languageChart",
                 _units: " years",
                 _dataSets: [
-                    { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [0.4, 2, 2, 0, 0, 0, 2] },
+                    { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [0.6, 2, 2, 0, 0, 0, 2] },
                     { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [5, 7, 0.6, 0.3, 0.4, 0.6, 0.6] }
                 ]
             });
@@ -82,8 +83,9 @@ export class SkillChartsPanel
                 _chartID: "softwareChart",
                 _units: " years",
                 _dataSets: [
-                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2, 0, 0, 2, 0, 0] },
-                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [7, 6, 3, 0.6, 0.6, 0.2] }
+                    { name: "Professional", color: chartRedColorTheme.backgroundColor,  data: [3.0, 0.0, 0.0, 2.0, 0.0, 0.0] },
+                    { name: "School", color: chartRedColorTheme.backgroundColor,        data: [0.0, 0.0, 0.0, 0.0, 1.0, 0.0]},
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor,        data: [5.0, 8.0, 4.0, 0.6, 0.3, 0.2] }
                 ]
             });
         }
@@ -255,25 +257,30 @@ export class SkillChartsPanel
 
     public updateChartColors()
     {
-        let primaryColor = chartRedColorTheme;
-        let secondaryColor = chartBlueColorTheme;
+        let topColor = chartRedColorTheme;
+        let middleColor = chartBlueColorTheme;
+        let bottomColor = chartDarkBlueColorTheme;
         switch(document.documentElement.className)
         {
             case "greenTheme":
-                primaryColor = chartYellowColorTheme;
-                secondaryColor = chartGreenColorTheme;
+                topColor = chartYellowColorTheme;
+                middleColor = chartGreenColorTheme;
+                bottomColor = chartDarkBlueColorTheme;
                 break;
             case "orangeTheme":
-                primaryColor = chartBlueColorTheme;
-                secondaryColor = chartOrangeColorTheme;
+                topColor = chartYellowColorTheme;
+                middleColor = chartBlueColorTheme;
+                bottomColor = chartOrangeColorTheme;
                 break;
             case "purpleTheme":
-                primaryColor = chartDarkBlueColorTheme;
-                secondaryColor = chartPurpleColorTheme;
+                topColor = chartGreenColorTheme;
+                middleColor = chartPurpleColorTheme;
+                bottomColor = chartDarkBlueColorTheme;
                 break;
             case "grayscaleTheme":
-                primaryColor = chartLightGrayColorTheme;
-                secondaryColor = chartDarkGrayColorTheme;
+                topColor = chartLightGrayColorTheme;
+                middleColor = chartGrayColorTheme;
+                bottomColor = chartDarkGrayColorTheme;
                 break;
         }
 
@@ -282,11 +289,15 @@ export class SkillChartsPanel
             for(let index = 0; index < this._highCharts.length; ++index)
             {
                 this._highCharts[index].series[0].update({
-                    color: primaryColor.backgroundColor,
+                    color: topColor.backgroundColor,
                     type: 'column'
                 });
                 this._highCharts[index].series[1].update({
-                    color: secondaryColor.backgroundColor,
+                    color: middleColor.backgroundColor,
+                    type: 'column'
+                });
+                this._highCharts[index].series[2].update({
+                    color: bottomColor.backgroundColor,
                     type: 'column'
                 });
             }
@@ -295,8 +306,8 @@ export class SkillChartsPanel
         {
             for(let index = 0; index < this._charts.length; ++index)
             {
-                this._charts[index].data.datasets[0].backgroundColor = primaryColor.backgroundColor;
-                this._charts[index].data.datasets[1].backgroundColor = secondaryColor.backgroundColor;
+                this._charts[index].data.datasets[0].backgroundColor = topColor.backgroundColor;
+                this._charts[index].data.datasets[1].backgroundColor = middleColor.backgroundColor;
                 this._charts[index].update();
             }
         }
