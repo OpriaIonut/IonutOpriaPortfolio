@@ -53,9 +53,6 @@ export class ArtProjectsPanel
         moreDetailsText.className = "centerText";
         moreDetailsText.innerHTML = "More Models";
         moreGamesBtn.appendChild(moreDetailsText);
-
-
-
     }
 
     public updateColorTheme()

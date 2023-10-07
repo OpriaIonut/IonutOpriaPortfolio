@@ -1,10 +1,8 @@
--Make it responsive
--Add a check for mobile and display "unavailable"
-
--Send an email to the school for the license project
 -Get permision from Loren
 -Publish
 
--Add navbar?
--Add Three.js animation for banner
--Make website work for mobile
+---------------Professional projects to ask about
+-Rockfish VR
+-WebPain
+-PiggyBanks
+-Recogneo

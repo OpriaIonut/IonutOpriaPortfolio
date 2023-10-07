@@ -34,10 +34,20 @@ export const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
 
+const warningMsg = document.createElement("div");
+warningMsg.id = "warningMsg";
+let warningMsgText = document.createElement("div");
+warningMsgText.id = "warningMsgText";
+warningMsgText.innerHTML = "Please open the website in a landscape/desktop format."
+warningMsg.appendChild(warningMsgText);
+document.body.appendChild(warningMsg);
+
 let previousFrameTime = 0;
 function gameLoop(timestamp: number)
 {
     requestAnimationFrame(gameLoop);
+
+    warningMsg.style.display = (window.innerWidth / window.innerHeight < 1.0) ? "block" : "none";
 
     let frameTime = timestamp;
     let deltaTime = (frameTime - previousFrameTime) * 0.01;
@@ -46,12 +56,12 @@ function gameLoop(timestamp: number)
     timeStats.currentTime = timestamp;
     timeStats.deltaTime = deltaTime;
 
+    mouseAnim.update();
     threeModelView.update(deltaTime);
     workProjectsPanel.update();
     gameProjectsPanel.update();
     specialSkillsPanel.update();
 
-    mouseAnim.update();
 }
 requestAnimationFrame(gameLoop);
 

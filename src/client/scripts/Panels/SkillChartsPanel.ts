@@ -124,6 +124,10 @@ export class SkillChartsPanel
     {
         let chartParent = document.createElement("div");
         chartParent.id = config._chartID;
+        if(window.innerWidth / window.innerHeight > 2.5 / 1.0)
+        {
+            chartParent.style.width = "35vw";
+        }
         parentNode.appendChild(chartParent);
 
         let createdChart = Highcharts.chart(chartParent, {
@@ -135,14 +139,17 @@ export class SkillChartsPanel
                 text: config._title,
                 align: 'left',
                 style: {
-                    color: "aliceblue"
+                    color: "aliceblue",
+                    fontSize: "2vw"
                 }
             },
             xAxis: {
                 categories: config._categories,
                 labels: {
+                    rotation: 0,
                     style: {
-                        color: "aliceblue"
+                        color: "aliceblue",
+                        fontSize: "0.75vw"
                     }
                 }
             },
@@ -152,16 +159,20 @@ export class SkillChartsPanel
                     text: ''
                 },
                 stackLabels: {
-                    enabled: true
+                    enabled: true,
+                    style: {
+                        fontSize: "1vw"
+                    }
                 },
                 labels: {
                     style: {
-                        color: "aliceblue"
+                        color: "aliceblue",
+                        fontSize: "0.75vw"
                     },
                     formatter: function() {
                         return this.value + config._units;
                     }
-                }
+                },
             },
             legend: {
                 align: 'left',
@@ -172,18 +183,30 @@ export class SkillChartsPanel
                 backgroundColor: 'rgba(0, 0, 0, 0.0)',
                 shadow: false,
                 itemStyle: {
-                    color: "aliceblue"
+                    color: "aliceblue",
+                    fontSize: "1vw"
                 }
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}' + config._units + '<br/>Total: {point.stackTotal}' + config._units
+                pointFormat: '{series.name}: {point.y}' + config._units + '<br/>Total: {point.stackTotal}' + config._units,
+                style: {
+                    fontSize: "1vw"
+                }
             },
             plotOptions: {
+                series: {
+                    marker: {
+                        radius: 2
+                    }
+                },
                 column: {
                     stacking: 'normal',
                     dataLabels: {
-                        enabled: true
+                        enabled: true,
+                        style: {
+                            fontSize: "0.75vw"
+                        }
                     }
                 }
             },

@@ -6,6 +6,7 @@
     width: 100%;
     height: 100%;
     background-color: #00000099;
+    font-size: 1vw;
 }
 
 #threeModelView
@@ -34,7 +35,7 @@
 .threeViewTrisCounter
 {
     position: relative;
-    margin: 7px;
+    margin: 0.5vw;
 }
 
 .buttonsWithSelectionParent
@@ -46,15 +47,15 @@
 .buttonsWithSelection
 {
     background-color: #121212dd;
-    padding: 8px;
-    margin: 7px;
+    padding: 0.75vw;
+    margin: 0.75vw;
 }
 
 .buttonsWithSelectionSelected
 {
     background-color: #33c0c5dd;
-    padding: 8px;
-    margin: 7px;
+    padding: 0.75vw;
+    margin: 0.75vw;
 }
 
 .closeBtn
@@ -63,15 +64,15 @@
     top: 0px;
     right: 0px;
     background-color: brown;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
 }
 
 .buttonsWithSelectionTitle
 {
-    margin: 7px;
-    font-size: 20px;
+    margin: 1vw;
+    font-size: 1.5vw;
     border-bottom: 2px solid #fff;
 }
 
@@ -85,7 +86,7 @@
 {
     width: auto;
     display: inline-block;
-    padding: 7px;
+    padding: 0.15vw;
 }
 
 .horizontalSliderBtn
@@ -96,7 +97,7 @@
     display: inline-block;
     background-color: rgb(62, 76, 78);
     text-align: center;
-    border: 2px solid #fff;
+    border: 0.35vw solid #fff;
     user-select: none;
 }
 
@@ -119,8 +120,8 @@
     width: 50%;
     left: 50%;
     transform: translateX(-50%);
-    margin: 7px;
-    padding: 10px;
+    margin: 0.5vw;
+    padding: 0.5vw;
     bottom: 0px;
     text-align: center;
     background-color: #33c0c5dd;
@@ -129,10 +130,12 @@
 #artistCredits
 {
     position: absolute;
-    bottom: 1vw;
-    right: 1vw;
-    width: 16vw;
+    top: 1vw;
+    left: 50%;
+    width: auto;
+    transform: translateX(-50%);
     text-align: center;
+    font-size: 1.5vw;
 }
 
 #artistCredits > a

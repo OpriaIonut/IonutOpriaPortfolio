@@ -1,8 +1,7 @@
 .wideCellWithDesc
 {
     background-color: var(--skill-cell-color);
-    margin: 10px;
-    padding: 3x;
+    margin: 0.5vw;
     border-radius: 1.5vw;
     font-size: 1.25vw;
 }

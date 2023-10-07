@@ -34,9 +34,11 @@
 {
     width: auto;
     display: inline-block;
-    padding: 5px;
-    margin: 3px;
-    border-radius: 10px;
+    padding: 0.25vw;
+    margin: 0.1vw;
+    margin-top: 1.0vw;
+    border-radius: 0.5vw;
+    font-size: 0.75vw;
 }
 
 .wideCellGalleryDescription

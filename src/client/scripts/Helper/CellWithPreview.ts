@@ -6,10 +6,14 @@ export class CellWithPreview
 
     constructor(parentNode: HTMLElement, cellsPerWidth: number, modelName: string, imagePath: string)
     {
+        let baseWidthForCalc = 80;
+        if(window.innerWidth / window.innerHeight > 2.5 / 1.0)
+            baseWidthForCalc = 65;
+
         let cellParent = document.createElement("div");
         cellParent.className = "cellWithPreview";
-        cellParent.style.width = `${80 / cellsPerWidth}vw`;
-        cellParent.style.height = `${(80 / cellsPerWidth) * 9.0 / 16.0}vw`;
+        cellParent.style.width = `${baseWidthForCalc / cellsPerWidth}vw`;
+        cellParent.style.height = `${(baseWidthForCalc / cellsPerWidth) * 9.0 / 16.0}vw`;
         parentNode.appendChild(cellParent);
 
         this._preview = document.createElement("img");
