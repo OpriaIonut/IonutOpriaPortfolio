@@ -34,7 +34,7 @@ export class SkillChartsPanel
         //Javascript & Typescript   prof 2021-05.2023, hobby 06.2023-present
         //GLSL                      prof: 2021-2022, hobby 06.2023-present
         //SQL                       school 1 year, prof 2 months (planet launch)
-        //Java                      school 6 months, hobby 3 months
+        //Java                      school 1 year, hobby 3 months
         //Python                    school 6 months
 
         //Softwares
@@ -50,13 +50,13 @@ export class SkillChartsPanel
             this.createHighChart(parentNode, {
                 _chartType: "column",
                 _title: "Languages",
-                _categories: ["C#", "C++", "Typescript", "GLSL", "SQL", "Java", "Python"],
+                _categories: ["C#", "C++", "Typescript", "GLSL", "Java", "SQL", "Python"],
                 _chartID: "languageChart",
                 _units: " years",
                 _dataSets: [
-                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data:    [3.0, 0.4, 2.0, 2.0, 0.2, 0.0, 0.0] },
-                    { name: "School", color: chartRedColorTheme.backgroundColor, data:          [0.5, 4.0, 0.0, 0.0, 1.0, 0.5, 0.5]},
-                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data:          [5.0, 3.0, 0.6, 0.6, 0.0, 0.2, 0.0] }
+                    { name: "Professional", color: chartRedColorTheme.backgroundColor, data:    [3.0, 0.4, 2.0, 2.0, 0.0, 0.2, 0.0] },
+                    { name: "School", color: chartRedColorTheme.backgroundColor, data:          [0.5, 4.0, 0.0, 0.0, 1.0, 1.0, 0.5]},
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data:          [5.0, 3.0, 0.6, 0.6, 0.3, 0.0, 0.0] }
                 ]
             });
         }
