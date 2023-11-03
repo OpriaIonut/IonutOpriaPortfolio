@@ -36,8 +36,7 @@ export class AboutMePanel
         descriptionText.innerHTML = `
         I've always been curios about how games work underneath the surface, which is what got me into programming (and 3D modelling later on). I'm passionate about building games, learning how complex mechanics should be implemented properly, what optimizations are required to ship successful games and how I can best contribute to the projects I'm working on.<br><br>
         I love the process of learning new things, improving my skills as much as I can and I don't shy away from difficult problems, because in my opinion, the harder the problem, the more things there are to be learned.<br><br>
-        Currently working at Neomorph Studio SRL and contribuiting to the development of PlanetQuest as part of a collaboration with Galactic Entertainment.<br><br>
-        Hobbies: 3D modelling, cosplaying, learning Japanese, going to rock concerts & mountain hikes, playing games and generally trying new experiences.<br>
+        Hobbies: 3D modelling, cosplaying, learning Japanese, going to rock concerts & mountain hikes, volunteering, playing games and generally trying new experiences.<br>
         Languages: Romanian, English, very basic Japanese.`;
         parentNode.appendChild(descriptionText);
 

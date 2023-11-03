@@ -22,7 +22,7 @@ export class EndingPanel
         text.id = "endingPanelText";
         text.innerHTML = `
         Thank you for spending the time to look through my portfolio!<br>
-        Feel free to contact me at the following address: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut@gmailcom</div><br>
+        Feel free to contact me at the following address: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut14@gmail.com</div><br>
         `;
         parentNode.appendChild(text);
 

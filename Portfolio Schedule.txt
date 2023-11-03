@@ -4,5 +4,4 @@
 ---------------Professional projects to ask about
 -Rockfish VR
 -WebPain
--PiggyBanks
 -Recogneo
