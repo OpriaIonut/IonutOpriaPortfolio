@@ -2,6 +2,7 @@ import Chart from 'chart.js/auto';
 import { ChartConfig, HighChartConfig } from '../../types';
 import { chartRedColorTheme, chartBlueColorTheme, chartGreenColorTheme, chartPurpleColorTheme, chartYellowColorTheme, chartDarkBlueColorTheme, chartOrangeColorTheme, chartLightGrayColorTheme, chartDarkGrayColorTheme, chartGrayColorTheme } from '../Themes/ChartThemes';
 import * as Highcharts from 'highcharts';
+import { isPortraitMode } from '../../client';
 
 export class SkillChartsPanel
 {
@@ -140,7 +141,7 @@ export class SkillChartsPanel
                 align: 'left',
                 style: {
                     color: "aliceblue",
-                    fontSize: "2vw"
+                    fontSize: isPortraitMode.value ? "4.0vw" : "2vw"
                 }
             },
             xAxis: {
@@ -149,7 +150,7 @@ export class SkillChartsPanel
                     rotation: 0,
                     style: {
                         color: "aliceblue",
-                        fontSize: "0.75vw"
+                        fontSize: isPortraitMode.value ? "1.75vw" : "0.75vw"
                     }
                 }
             },
@@ -161,13 +162,13 @@ export class SkillChartsPanel
                 stackLabels: {
                     enabled: true,
                     style: {
-                        fontSize: "1vw"
+                        fontSize: isPortraitMode.value ? "2.5vw" : "1vw"
                     }
                 },
                 labels: {
                     style: {
                         color: "aliceblue",
-                        fontSize: "0.75vw"
+                        fontSize: isPortraitMode.value ? "1.75vw" : "0.75vw"
                     },
                     formatter: function() {
                         return this.value + config._units;
@@ -184,14 +185,14 @@ export class SkillChartsPanel
                 shadow: false,
                 itemStyle: {
                     color: "aliceblue",
-                    fontSize: "1vw"
+                    fontSize: isPortraitMode.value ? "3.0vw" : "1vw"
                 }
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
                 pointFormat: '{series.name}: {point.y}' + config._units + '<br/>Total: {point.stackTotal}' + config._units,
                 style: {
-                    fontSize: "1vw"
+                    fontSize: isPortraitMode.value ? "2.0vw" : "1vw"
                 }
             },
             plotOptions: {
@@ -205,7 +206,7 @@ export class SkillChartsPanel
                     dataLabels: {
                         enabled: true,
                         style: {
-                            fontSize: "0.75vw"
+                            fontSize: isPortraitMode.value ? "2.0vw" : "0.75vw"
                         }
                     }
                 }

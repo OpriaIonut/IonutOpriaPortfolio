@@ -120,3 +120,35 @@
 {
     background-color: var(--skill-cell-hover-color);
 }
+
+@media (max-aspect-ratio: 1.0)
+{
+    .combinedBtnParent
+    {
+        width: 65vw;
+    }
+    .combinedBtnLeftBorder, .combinedBtnRightBorder
+    {
+        width: 35%;
+        height: 5.0vw;
+    }
+    .combinedBtnLeft,  .combinedBtnRight
+    {
+        width: 95%;
+        height: 90%;
+        font-size: 3vw;
+    }
+
+    .middleCenterBtnBorder
+    {
+        width: 35vw;
+        height: 6.0vw;
+        padding: 0.25vw;
+        margin-top: 3vw;
+    }
+    .middleCenterBtn
+    {
+        padding: 0.25vw;
+        font-size: 3vw;
+    }
+}

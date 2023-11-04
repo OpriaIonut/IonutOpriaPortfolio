@@ -1,3 +1,4 @@
+import { isPortraitMode } from "../../client";
 import { CellGalleryConfig } from "../../types";
 import { GalleryView } from "./GalleryView";
 
@@ -11,7 +12,7 @@ export class MultiCellWithGallery
         let cellParent = document.createElement("div");
         cellParent.id = config._id;
         cellParent.className = "multiCellWithGallery";
-        cellParent.style.width = `${94 / cellsPerWidth}%`;
+        cellParent.style.width = isPortraitMode.value ? "95%" : `${94 / cellsPerWidth}%`;
         parentNode.appendChild(cellParent);
 
         let topPanel = document.createElement("div");

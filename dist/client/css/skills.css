@@ -29,3 +29,11 @@
     margin-left: 1vw;
     margin-right: 1vw;
 }
+
+@media (max-aspect-ratio: 1.0)
+{
+    #specialSkillsArt, #specialSkillsProgramming
+    {
+        width: 95%;
+    }
+}

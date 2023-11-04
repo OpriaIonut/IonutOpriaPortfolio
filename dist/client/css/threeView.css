@@ -149,3 +149,29 @@
     color: yellow;
     text-decoration: none;
 }
+
+@media (max-aspect-ratio: 1.0)
+{
+    #threeViewSettingsParent
+    {
+        top: 70%;
+        width: 100%;
+        height: 30%;
+    }
+    
+    #threeModelViewParent
+    {
+        font-size: 3vw;
+    }
+
+    .buttonsWithSelectionTitle
+    {
+        font-size: 4vw;
+    }
+
+    #artistCredits
+    {
+        width: 90%;
+        font-size: 3vw;
+    }
+}

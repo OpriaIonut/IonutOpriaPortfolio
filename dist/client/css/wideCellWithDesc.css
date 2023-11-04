@@ -39,3 +39,19 @@
 {
     text-align: center;
 }
+
+@media (max-aspect-ratio: 1.0)
+{
+    .wideCellWithDesc
+    {
+        border-radius: 3vw;
+    }
+    .wideCellWithDescTitle
+    {
+        font-size: 3.5vw;
+    }
+    .wideCellWithDescText
+    {
+        font-size: 3.0vw;
+    }
+}

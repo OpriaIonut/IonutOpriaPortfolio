@@ -13,6 +13,7 @@ import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 export const threeDebugGUI = false;
 export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
 export const userInteractedWithPage = { value: false }
+export const isPortraitMode = { value: window.innerWidth / window.innerHeight < 1.0 }
 
 export const homePanel = new HomePanel();
 
@@ -36,6 +37,7 @@ export const threeModelView = new ThreeModelView();
 
 const warningMsg = document.createElement("div");
 warningMsg.id = "warningMsg";
+warningMsg.style.display = "none";
 let warningMsgText = document.createElement("div");
 warningMsgText.id = "warningMsgText";
 warningMsgText.innerHTML = "Please open the website in a landscape/desktop format."
@@ -47,7 +49,7 @@ function gameLoop(timestamp: number)
 {
     requestAnimationFrame(gameLoop);
 
-    warningMsg.style.display = (window.innerWidth / window.innerHeight < 1.0) ? "block" : "none";
+    isPortraitMode.value = window.innerWidth / window.innerHeight < 1.0;
 
     let frameTime = timestamp;
     let deltaTime = (frameTime - previousFrameTime) * 0.01;

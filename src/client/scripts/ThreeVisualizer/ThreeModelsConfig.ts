@@ -5,7 +5,7 @@ const litSceneConfig: ThreeSceneConfig =
 {
     _backgroundColor: new Color(0xffffff),
     _minZoom: 1.0,
-    _maxZoom: 10,
+    _maxZoom: 20,
     _litLighting: true,
     _ambientIntensity: 0.5,
     _directionalIntensity: 5.0,

@@ -15,21 +15,24 @@
     transform: translateX(-50%); */
 }
 
-#firstDescription
-{
-    font-size: 1.0vw;
-    padding: 3vw;
-    padding-bottom: 0px;
-    text-align: left;
-    width: 75%;
-}
-
 #aboutMePhoto
 {
-    position: absolute;
-    top: 1.5vw;
-    right: 3.5vw;
+    position: relative;
+    float: right;
+    margin: 2vw;
     width: 15vw;
     border-radius: 100%;
     border: 3px solid #fff;
+}
+
+@media (max-aspect-ratio: 1.0)
+{
+    #aboutMePhoto
+    {
+        width: 30vw;
+    }
+    #aboutMeDescription
+    {
+        font-size: 3vw;
+    }
 }

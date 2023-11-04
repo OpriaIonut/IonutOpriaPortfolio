@@ -1,3 +1,4 @@
+import { isPortraitMode } from "../../client";
 import { CellWithPreview } from "../Helper/CellWithPreview";
 
 export class ArtProjectsPanel
@@ -22,7 +23,7 @@ export class ArtProjectsPanel
         title.style.paddingBottom = "2vw";
         parentNode.appendChild(title);
 
-        const cellsPerWidth = 4;
+        const cellsPerWidth = isPortraitMode.value ? 2 : 4;
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Ori", "images/models/Ori.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg"));

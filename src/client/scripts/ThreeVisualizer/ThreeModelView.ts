@@ -8,6 +8,7 @@ import { mouseAnim, threeDebugGUI } from "../../client";
 import { ButtonsWithSelection } from "../Helper/ButtonsWithSelection";
 import { MaterialCache } from "./MaterialCache";
 import { HorizontalSliderWithTitle } from "../Helper/HorizontalSliderWithTitle";
+import { getGPUTier } from "detect-gpu";
 
 export class ThreeModelView
 {
@@ -26,10 +27,12 @@ export class ThreeModelView
     private _trisCounter!: HTMLDivElement;
     private _poseSettings!: ButtonsWithSelection;
     private _meshSettings!: ButtonsWithSelection;
-    private _lightSettings!: HorizontalSliderWithTitle;
+    private _lightSettings?: HorizontalSliderWithTitle = undefined;
     private _artistCredits!: HTMLDivElement;
 
     private _gui!: DebugUI;
+
+    private _isMobile: boolean = false;
 
     private _debugPostSettings: PostProcessingConfig = {
         _bloomRadius: 0.05,
@@ -78,9 +81,18 @@ export class ThreeModelView
         this.onModelLoaded = this.onModelLoaded.bind(this);
         this.onModelProgress = this.onModelProgress.bind(this);
 
-        this.createSettingsPanel(viewPanel);
         if(threeDebugGUI)
             this.createDebugUI();
+
+        this.checkStats(viewPanel);
+    }
+
+    private async checkStats(viewPanel: HTMLDivElement)
+    {
+        let gpuTier = await getGPUTier();
+        this._isMobile = gpuTier.isMobile == true;
+        this._cameraManager.isMobile = this._isMobile;
+        this.createSettingsPanel(viewPanel);
     }
 
     public activateView(modelName: string, targetProgressBar: HTMLDivElement)
@@ -162,7 +174,8 @@ export class ThreeModelView
 
         this._materialCache.registerModel(this._currentModel);
         this._meshSettings.changeSelectedButton(0);
-        this._lightSettings.resetValue();
+        if(this._lightSettings)
+            this._lightSettings.resetValue();
 
         this.findModelAnimations(asset);
         this.findModelStatistics();
@@ -297,11 +310,17 @@ export class ThreeModelView
         this._trisCounter.className = "threeViewTrisCounter";
         settingsParent.appendChild(this._trisCounter);
 
-        this._lightSettings = new HorizontalSliderWithTitle(settingsParent, "Light Angle", 0, 360, 0, this.onLightSliderChanged);
+        if(!this._isMobile)
+            this._lightSettings = new HorizontalSliderWithTitle(settingsParent, "Light Angle", 0, 360, 0, this.onLightSliderChanged);
         this._poseSettings = new ButtonsWithSelection(settingsParent, "Mesh Poses", this.onPoseChanged);
 
         this._meshSettings = new ButtonsWithSelection(settingsParent, "Mesh Rendering", this.onModelSettingChanged);
-        this._meshSettings.init(["Final Render", "No Post-Processing", "Base Color", "Base Color + Wireframe", "Wireframe", "NormalMap", "Matcap"], 0);
+        let options:string[];
+        if(this._isMobile)
+            options = ["Shaded", "Base Color", "Base Color + Wireframe", "Wireframe", "NormalMap", "Matcap"];
+        else
+            options = ["Final Render", "No Post-Processing", "Base Color", "Base Color + Wireframe", "Wireframe", "NormalMap", "Matcap"]
+        this._meshSettings.init(options, 0);
 
         //Close button
         let closeBtn = document.createElement("div");
@@ -349,7 +368,7 @@ export class ThreeModelView
         {
             this._cameraManager.usePostProcessing = true;
         }
-        else if(settingName == "No Post-Processing")
+        else if(settingName == "No Post-Processing" || settingName == "Shaded")
         {
             //Intentionally left empty
         }

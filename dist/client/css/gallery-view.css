@@ -72,3 +72,24 @@ input[name="r"]
     background-image: url("../images/ui/play-button.png");
     background-size: cover;
 }
+
+@media (max-aspect-ratio: 1.0)
+{
+    .pauseBtn
+    {
+        width: 7vw;
+        height: 7vw;
+    }
+    .galleryBar
+    {
+        width: 7vw;
+        margin-left: 0.75vw;
+        margin-right: 0.75vw;
+    }
+    .galleryNavigation
+    {
+        width: 65vw;
+        height: 3vw;
+        bottom: 7vw;
+    }
+}

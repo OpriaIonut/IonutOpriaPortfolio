@@ -48,6 +48,7 @@ export class CameraManager
 
     private _controls: OrbitControls | undefined;
 
+    public isMobile: boolean = false;
     public usePostProcessing: boolean = true;
 
     public get controls(): OrbitControls { return this._controls as OrbitControls }
@@ -132,7 +133,7 @@ export class CameraManager
         this.refreshCameraVectors();
         this._controls?.update();
 
-        if(this.usePostProcessing)
+        if(this.usePostProcessing && !this.isMobile)
             this._effectComposer?.render(deltaTime);
         else
             this._renderer?.render(this._scene, this._camera as Camera);

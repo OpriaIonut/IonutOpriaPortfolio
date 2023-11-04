@@ -1,5 +1,5 @@
 import { lerp } from "three/src/math/MathUtils";
-import { timeStats } from "../../client";
+import { isPortraitMode, timeStats } from "../../client";
 
 export class MouseAnimation
 {
@@ -32,6 +32,9 @@ export class MouseAnimation
 
     public update()
     {
+        this._innerElem.style.display = isPortraitMode.value ? "none" : "block";
+        this._outerElem.style.display = isPortraitMode.value ? "none" : "block";
+
         this._innerPos.x = lerp(this._innerPos.x, this._lastMousePos.x, this._innerSpeed * timeStats.deltaTime);
         this._innerPos.y = lerp(this._innerPos.y, this._lastMousePos.y, this._innerSpeed * timeStats.deltaTime);
 

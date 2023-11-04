@@ -1,9 +1,12 @@
+import { isPortraitMode } from "../../client";
+import { CellGalleryConfig } from "../../types";
+import { MultiCellWithGallery } from "../Helper/MultiCellWithGallery";
 import { WideCellGallery } from "../Helper/WideCellGallery";
 import { tagColors } from "../Themes/ChartThemes";
 
 export class WorkProjectsPanel
 {
-    private _gallery!: WideCellGallery;
+    private _gallery!: WideCellGallery | MultiCellWithGallery;
 
     constructor(pageParent: HTMLDivElement)
     {
@@ -22,7 +25,7 @@ export class WorkProjectsPanel
         title.innerHTML = "Professional Projects";
         parentNode.appendChild(title);
 
-        this._gallery = new WideCellGallery(parentNode, {
+        let cellData: CellGalleryConfig = {
             _id: "planetquestCell",
             _title: "Planet Quest",
             _description: `<br>
@@ -44,7 +47,16 @@ export class WorkProjectsPanel
             _imageDurationMs: 5000,
             _downloadPath: "",
             _downloadName: ""
-        });
+        }
+
+        if(isPortraitMode.value)
+        {
+            this._gallery = new MultiCellWithGallery(parentNode, 1, cellData);
+        }
+        else
+        {
+            this._gallery = new WideCellGallery(parentNode, cellData);
+        }
 
         let separator = document.createElement("div");
         separator.className = "separator";

@@ -26,5 +26,8 @@
     "webpack-merge": "^5.8.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "detect-gpu": "^5.0.37"
+  }
 }
