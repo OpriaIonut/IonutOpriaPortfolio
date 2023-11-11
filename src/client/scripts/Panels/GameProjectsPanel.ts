@@ -46,7 +46,7 @@ export class GameProjectsPanel
             _imageCount: 7,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _downloadPath: "games/Serenity Garden TD.rar",
+            _downloadPath: "https://drive.google.com/file/d/1ZznBIv_GS-IxAVjlkC9eRUwwSig6ISaT/view?usp=sharing",
             _downloadName: "Serenity Garden TD.rar",
             _btn1Name: "More Details",
             _btn2Name: "Download"
@@ -76,7 +76,7 @@ export class GameProjectsPanel
             _imageCount: 6,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _downloadPath: "games/Chicken Invaders DX.rar",
+            _downloadPath: "https://drive.google.com/file/d/12X9nBBK_FJtfkDELjQtOVL-uhzYNnnev/view?usp=sharing",
             _downloadName: "Chicken Invaders DX.rar",
             _btn1Name: "More Details",
             _btn2Name: "Download"
@@ -103,7 +103,7 @@ export class GameProjectsPanel
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _imgExtension: "png",
-            _downloadPath: "games/Legeithiel Unaelian.rar",
+            _downloadPath: "https://drive.google.com/file/d/1yx7KNyS5YnUH3r_LGqOQwMHjVEFkOKgw/view?usp=sharing",
             _downloadName: "Legeithiel Unaelian.rar",
             _btn1Name: "More Details",
             _btn2Name: "Download"
@@ -130,7 +130,7 @@ export class GameProjectsPanel
             _imageCount: 6,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _downloadPath: "games/Ori Gameplay Clone.rar",
+            _downloadPath: "https://drive.google.com/file/d/1HHsoNvKYvfDEnrI-6k_y--FHEQXToXla/view?usp=sharing",
             _downloadName: "Ori Gameplay Clone.rar",
             _btn1Name: "More Details",
             _btn2Name: "Download"

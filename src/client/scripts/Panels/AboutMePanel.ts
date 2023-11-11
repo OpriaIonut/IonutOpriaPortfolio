@@ -1,6 +1,6 @@
 export class AboutMePanel
 {
-    private _aboutMePhoto!: HTMLImageElement;
+    private _aboutMePhoto?: HTMLImageElement;
 
     constructor(parentElem: HTMLDivElement)
     {
@@ -42,9 +42,12 @@ export class AboutMePanel
 
     public updateColorTheme()
     {
-        if(document.documentElement.className == "grayscaleTheme")
-            this._aboutMePhoto.classList.add("grayscale");
-        else
-            this._aboutMePhoto.classList.remove("grayscale");
+        if(this._aboutMePhoto !== undefined)
+        {
+            if(document.documentElement.className == "grayscaleTheme")
+                this._aboutMePhoto.classList.add("grayscale");
+            else
+                this._aboutMePhoto.classList.remove("grayscale");
+        }
     }
 }
