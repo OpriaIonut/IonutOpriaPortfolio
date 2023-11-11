@@ -191,6 +191,14 @@ body
     transform: translateX(-50%) translateY(-50%);
 }
 
+.descriptionText
+{
+    font-size: 1.0vw;
+    padding: 3vw;
+    padding-top: 0px;
+    text-align: left;
+}
+
 @media (min-aspect-ratio: 2.5 / 1.0)
 {
     #pageParent

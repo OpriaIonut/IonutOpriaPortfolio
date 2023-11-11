@@ -48,39 +48,19 @@ export class WideCellGallery
 
         if(config._btn1Link != "" || config._btn2Link != "")
         {
-            let combinedBtnParent = document.createElement("div");
-            combinedBtnParent.className = "combinedBtnParent";
-            leftPanel.appendChild(combinedBtnParent);
-    
             let moreDetailsBorder = document.createElement("div");
-            moreDetailsBorder.className = "combinedBtnLeftBorder";
-            combinedBtnParent.appendChild(moreDetailsBorder);
-    
-            let downloadBtnBorder = document.createElement("div");
-            downloadBtnBorder.className = "combinedBtnRightBorder";
-            combinedBtnParent.appendChild(downloadBtnBorder);
+            moreDetailsBorder.className = "cellButtonBorder";
+            leftPanel.appendChild(moreDetailsBorder);
     
             let moreDetails = document.createElement("div");
-            moreDetails.className = "combinedBtnLeft";
-            if(config._btn1Link != "")
-                moreDetails.addEventListener('mousedown', () => { window.open(config._btn1Link, '_blank'); });
+            moreDetails.className = "cellButton"; 
+            moreDetails.addEventListener('mousedown', () => { window.open(config._btn2Link, '_blank'); });
             moreDetailsBorder.appendChild(moreDetails);
-    
-            let downloadBtn = document.createElement("div");
-            downloadBtn.className = "combinedBtnRight";
-            if(config._btn2Link != "")
-                downloadBtn.addEventListener('mousedown', () => { window.open(config._btn2Link, '_blank'); });
-            downloadBtnBorder.appendChild(downloadBtn);
     
             let moreDetailsText = document.createElement("div");
             moreDetailsText.className = "centerText";
-            moreDetailsText.innerHTML = config._btn1Name;
+            moreDetailsText.innerHTML = config._btn2Name;
             moreDetails.appendChild(moreDetailsText);
-            
-            let downloadBtnText = document.createElement("div");
-            downloadBtnText.className = "centerText";
-            downloadBtnText.innerHTML = config._btn2Name;
-            downloadBtn.appendChild(downloadBtnText);
         }
     }
 

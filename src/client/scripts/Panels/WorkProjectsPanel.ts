@@ -41,7 +41,7 @@ export class WorkProjectsPanel
             </div>`,
             _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Engine"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.language, tagColors.gameType, tagColors.software],
-            _btn1Link: "www.opriaionut.com/pqPage.html",
+            _btn1Link: "",
             _btn2Link: "https://planetquest.io",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
