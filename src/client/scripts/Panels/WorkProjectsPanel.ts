@@ -6,7 +6,8 @@ import { tagColors } from "../Themes/ChartThemes";
 
 export class WorkProjectsPanel
 {
-    private _gallery!: WideCellGallery | MultiCellWithGallery;
+    private _pqGalery!: WideCellGallery | MultiCellWithGallery;
+    private _recogneoGalery!: WideCellGallery | MultiCellWithGallery;
 
     constructor(pageParent: HTMLDivElement)
     {
@@ -25,7 +26,7 @@ export class WorkProjectsPanel
         title.innerHTML = "Professional Projects";
         parentNode.appendChild(title);
 
-        let cellData: CellGalleryConfig = {
+        let pqCellData: CellGalleryConfig = {
             _id: "planetquestCell",
             _title: "Planet Quest",
             _description: `<br>
@@ -40,22 +41,54 @@ export class WorkProjectsPanel
             </div>`,
             _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Engine"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.language, tagColors.gameType, tagColors.software],
-            _moreDetailsPage: "https://planetquest.io",
+            _btn1Link: "www.opriaionut.com/pqPage.html",
+            _btn2Link: "https://planetquest.io",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
             _videoFormatIndices: [5, 6],
             _imageDurationMs: 5000,
             _downloadPath: "",
-            _downloadName: ""
+            _downloadName: "",
+            _btn1Name: "More Details",
+            _btn2Name: "Project Link"
+        }
+
+        let recogneoCellData: CellGalleryConfig = {
+            _id: "recogneoCell",
+            _title: "Recogneo",
+            _description: `<br>
+            Recogneo is a library that is able to generate datasets for AI training in a matter of minutes, process which would take weeks if done manually. You can generate thousands or even milions of images in the environment that you want to train your AI model in, while also generating annotations for the Yolo & Coco-based models.<br><br>
+            Key contributions:<br>
+            <div class='bulletPointList'>
+                <b>&#149;</b> Developed the image generation logic. <br>
+                <b>&#149;</b> Implemented image processing algorithms using compute shaders, to generate the desired results in a very optimal manner. <br>
+                <b>&#149;</b> Developed the logic for automatically generating the annotations for the datasets. <br>
+                <b>&#149;</b> Trained a couple of AI models in different environments to test the accuracy of the datasets generated. <br>
+            </div>
+            `,
+            _tags: ["Unity", "C#", "AI Training", "Image Processing", "Compute Shaders"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.extra, tagColors.extra, tagColors.extra],
+            _btn1Link: "",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/recogneo/",
+            _imageCount: 5,
+            _videoFormatIndices: [3, 4],
+            _imageDurationMs: 5000,
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "More Details",
+            _btn2Name: "Project Link"
         }
 
         if(isPortraitMode.value)
         {
-            this._gallery = new MultiCellWithGallery(parentNode, 1, cellData);
+            this._pqGalery = new MultiCellWithGallery(parentNode, 1, pqCellData);
+            this._recogneoGalery = new MultiCellWithGallery(parentNode, 1, recogneoCellData);
         }
         else
         {
-            this._gallery = new WideCellGallery(parentNode, cellData);
+            this._pqGalery = new WideCellGallery(parentNode, pqCellData);
+            this._recogneoGalery = new WideCellGallery(parentNode, recogneoCellData);
         }
 
         let separator = document.createElement("div");
@@ -65,11 +98,13 @@ export class WorkProjectsPanel
 
     public update()
     {
-        this._gallery.update();
+        this._pqGalery.update();
+        this._recogneoGalery.update();
     }
 
     public updateColorTheme()
     {
-        this._gallery.updateColorTheme();
+        this._pqGalery.updateColorTheme();
+        this._recogneoGalery.updateColorTheme();
     }
 }

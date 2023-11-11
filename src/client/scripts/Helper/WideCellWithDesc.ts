@@ -5,6 +5,7 @@ export class WideCellWithDesc
 {
     private _cellDesc: HTMLDivElement;
     private _isVisible: boolean = false;
+    private _arrowElem: HTMLImageElement;
 
     private _typewriter: TypewriterElement;
     private _description: string;
@@ -23,6 +24,11 @@ export class WideCellWithDesc
         cellTitle.innerHTML = title;
         cellDiv.appendChild(cellTitle);
 
+        this._arrowElem = document.createElement("img");
+        this._arrowElem.className = "wideCellWithDescArrow";
+        this._arrowElem.src = "./images/ui/down-arrow.png";
+        cellDiv.appendChild(this._arrowElem);
+
         // let cellBtn = document.createElement("button");
         // cellBtn.className = "wideCellWithDescBtn";
         // cellBtn.innerHTML = "^"
@@ -34,6 +40,7 @@ export class WideCellWithDesc
         this._cellDesc.style.display = "none";
         cellDiv.appendChild(this._cellDesc);
 
+
         this._typewriter = new TypewriterElement(this._cellDesc);
         this._description = description;
     }
@@ -44,12 +51,14 @@ export class WideCellWithDesc
         if(this._isVisible)
         {
             this._cellDesc.style.display = "block";
+            this._arrowElem.src = "./images/ui/next.png";
             this._typewriter.displayText(this._description, 0.1, 0, 0, true, null);
         }
         else
         {
             this._cellDesc.innerHTML = "";
             this._cellDesc.style.display = "none";
+            this._arrowElem.src = "./images/ui/down-arrow.png";
         }
     }
 

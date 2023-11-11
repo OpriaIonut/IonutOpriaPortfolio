@@ -26,6 +26,7 @@
     font-size: 1vw;
     text-align: left;
     padding: 0.5vw 1.5vw 1.5vw 1.5vw;
+    color: rgb(215, 215, 215);
 }
 .wideCellWithDescBtn
 {
@@ -38,6 +39,12 @@
 .wideCellGalleryTagsList
 {
     text-align: center;
+}
+.wideCellWithDescArrow
+{
+    width: 1.5vw;
+    height: 1.5vw;
+    pointer-events: none;
 }
 
 @media (max-aspect-ratio: 1.0)

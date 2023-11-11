@@ -73,9 +73,9 @@ export class CameraManager
         this._renderer.toneMapping = NoToneMapping;
         
         this._scene = new Scene();
-        new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
-            this._scene.background = texture;
-        });
+        // new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
+        //     this._scene.background = texture;
+        // });
 
         this._ambientLight = new AmbientLight(0xffffff, 0.5);
         this._directionalLight = new DirectionalLight(0xffffff, 1.0);
@@ -141,7 +141,7 @@ export class CameraManager
 
     public applySceneConfig(config: ThreeSceneConfig)
     {
-        //this._scene.background = new Color(config._backgroundColor);
+        this._scene.background = new Color(config._backgroundColor);
         this._controls!.minDistance = config._minZoom;
         this._controls!.maxDistance = config._maxZoom;
         

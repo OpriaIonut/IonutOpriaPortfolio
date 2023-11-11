@@ -40,13 +40,16 @@ export class GameProjectsPanel
             </div>`,
                 _tags: ["Unity", "Photon 2", "C#", "Tower Defense", "Multi-user", "Multi-platform"],
             _tagColors: [tagColors.software, tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _moreDetailsPage: "https://kirirato.itch.io/serenity-garden",
+            _btn1Link: "https://kirirato.itch.io/serenity-garden",
+            _btn2Link: "",
             _imagesPath: "images/gallery/serenity-garden/",
             _imageCount: 7,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _downloadPath: "games/Serenity Garden TD.rar",
-            _downloadName: "Serenity Garden TD.rar"
+            _downloadName: "Serenity Garden TD.rar",
+            _btn1Name: "More Details",
+            _btn2Name: "Download"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -67,13 +70,16 @@ export class GameProjectsPanel
                 </div>`,
             _tags: ["C++", "SFML", "Bullet Hell", "Endless", "Leaderboard"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _moreDetailsPage: "https://kirirato.itch.io/chicken-invaders-dx",
+            _btn1Link: "https://kirirato.itch.io/chicken-invaders-dx",
+            _btn2Link: "",
             _imagesPath: "images/gallery/chicken-invaders/",
             _imageCount: 6,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _downloadPath: "games/Chicken Invaders DX.rar",
-            _downloadName: "Chicken Invaders DX.rar"
+            _downloadName: "Chicken Invaders DX.rar",
+            _btn1Name: "More Details",
+            _btn2Name: "Download"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -90,14 +96,17 @@ export class GameProjectsPanel
             </div>`,
             _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _moreDetailsPage: "https://kirirato.itch.io/legeithiel-unaelian",
+            _btn1Link: "https://kirirato.itch.io/legeithiel-unaelian",
+            _btn2Link: "",
             _imagesPath: "images/gallery/legeithiel-unaelian/",
             _imageCount: 5,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _imgExtension: "png",
             _downloadPath: "games/Legeithiel Unaelian.rar",
-            _downloadName: "Legeithiel Unaelian.rar"
+            _downloadName: "Legeithiel Unaelian.rar",
+            _btn1Name: "More Details",
+            _btn2Name: "Download"
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
@@ -115,13 +124,16 @@ export class GameProjectsPanel
             </div>`,
             _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay", "Checkpoints"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _moreDetailsPage: "https://kirirato.itch.io/origameplayclone",
+            _btn1Link: "https://kirirato.itch.io/origameplayclone",
+            _btn2Link: "",
             _imagesPath: "images/gallery/ori/",
             _imageCount: 6,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _downloadPath: "games/Ori Gameplay Clone.rar",
-            _downloadName: "Ori Gameplay Clone.rar"
+            _downloadName: "Ori Gameplay Clone.rar",
+            _btn1Name: "More Details",
+            _btn2Name: "Download"
         }));
 
 

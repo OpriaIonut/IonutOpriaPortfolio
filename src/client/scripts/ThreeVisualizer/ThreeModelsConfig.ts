@@ -3,7 +3,7 @@ import { PostProcessingConfig, ThreeSceneConfig } from "../../types";
 
 const litSceneConfig: ThreeSceneConfig =
 {
-    _backgroundColor: new Color(0xffffff),
+    _backgroundColor: new Color(0x777777),
     _minZoom: 1.0,
     _maxZoom: 20,
     _litLighting: true,
@@ -13,7 +13,7 @@ const litSceneConfig: ThreeSceneConfig =
 }
 const godEaterScene: ThreeSceneConfig =
 {
-    _backgroundColor: new Color(0xffffff),
+    _backgroundColor: new Color(0x777777),
     _minZoom: 1.0,
     _maxZoom: 10,
     _litLighting: true,
@@ -23,7 +23,7 @@ const godEaterScene: ThreeSceneConfig =
 }
 const emissiveSceneConfig: ThreeSceneConfig =
 {
-    _backgroundColor: new Color(0xffffff),
+    _backgroundColor: new Color(0x777777),
     _minZoom: 1.0,
     _maxZoom: 10,
     _litLighting: false,
@@ -34,7 +34,7 @@ const emissiveSceneConfig: ThreeSceneConfig =
 
 const enriSceneConfig: ThreeSceneConfig =
 {
-    _backgroundColor: new Color(0xffffff),
+    _backgroundColor: new Color(0x777777),
     _minZoom: 1.0,
     _maxZoom: 10,
     _litLighting: true,

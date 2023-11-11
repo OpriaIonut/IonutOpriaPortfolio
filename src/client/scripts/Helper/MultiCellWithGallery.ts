@@ -68,7 +68,7 @@ export class MultiCellWithGallery
 
         let moreDetails = document.createElement("div");
         moreDetails.className = "combinedBtnLeft";
-        moreDetails.addEventListener('mousedown', () => { window.open(config._moreDetailsPage, '_blank'); });
+        moreDetails.addEventListener('mousedown', () => { window.open(config._btn1Link, '_blank'); });
         moreDetailsBorder.appendChild(moreDetails);
 
         let downloadBtn = document.createElement("div");

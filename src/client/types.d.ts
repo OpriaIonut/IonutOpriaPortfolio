@@ -41,10 +41,13 @@ export declare type CellGalleryConfig =
     _tagColors: string[],
     _videoFormatIndices: number[],
     _description: string,
-    _moreDetailsPage: string,
+    _btn1Link: string,
+    _btn2Link: string,
     _imgExtension?: string,
     _downloadPath: string,
-    _downloadName: string
+    _downloadName: string,
+    _btn1Name: string,
+    _btn2Name: string
 }
 
 export declare type ThreeSceneConfig =

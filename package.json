@@ -7,7 +7,8 @@
     "dev": "webpack serve --config ./src/webpack/webpack.dev.js",
     "build": "webpack --config ./src/webpack/webpack.prod.js && http-server ./dist/client",
     "test-build": "webpack --config ./src/webpack/webpack.prod.js && http-server ./dist/client",
-    "analyze": "webpack --config ./src/webpack/webpack.analyze.js"
+    "analyze": "webpack --config ./src/webpack/webpack.analyze.js",
+    "encryptPage": "pagecrypt dist/client/index.html dist/client/index-encrypted.html PAJ5qSJLdu"
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.10",
@@ -16,6 +17,7 @@
     "dat.gui": "^0.7.9",
     "highcharts": "^11.1.0",
     "http-server": "^14.1.1",
+    "pagecrypt": "^6.1.1",
     "three": "^0.155.0",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
