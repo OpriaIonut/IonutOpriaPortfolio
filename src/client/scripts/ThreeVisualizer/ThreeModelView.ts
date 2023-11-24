@@ -30,6 +30,8 @@ export class ThreeModelView
     private _lightSettings?: HorizontalSliderWithTitle = undefined;
     private _artistCredits!: HTMLDivElement;
 
+    private static isDownloadingModel: boolean = false;
+
     private _gui!: DebugUI;
 
     private _isMobile: boolean = false;
@@ -97,6 +99,10 @@ export class ThreeModelView
 
     public activateView(modelName: string, targetProgressBar: HTMLDivElement)
     {
+        if(ThreeModelView.isDownloadingModel)
+            return;
+        ThreeModelView.isDownloadingModel = true;
+
         let config = ThreeModelConfig[modelName];
         this._currentModelName = modelName;
         this._currentProgressBar = targetProgressBar;
@@ -179,6 +185,8 @@ export class ThreeModelView
 
         this.findModelAnimations(asset);
         this.findModelStatistics();
+
+        ThreeModelView.isDownloadingModel = false;
     }
 
     private onModelProgress(bytesLoaded: number)
