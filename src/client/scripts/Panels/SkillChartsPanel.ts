@@ -86,7 +86,7 @@ export class SkillChartsPanel
                 _dataSets: [
                     { name: "Professional", color: chartRedColorTheme.backgroundColor,  data: [3.0, 0.0, 0.0, 2.0, 0.0, 0.0] },
                     { name: "School", color: chartRedColorTheme.backgroundColor,        data: [0.0, 0.0, 0.0, 0.0, 1.0, 0.0]},
-                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor,        data: [5.0, 8.0, 4.0, 0.6, 0.3, 0.2] }
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor,        data: [5.0, 8.0, 4.0, 0.6, 0.3, 0.6] }
                 ]
             });
         }

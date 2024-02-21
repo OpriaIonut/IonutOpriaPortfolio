@@ -22,7 +22,7 @@ export class EndingPanel
         text.id = "endingPanelText";
         text.innerHTML = `
         Thank you for spending the time to look through my portfolio!<br>
-        Feel free to contact me at the following address: <div style='display: inline-block; color: var(--secondary-color);'>opriaionut14@gmail.com</div><br>
+        Feel free to contact me at the following address: <div style='display: inline-block; color: var(--secondary-color);'>ionutopriaofficial@gmail.com</div><br>
         `;
         parentNode.appendChild(text);
 
@@ -39,7 +39,7 @@ export class EndingPanel
 
         let copyright = document.createElement("div");
         copyright.id = "copyright";
-        copyright.innerHTML = "Copyright © 2023 by Ionu&#x021b; Opria<br>All content and trademarks property of their respective owners";
+        copyright.innerHTML = "Copyright © 2024 by Ionu&#x021b; Opria<br>All content and trademarks property of their respective owners";
         parentNode.appendChild(copyright);
     }
 

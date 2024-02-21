@@ -55,7 +55,7 @@ export class HomePanel
         this.createCellLink(linksParent, "./images/icons/CV3.jpg", "CV");
 
         let contact = document.createElement("div");
-        contact.innerHTML = "Contact: opriaionut14@gmail.com";
+        contact.innerHTML = "Contact: ionutopriaofficial@gmail.com";
         contact.id = "homePanelContact";
         titleParent.appendChild(contact);
     }
