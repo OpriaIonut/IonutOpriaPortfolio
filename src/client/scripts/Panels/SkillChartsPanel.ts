@@ -70,7 +70,7 @@ export class SkillChartsPanel
                 _units: " years",
                 _dataSets: [
                     { _label: "Professional", _colorTheme: chartRedColorTheme, _data: [0.6, 2, 2, 0, 0, 0, 2] },
-                    { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [5, 7, 0.6, 0.3, 0.4, 0.6, 0.6] }
+                    { _label: "Hobby", _colorTheme: chartBlueColorTheme, _data: [5, 7, 0.6, 0.3, 0.4, 0.6, 0.7] }
                 ]
             });
         }
@@ -86,7 +86,7 @@ export class SkillChartsPanel
                 _dataSets: [
                     { name: "Professional", color: chartRedColorTheme.backgroundColor,  data: [3.0, 0.0, 0.0, 2.0, 0.0, 0.0] },
                     { name: "School", color: chartRedColorTheme.backgroundColor,        data: [0.0, 0.0, 0.0, 0.0, 1.0, 0.0]},
-                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor,        data: [5.0, 8.0, 4.0, 0.6, 0.3, 0.6] }
+                    { name: "Hobby", color: chartBlueColorTheme.backgroundColor,        data: [5.0, 8.0, 4.0, 0.6, 0.3, 0.7] }
                 ]
             });
         }

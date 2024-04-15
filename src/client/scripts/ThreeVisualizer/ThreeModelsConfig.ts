@@ -82,6 +82,19 @@ const enriPost: PostProcessingConfig =
     _lutIntensity: 0.35
 }
 
+const jorogumoPost: PostProcessingConfig =
+{
+    _bloomRadius: 0.5,
+    _bloomStrength: 0.15,
+    _bloomThreshold: 1.0,
+    _chromaAberrationLength: 0.0,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true,
+    _lutName: "Remy 24.CUBE",
+    _lutIntensity: 0.35
+}
+
 const mechSpiderPost: PostProcessingConfig =
 {
     _bloomRadius: 0.8,
@@ -198,6 +211,43 @@ export const ThreeModelConfig: any =
         postProcessing: enriPost,
         totalBytes: 5024536,
         artist: "Please credit <a href='https://twitter.com/nama41228652'>Nama</a> for the original concept"
+    },
+    Jorogumo: { 
+        path: "models/Jorogumo.glb", 
+        anim: [], 
+        scale: 1.0, 
+        cameraPos: new Vector3(1, 2, 7), 
+        sceneConfig: litSceneConfig,
+        postProcessing: jorogumoPost,
+        animations: {
+            firstAnimation: "Default",
+            Default: {
+                speed: 1.0,
+                looping: false
+            },
+            Idle: {
+                speed: 0.1,
+                looping: true
+            },
+            KillPlayer: {
+                speed: 0.075,
+                looping: true
+            },
+            JumpWindow: {
+                speed: 0.075,
+                looping: true
+            },
+            Running: {
+                speed: 0.075,
+                looping: true
+            },
+            Scream: {
+                speed: 0.075,
+                looping: true
+            }
+        },
+        totalBytes: 12483440,
+        artist: ""
     },
     MechSpider: { 
         path: "models/MechSpider.glb", 

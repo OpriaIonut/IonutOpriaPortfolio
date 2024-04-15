@@ -25,6 +25,31 @@ export class GameProjectsPanel
         let cellsPerWidth = 2;
         
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+            _id: "jorogumosCradleCell",
+            _title: "Jorogumo's Cradle",
+            _description: `
+                Short first-person horror game that I built as a passion project, in order to learn Unreal Engine and launch my first ever steam game.<br>
+                <br>
+                The game is a short, 30 min experience in which you have to explore a wild forest and build tools to defend yourself against a humanoid spider-like creature.<br>
+                <br>
+                The enemy has multiple attack patterns that it utilizes to get into your cabin, which is the only thing keeping it at bay. You need to react to it's attack patterns and find ways to stop it from breaking through. This includes: building torches to burn the spider webs, navigating labyrinth-like structures, setting up a blockade inside the cabin, shooting the monster down with a slingshot, etc.
+            `,
+            _tags: ["Unreal Engine", "Blueprints", "First-Person", "Horror", "Steam Release", "Enemy AI"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.gameType, tagColors.extra, tagColors.extra],
+            _btn1Link: "https://store.steampowered.com/app/2914870/Jorogumos_Cradle/",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/jorogumos-cradle/",
+            _imageCount: 8,
+            _videoFormatIndices: [0],
+            _imageDurationMs: 5000,
+            _imgExtension: "jpg",
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "More Details",
+            _btn2Name: ""
+        }));
+
+        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "serenityGardenCell",
             _title: "Serenity Garden",
             _description: `Tower defense game that I build as part of my Bachelor's Degree assessment.<br><br>
@@ -109,32 +134,32 @@ export class GameProjectsPanel
             _btn2Name: "Download"
         }));
 
-        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
-            _id: "oriCloneCell",
-            _title: "Ori Gameplay Clone",
-            _description: `Gameplay replica of the game Ori and the Blind Forest<br><br>
-                It contains the following mechanics:<br>
-            <div class='bulletPointList'>
-                <b>&#149;</b> Normal attack that can target up to 3 enemies + charge attack that deals a lot of damage<br>
-                <b>&#149;</b> Dynamic movement with double jump, dashing, charged jump, wall climbing, propulsion dodge<br>
-                <b>&#149;</b> 8 different enemy types<br>
-                <b>&#149;</b> 4 kinds of traps that each require different interactions<br>
-                <b>&#149;</b> Minimap functionality that shows the objective for the game<br>
-                <b>&#149;</b> Checkpoints that save your progress when you reach them
-            </div>`,
-            _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay", "Checkpoints"],
-            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _btn1Link: "https://kirirato.itch.io/origameplayclone",
-            _btn2Link: "",
-            _imagesPath: "images/gallery/ori/",
-            _imageCount: 6,
-            _videoFormatIndices: [0],
-            _imageDurationMs: 5000,
-            _downloadPath: "https://drive.google.com/file/d/1HHsoNvKYvfDEnrI-6k_y--FHEQXToXla/view?usp=sharing",
-            _downloadName: "Ori Gameplay Clone.rar",
-            _btn1Name: "More Details",
-            _btn2Name: "Download"
-        }));
+        // this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+        //     _id: "oriCloneCell",
+        //     _title: "Ori Gameplay Clone",
+        //     _description: `Gameplay replica of the game Ori and the Blind Forest<br><br>
+        //         It contains the following mechanics:<br>
+        //     <div class='bulletPointList'>
+        //         <b>&#149;</b> Normal attack that can target up to 3 enemies + charge attack that deals a lot of damage<br>
+        //         <b>&#149;</b> Dynamic movement with double jump, dashing, charged jump, wall climbing, propulsion dodge<br>
+        //         <b>&#149;</b> 8 different enemy types<br>
+        //         <b>&#149;</b> 4 kinds of traps that each require different interactions<br>
+        //         <b>&#149;</b> Minimap functionality that shows the objective for the game<br>
+        //         <b>&#149;</b> Checkpoints that save your progress when you reach them
+        //     </div>`,
+        //     _tags: ["Unity", "C#", "Platformer", "Dynamic Gameplay", "Checkpoints"],
+        //     _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
+        //     _btn1Link: "https://kirirato.itch.io/origameplayclone",
+        //     _btn2Link: "",
+        //     _imagesPath: "images/gallery/ori/",
+        //     _imageCount: 6,
+        //     _videoFormatIndices: [0],
+        //     _imageDurationMs: 5000,
+        //     _downloadPath: "https://drive.google.com/file/d/1HHsoNvKYvfDEnrI-6k_y--FHEQXToXla/view?usp=sharing",
+        //     _downloadName: "Ori Gameplay Clone.rar",
+        //     _btn1Name: "More Details",
+        //     _btn2Name: "Download"
+        // }));
 
 
         let moreDetailsBorder = document.createElement("div");

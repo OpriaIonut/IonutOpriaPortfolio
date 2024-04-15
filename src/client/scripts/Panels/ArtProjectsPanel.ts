@@ -27,7 +27,7 @@ export class ArtProjectsPanel
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Ori", "images/models/Ori.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg"));
-        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Enri", "images/models/Enri.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Jorogumo", "images/models/Jorogumo.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechSpider", "images/models/MechSpider.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "GodEater", "images/models/GodEaterChainsaw.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "AnchorSword", "images/models/AnchorSword.jpg"));
