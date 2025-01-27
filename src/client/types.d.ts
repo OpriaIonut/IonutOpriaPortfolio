@@ -63,6 +63,10 @@ export declare type ThreeSceneConfig =
 
 export declare type PostProcessingConfig =
 {
+    _enableBloom: boolean,
+    _enableChromaAberration: boolean,
+    _enableLuts: boolean,
+    _enableVignette: boolean,
     _bloomStrength: number,
     _bloomRadius: number,
     _bloomThreshold: number,

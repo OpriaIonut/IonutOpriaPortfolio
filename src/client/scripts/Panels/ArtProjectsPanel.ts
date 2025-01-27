@@ -24,7 +24,7 @@ export class ArtProjectsPanel
         parentNode.appendChild(title);
 
         const cellsPerWidth = isPortraitMode.value ? 2 : 4;
-        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Ori", "images/models/Ori.jpg"));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "BloodyBunny", "images/models/BloodyBunny.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MechaGirl", "images/models/MechaGirl.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "OniGurl", "images/models/OniGurl.jpg"));
         this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "Jorogumo", "images/models/Jorogumo.jpg"));

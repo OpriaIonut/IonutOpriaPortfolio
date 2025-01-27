@@ -153,6 +153,11 @@ export class CameraManager
 
     public applyPostProcessing(config: PostProcessingConfig)
     {
+        this._lutPass!.enabled = config._enableLuts;
+        this._bloomPass!.enabled = config._enableBloom;
+        this._vignettePass!.enabled = config._enableVignette;
+        this._chromaticAberrationsPass!.enabled = config._enableChromaAberration;
+
         this._bloomPass!.strength = config._bloomStrength;
         this._bloomPass!.threshold = config._bloomThreshold;
         this._bloomPass!.radius = config._bloomRadius;

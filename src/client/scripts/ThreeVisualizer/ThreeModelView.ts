@@ -37,6 +37,10 @@ export class ThreeModelView
     private _isMobile: boolean = false;
 
     private _debugPostSettings: PostProcessingConfig = {
+        _enableBloom: true,
+        _enableChromaAberration: true,
+        _enableLuts: true,
+        _enableVignette: true,
         _bloomRadius: 0.05,
         _bloomStrength: 1.0,
         _bloomThreshold: 1.0,
@@ -119,7 +123,7 @@ export class ThreeModelView
         this._debugPostSettings._vignetteOffset = config.postProcessing._vignetteOffset;
         this._debugPostSettings._lutName = config.postProcessing._lutName;
         this._debugPostSettings._lutIntensity = config.postProcessing._lutIntensity;
-        
+
         this._debugSceneConfig._ambientIntensity = config.sceneConfig._ambientIntensity;
         this._debugSceneConfig._backgroundColor = config.sceneConfig._backgroundColor;
         this._debugSceneConfig._directionalIntensity = config.sceneConfig._directionalIntensity;

@@ -45,6 +45,10 @@ const enriSceneConfig: ThreeSceneConfig =
 
 const zoroPostProccessing: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.8,
     _bloomStrength: 0.25,
     _bloomThreshold: 0.5,
@@ -58,6 +62,27 @@ const zoroPostProccessing: PostProcessingConfig =
 
 const oniGurlPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
+    _bloomRadius: 0.8,
+    _bloomStrength: 0.25,
+    _bloomThreshold: 0.9,
+    _chromaAberrationLength: 0.0,
+    _vignetteOffset: 1.0,
+    _vignetteDarkness: 1.0,
+    _chromaAberrationRedOut: true,
+    _lutName: "Chemical 168.CUBE",
+    _lutIntensity: 0.5
+}
+
+const bloodyBunnyPost: PostProcessingConfig =
+{
+    _enableBloom: true,
+    _enableChromaAberration: false,
+    _enableLuts: false,
+    _enableVignette: false,
     _bloomRadius: 0.8,
     _bloomStrength: 0.25,
     _bloomThreshold: 0.9,
@@ -71,6 +96,10 @@ const oniGurlPost: PostProcessingConfig =
 
 const enriPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.5,
     _bloomStrength: 0.25,
     _bloomThreshold: 1.0,
@@ -84,6 +113,10 @@ const enriPost: PostProcessingConfig =
 
 const jorogumoPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.5,
     _bloomStrength: 0.15,
     _bloomThreshold: 1.0,
@@ -97,6 +130,10 @@ const jorogumoPost: PostProcessingConfig =
 
 const mechSpiderPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.8,
     _bloomStrength: 0.5,
     _bloomThreshold: 0.75,
@@ -110,6 +147,10 @@ const mechSpiderPost: PostProcessingConfig =
 
 const godEaterPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.5,
     _bloomStrength: 0.35,
     _bloomThreshold: 0.75,
@@ -123,6 +164,10 @@ const godEaterPost: PostProcessingConfig =
 
 const anchorPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.8,
     _bloomStrength: 0.25,
     _bloomThreshold: 0.5,
@@ -136,6 +181,10 @@ const anchorPost: PostProcessingConfig =
 
 const fantasyBowPost: PostProcessingConfig =
 {
+    _enableBloom: true,
+    _enableChromaAberration: true,
+    _enableLuts: true,
+    _enableVignette: true,
     _bloomRadius: 0.5,
     _bloomStrength: 0.35,
     _bloomThreshold: 0.75,
@@ -181,6 +230,19 @@ export const ThreeModelConfig: any =
         },
         totalBytes: 3367424,
         artist: ""
+    },
+    BloodyBunny: { 
+        path: "models/BloodyBunny.glb", 
+        anim: [], 
+        scale: 1.0, 
+        cameraPos: new Vector3(-1.096256754139416, 2.0, 3.96), 
+        sceneConfig: emissiveSceneConfig,
+        postProcessing: bloodyBunnyPost,
+        totalBytes: 2068392,
+        artist: "Please credit <a href='https://www.youtube.com/@BloodyBunnyOfficialChannel/featured'>the original work</a> for the concept",
+        animations: {
+            firstAnimation: "SwordPose1"
+        },
     },
     MechaGirl: { 
         path: "models/MechaGirl.glb", 

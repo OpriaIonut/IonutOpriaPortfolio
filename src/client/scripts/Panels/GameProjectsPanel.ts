@@ -12,10 +12,15 @@ export class GameProjectsPanel
 
     private createElements(pageParent: HTMLDivElement)
     {
+        const section = document.createElement("div");
+        section.id = "gameProjectsPanel";
+        section.className = "fullwidth";
+        pageParent.appendChild(section);
+
         const parentNode = document.createElement("div");
-        parentNode.id = "gameProjectsPanel";
+        parentNode.id = "gameProjectsGalleryParent";
         parentNode.className = "fullwidth";
-        pageParent.appendChild(parentNode);
+        section.appendChild(parentNode);
 
         let title = document.createElement("div");
         title.className = "sectionTitle";
@@ -28,7 +33,7 @@ export class GameProjectsPanel
             _id: "jorogumosCradleCell",
             _title: "Jorogumo's Cradle",
             _description: `
-                Short first-person horror game that I built as a passion project, in order to learn Unreal Engine and launch my first ever steam game.<br>
+                Short first-person horror game that I built on my own as a passion project, in order to learn Unreal Engine and launch my first ever steam game.<br>
                 <br>
                 The game is a short, 30 min experience in which you have to explore a wild forest and build tools to defend yourself against a humanoid spider-like creature.<br>
                 <br>
@@ -50,9 +55,32 @@ export class GameProjectsPanel
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+            _id: "bubbleManiaCell",
+            _title: "Bubble Mania",
+            _description: `
+                Game that I built together with 2 other people for the 2025 Global Game Jam. The theme of the game jam was 'Bubble'. I was the main programmer and developed all of the systems of the game. It is a vampire-survivors-like top-down shooter in which you kill origami.
+                <br><br>
+                My purpose for the game was to create a short and fun experience for the players, and I achieved that by creating an intense 3-5 minutes experience in which you get overwhelmed gradually by enemies. The experience was very fun for me and I enjoyed immensely working with the other team members as we clicked very well and our entire workflow was extremely smooth (almost too smooth for a gamejam)
+            `,
+            _tags: ["Unity", "C#", "Top-down Shooter", "Web Build", "48 Hour Game Jam"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
+            _btn1Link: "https://lexydotzip.itch.io/ggj-2025",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/bubble-mania/",
+            _imageCount: 4,
+            _videoFormatIndices: [0],
+            _imageDurationMs: 5000,
+            _imgExtension: "jpg",
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "More Details",
+            _btn2Name: ""
+        }));
+
+        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "serenityGardenCell",
             _title: "Serenity Garden",
-            _description: `Tower defense game that I build as part of my Bachelor's Degree assessment.<br><br>
+            _description: `Tower defense game that I build on my ownas part of my Bachelor's Degree assessment.<br><br>
             The game has the following features:<br>
             <div class='bulletPointList'>
                 <b>&#149;</b> Construct & upgrade 6 different types of turrets<br>
@@ -61,7 +89,6 @@ export class GameProjectsPanel
                 <b>&#149;</b> Buy permanent upgrades for your turrets<br>
                 <b>&#149;</b> Play a co-op boss-fight arena mode with a friend on 3 different difficulties<br>
                 <b>&#149;</b> Windows & Android executables<br>
-                <b>&#149;</b> Multi-platform co-op (Android devices can match with Windows devices)
             </div>`,
                 _tags: ["Unity", "Photon 2", "C#", "Tower Defense", "Multi-user", "Multi-platform"],
             _tagColors: [tagColors.software, tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
@@ -71,27 +98,22 @@ export class GameProjectsPanel
             _imageCount: 7,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _downloadPath: "https://drive.google.com/file/d/1ZznBIv_GS-IxAVjlkC9eRUwwSig6ISaT/view?usp=sharing",
-            _downloadName: "Serenity Garden TD.rar",
+            _downloadPath: "",
+            _downloadName: "",
             _btn1Name: "More Details",
-            _btn2Name: "Download"
+            _btn2Name: ""
         }));
 
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "chickenInvadersCell",
             _title: "Chicken Invaders DX",
-            _description: `Replica of the initial Chicken Invaders DX game, which contains the following:<br>
+            _description: `Replica of the initial Chicken Invaders DX game, which contains the following features:<br><br>
             <div class='bulletPointList'>
                 <b>&#149;</b> 10 playable levels that repeat endlessly<br>
                 <b>&#149;</b> Local leaderboard system<br>
                 <b>&#149;</b> Weapon utility with 8 different levels, each having a different attack pattern<br>
                 <b>&#149;</b> Rocket that fries all chickens and skips the level<br>
                 <b>&#149;</b> Assistant spaceship that helps with shooting enemies<br>
-                <br>
-                Main Contributions:<br>
-                <b>&#149;</b> Implemented asteroid belt and waves 4-5<br>
-                <b>&#149;</b> Created the spritesheets for all non-ui elements in the game (spaceship, chickens, weapons, asteroids, etc.)<br>
-                <b>&#149;</b> Optimized resource loading using multithreaded programming
                 </div>`,
             _tags: ["C++", "SFML", "Bullet Hell", "Endless", "Leaderboard"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
@@ -101,38 +123,38 @@ export class GameProjectsPanel
             _imageCount: 6,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
-            _downloadPath: "https://drive.google.com/file/d/12X9nBBK_FJtfkDELjQtOVL-uhzYNnnev/view?usp=sharing",
-            _downloadName: "Chicken Invaders DX.rar",
+            _downloadPath: "",
+            _downloadName: "",
             _btn1Name: "More Details",
-            _btn2Name: "Download"
+            _btn2Name: ""
         }));
 
-        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
-            _id: "legeithielUnaelianCell",
-            _title: "Legeithiel Unaelian",
-            _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br><br>
-                It contains the following:<br>
-            <div class='bulletPointList'>
-                <b>&#149;</b> 3 playable levels<br>
-                <b>&#149;</b> 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
-                <b>&#149;</b> Pause menu from which you can tweak sound settings<br>
-                <b>&#149;</b> Leaderboard system stored locally<br>
-                <b>&#149;</b> Controller support
-            </div>`,
-            _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
-            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _btn1Link: "https://kirirato.itch.io/legeithiel-unaelian",
-            _btn2Link: "",
-            _imagesPath: "images/gallery/legeithiel-unaelian/",
-            _imageCount: 5,
-            _videoFormatIndices: [0],
-            _imageDurationMs: 5000,
-            _imgExtension: "png",
-            _downloadPath: "https://drive.google.com/file/d/1yx7KNyS5YnUH3r_LGqOQwMHjVEFkOKgw/view?usp=sharing",
-            _downloadName: "Legeithiel Unaelian.rar",
-            _btn1Name: "More Details",
-            _btn2Name: "Download"
-        }));
+        // this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+        //     _id: "legeithielUnaelianCell",
+        //     _title: "Legeithiel Unaelian",
+        //     _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br><br>
+        //         It contains the following:<br>
+        //     <div class='bulletPointList'>
+        //         <b>&#149;</b> 3 playable levels<br>
+        //         <b>&#149;</b> 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
+        //         <b>&#149;</b> Pause menu from which you can tweak sound settings<br>
+        //         <b>&#149;</b> Leaderboard system stored locally<br>
+        //         <b>&#149;</b> Controller support
+        //     </div>`,
+        //     _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
+        //     _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
+        //     _btn1Link: "https://kirirato.itch.io/legeithiel-unaelian",
+        //     _btn2Link: "",
+        //     _imagesPath: "images/gallery/legeithiel-unaelian/",
+        //     _imageCount: 5,
+        //     _videoFormatIndices: [0],
+        //     _imageDurationMs: 5000,
+        //     _imgExtension: "png",
+        //     _downloadPath: "https://drive.google.com/file/d/1yx7KNyS5YnUH3r_LGqOQwMHjVEFkOKgw/view?usp=sharing",
+        //     _downloadName: "Legeithiel Unaelian.rar",
+        //     _btn1Name: "More Details",
+        //     _btn2Name: "Download"
+        // }));
 
         // this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
         //     _id: "oriCloneCell",

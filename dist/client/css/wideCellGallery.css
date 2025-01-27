@@ -1,9 +1,9 @@
 .wideCellGallery
 {
-    width: 96%;
+    width: 80%;
     padding: 1vw;
-    margin-left: 1vw;
-    margin-right: 1vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .wideCellGalleryLeftPanel
@@ -24,7 +24,7 @@
 
 .wideCellGalleryTitle
 {
-    font-size: 2.5vw;
+    font-size: 2.0vw;
     text-align: center;
     padding-bottom: 0.25vw;
     color: var(--tertiary-color);
@@ -38,12 +38,12 @@
     margin: 0.1vw;
     margin-top: 1.0vw;
     border-radius: 0.5vw;
-    font-size: 0.75vw;
+    font-size: 0.65vw;
 }
 
 .wideCellGalleryDescription
 {
-    font-size: 1.0vw;
+    font-size: 0.8vw;
     padding-right: 1vw;
     text-align: left;
 }

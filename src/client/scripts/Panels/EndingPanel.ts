@@ -39,7 +39,7 @@ export class EndingPanel
 
         let copyright = document.createElement("div");
         copyright.id = "copyright";
-        copyright.innerHTML = "Copyright © 2024 by Ionu&#x021b; Opria<br>All content and trademarks property of their respective owners";
+        copyright.innerHTML = "Copyright © 2025 by Ionu&#x021b; Opria<br>All content and trademarks property of their respective owners";
         parentNode.appendChild(copyright);
     }
 
