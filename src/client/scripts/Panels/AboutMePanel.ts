@@ -28,7 +28,7 @@ export class AboutMePanel
         descriptionText.id = "aboutMeDescription";
         descriptionText.innerHTML = `
         Hello and thank you for checking out my portfolio!<br><br>
-        I'm a versatile Software Developer with <b>4+ years of experience</b> in the game development space. During my career I developed various types of applications and aquired a wide variety of skills, ranging from <b>engine programming, graphics programming, network programming, web development</b> using <b>Three.js</b>, <b>Unity development</b> for <b>games & VR applications</b>.<br><br>
+        I'm a versatile Software Developer with <b>5 years of experience</b> in the game development space. During my career I developed various types of applications and aquired a wide variety of skills, ranging from <b>engine programming, graphics programming, network programming, web development</b> using <b>Three.js</b>, <b>Unity development</b> for <b>games & VR applications</b>.<br><br>
         I've always been curios about how games work underneath the surface, which is what got me into programming (and 3D modelling later on). I'm passionate about building games, learning how complex mechanics should be implemented properly, what optimizations are required to ship successful games and how I can best contribute to the projects I'm working on.
         `;
 

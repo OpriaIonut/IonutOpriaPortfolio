@@ -6,8 +6,9 @@ import { tagColors } from "../Themes/ChartThemes";
 
 export class WorkProjectsPanel
 {
-    private _pqGalery!: WideCellGallery | MultiCellWithGallery;
-    private _recogneoGalery!: WideCellGallery | MultiCellWithGallery;
+    private _proj1!: WideCellGallery | MultiCellWithGallery;
+    private _proj2!: WideCellGallery | MultiCellWithGallery;
+    private _proj3!: WideCellGallery | MultiCellWithGallery;
 
     constructor(pageParent: HTMLDivElement)
     {
@@ -70,10 +71,37 @@ export class WorkProjectsPanel
             _tags: ["Unity", "C#", "Augumented Reality", "Google Play Release", "App Store Release"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
             _btn1Link: "",
-            _btn2Link: "https://app.heidi-chocolate.com/",
+            _btn2Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
             _imagesPath: "images/gallery/heidi-christmas/",
             _imageCount: 8,
             _videoFormatIndices: [0, 1, 2, 3, 4],
+            _imageDurationMs: 5000,
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "",
+            _btn2Name: "Project Link"
+        }
+
+        let heidiEasterCellData: CellGalleryConfig = {
+            _id: "heidiEasterCell",
+            _title: "HEIDI Chocolate Easter",
+            _description: `<br>
+            Game in which you need to find multiple objects scattered across different maps. It contains 30 playable levels on 5 different maps.<br><br>
+            Key contributions:<br>
+            <div class='bulletPointList'>
+                <b>&#149;</b> Implemented the object scattering algorithm.<br>
+                <b>&#149;</b> Implemented multiple systems, such as: scoring, vouchers, tombola entries tracking, multiple ui panels, etc.<br>
+                <b>&#149;</b> Designed, implemented and integrated the backend for the game.<br>
+                <b>&#149;</b> Optimized and profiled the game for a successful release.<br>
+            </div>
+            `,
+            _tags: ["Unity", "C#", "Google Play Release", "App Store Release"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.extra, tagColors.extra],
+            _btn1Link: "",
+            _btn2Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
+            _imagesPath: "images/gallery/heidi-easter/",
+            _imageCount: 5,
+            _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _downloadPath: "",
             _downloadName: "",
@@ -110,13 +138,15 @@ export class WorkProjectsPanel
 
         if(isPortraitMode.value)
         {
-            this._pqGalery = new MultiCellWithGallery(parentNode, 1, pqCellData);
-            this._recogneoGalery = new MultiCellWithGallery(parentNode, 1, heidiCellData);
+            this._proj1 = new MultiCellWithGallery(parentNode, 1, pqCellData);
+            this._proj2 = new MultiCellWithGallery(parentNode, 1, heidiCellData);
+            this._proj3 = new MultiCellWithGallery(parentNode, 1, heidiEasterCellData);
         }
         else
         {
-            this._pqGalery = new WideCellGallery(parentNode, pqCellData);
-            this._recogneoGalery = new WideCellGallery(parentNode, heidiCellData);
+            this._proj1 = new WideCellGallery(parentNode, pqCellData);
+            this._proj2 = new WideCellGallery(parentNode, heidiCellData);
+            this._proj3 = new WideCellGallery(parentNode, heidiEasterCellData);
         }
 
         let separator = document.createElement("div");
@@ -126,13 +156,15 @@ export class WorkProjectsPanel
 
     public update()
     {
-        this._pqGalery.update();
-        this._recogneoGalery.update();
+        this._proj1.update();
+        this._proj2.update();
+        this._proj3.update();
     }
 
     public updateColorTheme()
     {
-        this._pqGalery.updateColorTheme();
-        this._recogneoGalery.updateColorTheme();
+        this._proj1.updateColorTheme();
+        this._proj2.updateColorTheme();
+        this._proj3.updateColorTheme();
     }
 }
