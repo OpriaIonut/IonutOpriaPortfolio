@@ -142,7 +142,7 @@ export class WorkProjectsPanel
             this._proj1 = new MultiCellWithGallery(parentNode, 1, pqCellData);
             this._proj2 = new MultiCellWithGallery(parentNode, 1, heidiCellData);
             this._proj3 = new MultiCellWithGallery(parentNode, 1, heidiEasterCellData);
-            this._proj4 = new MultiCellWithGallery(parentNode, 1, heidiEasterCellData);
+            this._proj4 = new MultiCellWithGallery(parentNode, 1, recogneoCellData);
         }
         else
         {

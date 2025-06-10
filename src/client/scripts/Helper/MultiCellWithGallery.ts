@@ -93,6 +93,15 @@ export class MultiCellWithGallery
                 moreDetailsText.innerHTML = config._btn1Name;
                 moreDetailsText.style.fontSize = "1vw";
                 moreDetails.appendChild(moreDetailsText);
+
+                if(isPortraitMode.value)
+                {
+                    moreDetailsBorder.style.left = "45%";
+                    moreDetailsBorder.style.bottom = "0%";
+                    moreDetailsBorder.style.width = "25vw";
+                    moreDetailsBorder.style.height = "5vw";
+                    moreDetailsText.style.fontSize = "3vw";
+                }
             }
             else
             {            
