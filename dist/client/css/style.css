@@ -97,6 +97,13 @@ body
     background-color: var(--tertiary-background-color);
 }
 
+#workProjectsPanel
+{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #gameProjectsGalleryParent
 {
     width: 95%;

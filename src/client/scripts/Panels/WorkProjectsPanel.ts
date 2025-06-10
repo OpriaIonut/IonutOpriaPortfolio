@@ -9,6 +9,7 @@ export class WorkProjectsPanel
     private _proj1!: WideCellGallery | MultiCellWithGallery;
     private _proj2!: WideCellGallery | MultiCellWithGallery;
     private _proj3!: WideCellGallery | MultiCellWithGallery;
+    private _proj4!: WideCellGallery | MultiCellWithGallery;
 
     constructor(pageParent: HTMLDivElement)
     {
@@ -40,18 +41,18 @@ export class WorkProjectsPanel
                 <b>&#149;</b> Worked on a procedural volumetric terrain system that is also able to generate underground caves. <br>
                 <b>&#149;</b> Currently helping out on the engine development side, by creating the tools that are required to run the game in the most optimal manner.
             </div>`,
-            _tags: ["WebGL", "Typescript", "C++", "Procedural", "Custom Game Engine"],
+            _tags: ["WebGL", "Typescript", "C++", "Procedural Generation", "Custom Game Engine"],
             _tagColors: [tagColors.language, tagColors.language, tagColors.language, tagColors.gameType, tagColors.software],
-            _btn1Link: "",
-            _btn2Link: "https://planetquest.io",
+            _btn1Link: "https://planetquest.io",
+            _btn2Link: "",
             _imagesPath: "images/gallery/planetquest/",
             _imageCount: 7,
             _videoFormatIndices: [5, 6],
             _imageDurationMs: 5000,
             _downloadPath: "",
             _downloadName: "",
-            _btn1Name: "",
-            _btn2Name: "Project Link"
+            _btn1Name: "Project Link",
+            _btn2Name: ""
         }
 
         let heidiCellData: CellGalleryConfig = {
@@ -70,16 +71,16 @@ export class WorkProjectsPanel
             `,
             _tags: ["Unity", "C#", "Augumented Reality", "Google Play Release", "App Store Release"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-            _btn1Link: "",
-            _btn2Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
+            _btn1Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
+            _btn2Link: "",
             _imagesPath: "images/gallery/heidi-christmas/",
             _imageCount: 8,
             _videoFormatIndices: [0, 1, 2, 3, 4],
             _imageDurationMs: 5000,
             _downloadPath: "",
             _downloadName: "",
-            _btn1Name: "",
-            _btn2Name: "Project Link"
+            _btn1Name: "Project Link",
+            _btn2Name: ""
         }
 
         let heidiEasterCellData: CellGalleryConfig = {
@@ -97,56 +98,59 @@ export class WorkProjectsPanel
             `,
             _tags: ["Unity", "C#", "Google Play Release", "App Store Release"],
             _tagColors: [tagColors.software, tagColors.language, tagColors.extra, tagColors.extra],
-            _btn1Link: "",
-            _btn2Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
+            _btn1Link: "https://play.google.com/store/apps/details?id=com.HeidiChocolat.HeidiChocolate",
+            _btn2Link: "",
             _imagesPath: "images/gallery/heidi-easter/",
             _imageCount: 5,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _downloadPath: "",
             _downloadName: "",
-            _btn1Name: "",
-            _btn2Name: "Project Link"
+            _btn1Name: "Project Link",
+            _btn2Name: ""
         }
 
-        // let recogneoCellData: CellGalleryConfig = {
-        //     _id: "recogneoCell",
-        //     _title: "Recogneo",
-        //     _description: `<br>
-        //     Recogneo is a library that is able to generate datasets for AI training in a matter of minutes, process which would take weeks if done manually. You can generate thousands or even milions of images in the environment that you want to train your AI model in, while also generating annotations for the Yolo & Coco-based models.<br><br>
-        //     Key contributions:<br>
-        //     <div class='bulletPointList'>
-        //         <b>&#149;</b> Developed the image generation logic. <br>
-        //         <b>&#149;</b> Implemented image processing algorithms using compute shaders, to generate the desired results in a very optimal manner. <br>
-        //         <b>&#149;</b> Developed the logic for automatically generating the annotations for the datasets. <br>
-        //         <b>&#149;</b> Trained a couple of AI models in different environments to test the accuracy of the datasets generated. <br>
-        //     </div>
-        //     `,
-        //     _tags: ["Unity", "C#", "AI Training", "Image Processing", "Compute Shaders"],
-        //     _tagColors: [tagColors.software, tagColors.language, tagColors.extra, tagColors.extra, tagColors.extra],
-        //     _btn1Link: "",
-        //     _btn2Link: "",
-        //     _imagesPath: "images/gallery/recogneo/",
-        //     _imageCount: 5,
-        //     _videoFormatIndices: [3, 4],
-        //     _imageDurationMs: 5000,
-        //     _downloadPath: "",
-        //     _downloadName: "",
-        //     _btn1Name: "More Details",
-        //     _btn2Name: "Project Link"
-        // }
+        let recogneoCellData: CellGalleryConfig = {
+            _id: "recogneoCell",
+            _title: "Recogneo",
+            _description: `<br>
+            Recogneo is a library that is able to generate datasets for AI training in a matter of minutes, process which would take weeks if done manually. You can generate thousands or even milions of images in the environment that you want to train your AI model in, while also generating annotations for the Yolo & Coco-based models.<br><br>
+            Key contributions:<br>
+            <div class='bulletPointList'>
+                <b>&#149;</b> Developed the image generation logic. <br>
+                <b>&#149;</b> Implemented image processing algorithms using compute shaders, to generate the desired results in a very optimal manner. <br>
+                <b>&#149;</b> Developed the logic for automatically generating the annotations for the datasets. <br>
+                <b>&#149;</b> Trained a couple of AI models in different environments to test the accuracy of the datasets generated. <br>
+            </div>
+            `,
+            _tags: ["Unity", "C#", "AI Training", "Image Processing", "Compute Shaders"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.extra, tagColors.extra, tagColors.extra],
+            _btn1Link: "",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/recogneo/",
+            _imageCount: 5,
+            _videoFormatIndices: [3, 4],
+            _imageDurationMs: 5000,
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "",
+            _btn2Name: ""
+        }
 
         if(isPortraitMode.value)
         {
             this._proj1 = new MultiCellWithGallery(parentNode, 1, pqCellData);
             this._proj2 = new MultiCellWithGallery(parentNode, 1, heidiCellData);
             this._proj3 = new MultiCellWithGallery(parentNode, 1, heidiEasterCellData);
+            this._proj4 = new MultiCellWithGallery(parentNode, 1, heidiEasterCellData);
         }
         else
         {
-            this._proj1 = new WideCellGallery(parentNode, pqCellData);
-            this._proj2 = new WideCellGallery(parentNode, heidiCellData);
-            this._proj3 = new WideCellGallery(parentNode, heidiEasterCellData);
+            let cellsPerWidth = 2;
+            this._proj1 = new MultiCellWithGallery(parentNode, cellsPerWidth, pqCellData);
+            this._proj2 = new MultiCellWithGallery(parentNode, cellsPerWidth, heidiCellData);
+            this._proj3 = new MultiCellWithGallery(parentNode, cellsPerWidth, heidiEasterCellData);
+            this._proj4 = new MultiCellWithGallery(parentNode, cellsPerWidth, recogneoCellData);
         }
 
         let separator = document.createElement("div");
@@ -159,6 +163,7 @@ export class WorkProjectsPanel
         this._proj1.update();
         this._proj2.update();
         this._proj3.update();
+        this._proj4.update();
     }
 
     public updateColorTheme()
@@ -166,5 +171,6 @@ export class WorkProjectsPanel
         this._proj1.updateColorTheme();
         this._proj2.updateColorTheme();
         this._proj3.updateColorTheme();
+        this._proj4.updateColorTheme();
     }
 }
