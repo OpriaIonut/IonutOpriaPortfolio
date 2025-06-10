@@ -27,15 +27,13 @@ export class GameProjectsPanel
         title.innerHTML = "Personal Projects";
         parentNode.appendChild(title);
 
-        let cellsPerWidth = 2;
+        let cellsPerWidth = 3;
         
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "jorogumosCradleCell",
             _title: "Jorogumo's Cradle",
             _description: `
-                Short first-person horror game that I built on my own as a passion project, in order to learn Unreal Engine and launch my first ever steam game.<br>
-                <br>
-                The game is a short, 30 min experience in which you have to explore a wild forest and build tools to defend yourself against a humanoid spider-like creature.<br>
+                Short first-person horror game that I built on my own as a passion project, in order to learn Unreal Engine and launch my first ever steam game. The game is a short, 30 min experience in which you have to explore a wild forest and build tools to defend yourself against a humanoid spider-like creature.<br>
                 <br>
                 The enemy has multiple attack patterns that it utilizes to get into your cabin, which is the only thing keeping it at bay. You need to react to it's attack patterns and find ways to stop it from breaking through. This includes: building torches to burn the spider webs, navigating labyrinth-like structures, setting up a blockade inside the cabin, shooting the monster down with a slingshot, etc.
             `,
@@ -45,6 +43,28 @@ export class GameProjectsPanel
             _btn2Link: "",
             _imagesPath: "images/gallery/jorogumos-cradle/",
             _imageCount: 8,
+            _videoFormatIndices: [0],
+            _imageDurationMs: 5000,
+            _imgExtension: "jpg",
+            _downloadPath: "",
+            _downloadName: "",
+            _btn1Name: "More Details",
+            _btn2Name: ""
+        }));
+
+        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+            _id: "bladesAndBeggarsCell",
+            _title: "Blades and Beggars",
+            _description: `
+                Game that I built together with 3 other people for the 2025 thatgamecompany x COREBLAZER GameJam, which had the theme 'Generosity'. I implemented all of the gameplay logic of the game, such as the player controls, enemy AI, boss behavior, synchronizing data between scenes, deploying to WebGL. Additionally I was also responsible for integrating the relevant art assets, setting up animators, parallaxing backgrounds, etc.
+                <br><br>
+                The experience was extremely fun and I'm glad that I got to work with amazing people on this game. I'm also very satisfied with the result of this game jam.`,
+            _tags: ["Unity", "C#", "Side-Scroller", "Web Build", "Game Jam"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
+            _btn1Link: "https://stefan-zamfir.itch.io/blades-and-beggars",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/blades-and-beggars/",
+            _imageCount: 7,
             _videoFormatIndices: [0],
             _imageDurationMs: 5000,
             _imgExtension: "jpg",
@@ -80,7 +100,7 @@ export class GameProjectsPanel
         this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
             _id: "serenityGardenCell",
             _title: "Serenity Garden",
-            _description: `Tower defense game that I build on my ownas part of my Bachelor's Degree assessment.<br><br>
+            _description: `Tower defense game that I build on my own as part of my Bachelor's Degree assessment.<br><br>
             The game has the following features:<br>
             <div class='bulletPointList'>
                 <b>&#149;</b> Construct & upgrade 6 different types of turrets<br>
@@ -129,32 +149,32 @@ export class GameProjectsPanel
             _btn2Name: ""
         }));
 
-        // this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
-        //     _id: "legeithielUnaelianCell",
-        //     _title: "Legeithiel Unaelian",
-        //     _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br><br>
-        //         It contains the following:<br>
-        //     <div class='bulletPointList'>
-        //         <b>&#149;</b> 3 playable levels<br>
-        //         <b>&#149;</b> 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
-        //         <b>&#149;</b> Pause menu from which you can tweak sound settings<br>
-        //         <b>&#149;</b> Leaderboard system stored locally<br>
-        //         <b>&#149;</b> Controller support
-        //     </div>`,
-        //     _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
-        //     _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
-        //     _btn1Link: "https://kirirato.itch.io/legeithiel-unaelian",
-        //     _btn2Link: "",
-        //     _imagesPath: "images/gallery/legeithiel-unaelian/",
-        //     _imageCount: 5,
-        //     _videoFormatIndices: [0],
-        //     _imageDurationMs: 5000,
-        //     _imgExtension: "png",
-        //     _downloadPath: "https://drive.google.com/file/d/1yx7KNyS5YnUH3r_LGqOQwMHjVEFkOKgw/view?usp=sharing",
-        //     _downloadName: "Legeithiel Unaelian.rar",
-        //     _btn1Name: "More Details",
-        //     _btn2Name: "Download"
-        // }));
+        this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
+            _id: "legeithielUnaelianCell",
+            _title: "Legeithiel Unaelian",
+            _description: `Bullet-hell game that I built during my time at the University of Lincoln UK<br><br>
+                It contains the following:<br>
+            <div class='bulletPointList'>
+                <b>&#149;</b> 3 playable levels<br>
+                <b>&#149;</b> 3 types of powerups (increased movement speed, double damage, faster fire rate)<br>
+                <b>&#149;</b> Pause menu from which you can tweak sound settings<br>
+                <b>&#149;</b> Leaderboard system stored locally<br>
+                <b>&#149;</b> Controller support
+            </div>`,
+            _tags: ["Unity", "C#", "Bullet Hell", "Leaderboard", "Controller Support"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.extra, tagColors.extra],
+            _btn1Link: "https://kirirato.itch.io/legeithiel-unaelian",
+            _btn2Link: "",
+            _imagesPath: "images/gallery/legeithiel-unaelian/",
+            _imageCount: 5,
+            _videoFormatIndices: [0],
+            _imageDurationMs: 5000,
+            _imgExtension: "png",
+            _downloadPath: "https://drive.google.com/file/d/1yx7KNyS5YnUH3r_LGqOQwMHjVEFkOKgw/view?usp=sharing",
+            _downloadName: "Legeithiel Unaelian.rar",
+            _btn1Name: "More Details",
+            _btn2Name: ""
+        }));
 
         // this._galleries.push(new MultiCellWithGallery(parentNode, cellsPerWidth, {
         //     _id: "oriCloneCell",
