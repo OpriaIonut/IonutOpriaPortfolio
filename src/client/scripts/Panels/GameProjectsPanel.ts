@@ -221,7 +221,7 @@ export class GameProjectsPanel
         let separator = document.createElement("div");
         separator.className = "separator";
         separator.style.marginTop = "2vw";
-        parentNode.appendChild(separator);
+        pageParent.appendChild(separator);
     }
 
     public update()

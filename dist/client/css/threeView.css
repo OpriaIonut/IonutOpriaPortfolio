@@ -1,3 +1,8 @@
+#artProjectsPanel
+{
+    background-color: var(--tertiary-background-color);
+}
+
 #threeModelViewParent
 {
     position: fixed;

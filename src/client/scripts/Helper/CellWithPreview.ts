@@ -4,7 +4,7 @@ export class CellWithPreview
 {
     private _preview: HTMLImageElement;
 
-    constructor(parentNode: HTMLElement, cellsPerWidth: number, modelName: string, imagePath: string)
+    constructor(parentNode: HTMLElement, cellsPerWidth: number, modelName: string, imagePath: string, onClick: (projectName: string, progressBar: HTMLDivElement) => void)
     {
         let baseWidthForCalc = 80;
         if(window.innerWidth / window.innerHeight > 2.5 / 1.0)
@@ -35,7 +35,7 @@ export class CellWithPreview
         });
 
         cellParent.onclick = () => {
-            threeModelView.activateView(modelName, progressBar);
+            onClick(modelName, progressBar);
         };
     }
 

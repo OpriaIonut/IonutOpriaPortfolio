@@ -155,7 +155,7 @@ export class WorkProjectsPanel
 
         let separator = document.createElement("div");
         separator.className = "separator";
-        parentNode.appendChild(separator);
+        pageParent.appendChild(separator);
     }
 
     public update()

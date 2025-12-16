@@ -40,7 +40,7 @@ body
     left: 47.5%;
     transform: translateX(-50%);
     margin: 2vw;
-    background-color: var(--secondary-background-color);
+    background-color: var(--tertiary-background-color);
     text-align: center;
     padding-bottom: 2vw;
     box-shadow: 0 0 1.0vw rgba(0, 0, 0, 0.5);
@@ -104,9 +104,12 @@ body
 
 #workProjectsPanel
 {
-    width: 85%;
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
     margin-left: auto;
     margin-right: auto;
+    background-color: var(--secondary-background-color);
 }
 
 #gameProjectsGalleryParent

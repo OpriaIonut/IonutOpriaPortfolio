@@ -41,7 +41,7 @@ export class AboutMePanel
 
         let separator = document.createElement("div");
         separator.className = "separator";
-        parentNode.appendChild(separator);
+        parentElem.appendChild(separator);
     }
 
     public updateColorTheme()

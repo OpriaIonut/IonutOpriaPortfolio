@@ -5,6 +5,7 @@ import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
 import { EndingPanel } from "./scripts/Panels/EndingPanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
 import { HomePanel } from "./scripts/Panels/HomePanel";
+import { ShaderProjectsPanel } from "./scripts/Panels/ShaderProjects";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
@@ -30,6 +31,7 @@ export const skillChartsPanel = new SkillChartsPanel(pageParent);
 export const specialSkillsPanel = new SpecialSkillsPanel(pageParent);
 export const workProjectsPanel = new WorkProjectsPanel(pageParent);
 export const gameProjectsPanel = new GameProjectsPanel(pageParent);
+export const shaderProjectsPanel = new ShaderProjectsPanel(pageParent);
 export const artProjectsPanel = new ArtProjectsPanel(pageParent);
 export const endingPanel = new EndingPanel();
 
