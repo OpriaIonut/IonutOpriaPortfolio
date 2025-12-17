@@ -3,7 +3,7 @@
     background-color: var(--tertiary-background-color);
 }
 
-#threeModelViewParent
+#threeModelViewParent, #shaderVisualizerParent
 {
     position: fixed;
     top: 0px;
@@ -14,7 +14,7 @@
     font-size: 1vw;
 }
 
-#threeModelView
+#threeModelView, #shaderVisualizer
 {
     position: fixed;
     top: 50%;
@@ -164,7 +164,7 @@
         height: 30%;
     }
     
-    #threeModelViewParent
+    #threeModelViewParent, #shaderVisualizerParent
     {
         font-size: 3vw;
     }

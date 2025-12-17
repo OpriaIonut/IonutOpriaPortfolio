@@ -9,6 +9,7 @@ import { ShaderProjectsPanel } from "./scripts/Panels/ShaderProjects";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
+import { ShaderVisualizer } from "./scripts/ShaderVisualizer/ShaderVisualizer";
 import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 
 export const threeDebugGUI = false;
@@ -25,6 +26,7 @@ document.body.appendChild(pageParent);
 export const mouseAnim = new MouseAnimation(0.75, 0.4);
 const colorThemeButtons = new ColorThemeButtons();
 
+export const shaderVisualizer = new ShaderVisualizer();
 
 export const aboutMePanel = new AboutMePanel(pageParent);
 export const skillChartsPanel = new SkillChartsPanel(pageParent);
@@ -62,6 +64,7 @@ function gameLoop(timestamp: number)
 
     mouseAnim.update();
     threeModelView.update(deltaTime);
+    shaderVisualizer.update(deltaTime);
     workProjectsPanel.update();
     gameProjectsPanel.update();
     specialSkillsPanel.update();

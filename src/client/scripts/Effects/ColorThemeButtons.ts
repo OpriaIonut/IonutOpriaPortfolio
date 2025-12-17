@@ -1,4 +1,4 @@
-import { aboutMePanel, artProjectsPanel, endingPanel, gameProjectsPanel, homePanel, skillChartsPanel, workProjectsPanel } from "../../client";
+import { aboutMePanel, artProjectsPanel, endingPanel, gameProjectsPanel, homePanel, shaderProjectsPanel, skillChartsPanel, workProjectsPanel } from "../../client";
 
 const colorThemes: any = {
     blueTheme: "#189C9B", 
@@ -37,6 +37,7 @@ export class ColorThemeButtons
                 workProjectsPanel.updateColorTheme();
                 gameProjectsPanel.updateColorTheme();
                 artProjectsPanel.updateColorTheme();
+                shaderProjectsPanel.updateColorTheme();
                 endingPanel.updateColorTheme();
                 
                 this.setActiveBorder();

@@ -56,7 +56,6 @@ export class CameraManager
     public get scene() { return this._scene as Scene; }
     public get camera() { return this._camera as PerspectiveCamera; }
     public get renderer() { return this._renderer as WebGLRenderer; }
-    public get effect() { return this._renderer as WebGLRenderer; }
     
     public get cameraForward() { return this._cameraForward; }
     public get cameraRight() { return this._cameraRight; }

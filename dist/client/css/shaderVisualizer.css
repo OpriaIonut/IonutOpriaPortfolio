@@ -1,0 +1,45 @@
+#codePanelParent
+{
+    position: fixed;
+    background-color: brown;
+    top: 0px;
+    right: 0px;
+    width: 40%;
+    height: 100%;
+    z-index: 100;
+}
+
+#codePanelHeader
+{
+    background-color: aliceblue;
+    width: 100%;
+    height: 10%;
+}
+
+#codePanelInspector
+{
+    background-color: cadetblue;
+    width: 100%;
+    height: 90%;
+}
+
+#codePanelActivationBtn
+{
+    position: fixed;
+    z-index: 100;
+    top: 50%;
+    width: 3vw;
+    height: 3vw;
+    transform: translateY(-50%);
+    background-image: url("../images/ui/next.png");
+    background-size: cover;
+
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#codePanelActivationBtn:hover
+{
+    filter: brightness(0.5);
+}
