@@ -73,7 +73,7 @@
 
 .shaderBtnHeaderSelected
 {
-    background-color: #33c0c5dd;
+    background-color: var(--secondary-color);
     padding: 0.5vw;
     margin: 0.5vw;
     width: auto;

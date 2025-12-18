@@ -62,7 +62,7 @@
 
 .buttonsWithSelectionSelected
 {
-    background-color: #33c0c5dd;
+    background-color: var(--secondary-color);
     padding: 0.75vw;
     margin: 0.75vw;
 }
@@ -133,7 +133,7 @@
     padding: 0.5vw;
     bottom: 0px;
     text-align: center;
-    background-color: #33c0c5dd;
+    background-color: var(--secondary-color);
 }
 
 #artistCredits
