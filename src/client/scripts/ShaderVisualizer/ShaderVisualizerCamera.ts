@@ -1,4 +1,4 @@
-import { Camera, NoToneMapping, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { Camera, Color, NoToneMapping, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { FirstPersonControls } from "three/examples/jsm/controls/FirstPersonControls";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
@@ -48,6 +48,7 @@ export class ShaderVisualizerCamera
         // new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
         //     this._scene.background = texture;
         // });
+        this._scene.background = new Color(0x555555);
 
         let aspect = window.innerWidth / window.innerHeight;
         this._camera = new PerspectiveCamera(40, aspect, 0.01, 100);

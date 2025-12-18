@@ -3,6 +3,8 @@ import { IShaderScene } from "./ShaderScenes/IShaderScene";
 import { getGPUTier } from "detect-gpu";
 import { ShaderVisualizerCamera } from "./ShaderVisualizerCamera";
 import { ShaderSceneTest } from "./ShaderScenes/ShaderSceneTest";
+import { ShaderInspectorData } from "../../types";
+import { codePrettyPrinter } from "../../client";
 
 export enum ShaderSceneType
 {
@@ -22,6 +24,8 @@ export class ShaderVisualizer
     private _codePanelInspector!: HTMLDivElement;
     private _codePanelBtnActivation!: HTMLButtonElement;
 
+    private _availableShaders: ShaderInspectorData[] = [];
+
     private _cameraManager!: ShaderVisualizerCamera;
     // private _objectLoader: any;
     // private _materialCache: any;
@@ -38,18 +42,25 @@ export class ShaderVisualizer
     {
         this._panel.style.display = "block";
         this._currentScene = this.getSceneFromType(scene);
-        // this._currentScene.init(this._cameraManager.scene, null, null);
+        if(this._currentScene != undefined)
+        {
+            this._currentScene.init(this);
+            this._cameraManager.scene.add(this._currentScene.getScene());
+        }
 
     }
 
     public hideView()
     {
-        this._panel.style.display = "none";
         if(this._currentScene != undefined)
         {
             this._currentScene.hide();
+            this._cameraManager.scene.remove(this._currentScene.getScene());
             this._currentScene = undefined;
         }
+        this._panel.style.display = "none";
+        this._codePanelParent.style.display = "none";
+        this.updateCodeActivationBtnStyle();
     }
 
     public update(deltaTime: number)
@@ -57,6 +68,60 @@ export class ShaderVisualizer
         this._cameraManager.update(deltaTime);
         if(this._currentScene != undefined)
             this._currentScene.update(deltaTime);
+    }
+
+    public addScript(scriptName: string, scriptContent: string)
+    {
+        let shaderBtn = document.createElement("div");
+        shaderBtn.innerHTML = scriptName;
+        shaderBtn.className = "shaderBtnHeader";
+        shaderBtn.onclick = () => {
+            let dataIndex = this.findScriptIndex(scriptName);
+            if(dataIndex >= 0)
+            {
+                for(let index = 0; index < this._availableShaders.length; ++index)
+                {
+                    this._availableShaders[index].btn.className = "shaderBtnHeader";
+                }
+                this._codePanelInspector.innerHTML = this._availableShaders[dataIndex].code;
+                this._availableShaders[dataIndex].btn.className = "shaderBtnHeaderSelected";
+            }
+        };
+        this._codePanelHeader.appendChild(shaderBtn);
+
+        let shaderData: ShaderInspectorData = {
+            name: scriptName,
+            code: codePrettyPrinter.formatCode(scriptContent),
+            btn: shaderBtn
+        };
+        this._availableShaders.push(shaderData);
+    }
+
+    public removeScript(scriptName: string)
+    {
+        if(this._availableShaders.length <= 0)
+            return;
+
+        let dataIndex = this.findScriptIndex(scriptName);
+        if(dataIndex >= 0)
+        {
+            if(this._codePanelParent.contains(this._availableShaders[dataIndex].btn))
+                this._codePanelHeader.removeChild(this._availableShaders[dataIndex].btn);
+            this._availableShaders.splice(dataIndex, 1);
+        }
+        this._codePanelInspector.innerHTML = "";
+    }
+
+    private findScriptIndex(scriptName: string)
+    {
+        for(let index = 0; index < this._availableShaders.length; ++index)
+        {
+            if(this._availableShaders[index].name == scriptName)
+            {
+                return index;
+            }
+        }
+        return -1;
     }
 
     private initializeView()
@@ -129,6 +194,6 @@ export class ShaderVisualizer
     private updateCodeActivationBtnStyle()
     {
         this._codePanelBtnActivation.style.right = (this._codePanelParent.style.display == "none") ? "0%" : "40%";
-        this._codePanelBtnActivation.style.scale = (this._codePanelParent.style.display == "none") ? "-1" : "1";
+        this._codePanelBtnActivation.style.transform = (this._codePanelParent.style.display == "none") ? "translateY(-50%) scale(-1, 1)" : "translateY(-50%) scale(1, 1)";
     }
 }

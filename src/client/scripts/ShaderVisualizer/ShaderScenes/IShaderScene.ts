@@ -1,8 +1,10 @@
 import { Scene } from "three";
+import { ShaderVisualizer } from "../ShaderVisualizer";
 
 export interface IShaderScene
 {
-    init(parentScene: Scene, scriptsHeader: HTMLDivElement, scriptCodeEditor: HTMLDivElement): void;
+    init(visualizer: ShaderVisualizer): void;
     update(deltaTime: number): void;
     hide(): void;
+    getScene(): Scene;
 }

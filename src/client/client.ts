@@ -9,6 +9,7 @@ import { ShaderProjectsPanel } from "./scripts/Panels/ShaderProjects";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
 import { WorkProjectsPanel } from "./scripts/Panels/WorkProjectsPanel";
+import { CodePrettyPrinter } from "./scripts/ShaderVisualizer/CodePrettyPrinter";
 import { ShaderVisualizer } from "./scripts/ShaderVisualizer/ShaderVisualizer";
 import { ThreeModelView } from "./scripts/ThreeVisualizer/ThreeModelView";
 
@@ -17,6 +18,7 @@ export const timeStats = { currentTime: 0.0, deltaTime: 0.0 }
 export const userInteractedWithPage = { value: false }
 export const isPortraitMode = { value: window.innerWidth / window.innerHeight < 1.0 }
 
+export const codePrettyPrinter = new CodePrettyPrinter();
 export const homePanel = new HomePanel();
 
 const pageParent = document.createElement("div");

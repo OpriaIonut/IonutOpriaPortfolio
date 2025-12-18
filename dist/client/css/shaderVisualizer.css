@@ -11,16 +11,33 @@
 
 #codePanelHeader
 {
-    background-color: aliceblue;
+    background-color: rgb(40, 40, 40);
     width: 100%;
     height: 10%;
+    font-size: 0.75vw;
+    font-family: "Roboto";
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: center;
 }
 
 #codePanelInspector
 {
-    background-color: cadetblue;
+    background-color: rgb(25, 25, 25);
     width: 100%;
     height: 90%;
+    white-space: pre-wrap;
+    font-size: 0.75vw;
+    font-family: "Roboto";
+
+    overflow-x: auto;
+    overflow-y: auto;
+}
+#codePanelInspector > span
+{
+    font-family: "Roboto";
 }
 
 #codePanelActivationBtn
@@ -42,4 +59,24 @@
 #codePanelActivationBtn:hover
 {
     filter: brightness(0.5);
+}
+
+.shaderBtnHeader
+{
+    background-color: #121212dd;
+    padding: 0.5vw;
+    margin: 0.5vw;
+    width: auto;
+    height: 0.9vw;
+    text-align: center;
+}
+
+.shaderBtnHeaderSelected
+{
+    background-color: #33c0c5dd;
+    padding: 0.5vw;
+    margin: 0.5vw;
+    width: auto;
+    height: 0.9vw;
+    text-align: center;
 }

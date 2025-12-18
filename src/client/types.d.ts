@@ -83,3 +83,10 @@ export declare type Asset3D =
     model: Object3D,
     animations: AnimationClip[]
 }
+
+export declare type ShaderInspectorData =
+{
+    name: string,
+    code: string,
+    btn: HTMLDivElement
+}
