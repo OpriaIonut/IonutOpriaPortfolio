@@ -60,6 +60,12 @@
     margin: 0.75vw;
 }
 
+.buttonsWithSelection:hover
+{
+    background-color: var(--secondary-color);
+    filter: brightness(50%);
+}
+
 .buttonsWithSelectionSelected
 {
     background-color: var(--secondary-color);
@@ -76,6 +82,10 @@
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
+}
+.closeBtn:hover
+{
+    background-color: rgb(108, 28, 28);
 }
 
 .buttonsWithSelectionTitle
@@ -100,18 +110,37 @@
 
 .horizontalSliderBtn
 {
+    position: relative;
     width: 40%;
     height: 100%;
     border-radius: 3vw;
     display: inline-block;
     background-color: rgb(62, 76, 78);
     text-align: center;
-    border: 0.35vw solid #fff;
+    border: 0.15vw solid #fff;
     user-select: none;
+}
+
+.horizontalSliderBtn:hover
+{
+    background-color: rgb(22, 27, 28);
 }
 
 .horizontalSliderText
 {
+    pointer-events: none;
+}
+
+.sliderArrow
+{
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    width: 1vw;
+    height: 1vw;
+    background-image: url("../images/ui/next.png");
+    background-size: cover;
+    transform: translateY(-50%) scale(-1, 1);
     pointer-events: none;
 }
 
@@ -136,6 +165,11 @@
     background-color: var(--secondary-color);
 }
 
+#modelDownloadBtn:hover
+{
+    filter: brightness(50%);
+}
+
 #artistCredits
 {
     position: absolute;
@@ -153,10 +187,19 @@
     text-decoration: none;
 }
 
+#artistCredits > a:hover
+{
+    color: rgb(195, 195, 0);
+}
+
 #artistCredits > a:visited
 {
     color: yellow;
     text-decoration: none;
+}
+#artistCredits > a:visited:hover
+{
+    color: rgb(195, 195, 0);
 }
 
 @media (max-aspect-ratio: 1.0)

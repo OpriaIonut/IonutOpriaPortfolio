@@ -30,6 +30,17 @@ export class HorizontalSliderWithTitle
         slider.className = "horizontalSliderBtn";
         parent.appendChild(slider);
 
+        let leftArrow = document.createElement("div");
+        leftArrow.className = "sliderArrow";
+        slider.appendChild(leftArrow);
+        
+        let rightArrow = document.createElement("div");
+        rightArrow.className = "sliderArrow";
+        rightArrow.style.transform = "translateY(-50%)";
+        rightArrow.style.right = "0px";
+        rightArrow.style.left = "auto";
+        slider.appendChild(rightArrow);
+
         this._textDiv = document.createElement("div");
         this._textDiv.className = "horizontalSliderText";
         this._textDiv.innerHTML = "" + this._currentValue;

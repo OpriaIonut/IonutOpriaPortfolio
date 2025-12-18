@@ -165,6 +165,10 @@ body
     height: 1.5vw;
     margin-bottom: 0.5vw;
 }
+.colorThemeBtn:hover
+{
+    filter: brightness(50%);
+}
 
 .grayscale
 {
