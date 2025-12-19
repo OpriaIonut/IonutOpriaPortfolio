@@ -58,6 +58,7 @@
     background-color: #121212dd;
     padding: 0.75vw;
     margin: 0.75vw;
+    cursor: pointer;
 }
 
 .buttonsWithSelection:hover

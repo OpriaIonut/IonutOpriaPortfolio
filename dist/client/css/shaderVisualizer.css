@@ -69,6 +69,7 @@
     width: auto;
     height: 0.9vw;
     text-align: center;
+    cursor: pointer;
 }
 
 .shaderBtnHeader:hover
@@ -85,4 +86,5 @@
     width: auto;
     height: 0.9vw;
     text-align: center;
+    cursor: default;
 }

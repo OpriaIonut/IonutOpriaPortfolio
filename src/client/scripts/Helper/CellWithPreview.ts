@@ -6,7 +6,7 @@ export class CellWithPreview
 
     constructor(parentNode: HTMLElement, cellsPerWidth: number, modelName: string, imagePath: string, onClick: (projectName: string, progressBar: HTMLDivElement) => void)
     {
-        let baseWidthForCalc = 80;
+        let baseWidthForCalc = 75;
         if(window.innerWidth / window.innerHeight > 2.5 / 1.0)
             baseWidthForCalc = 65;
 

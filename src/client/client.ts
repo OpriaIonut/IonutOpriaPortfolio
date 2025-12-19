@@ -5,6 +5,7 @@ import { ArtProjectsPanel } from "./scripts/Panels/ArtProjectsPanel";
 import { EndingPanel } from "./scripts/Panels/EndingPanel";
 import { GameProjectsPanel } from "./scripts/Panels/GameProjectsPanel";
 import { HomePanel } from "./scripts/Panels/HomePanel";
+import { NavBar } from "./scripts/Panels/Navbar";
 import { ShaderProjectsPanel } from "./scripts/Panels/ShaderProjects";
 import { SkillChartsPanel } from "./scripts/Panels/SkillChartsPanel";
 import { SpecialSkillsPanel } from "./scripts/Panels/SpecialSkillsPanel";
@@ -41,6 +42,8 @@ export const endingPanel = new EndingPanel();
 
 export const threeModelView = new ThreeModelView();
 
+const navbar = new NavBar();
+
 const warningMsg = document.createElement("div");
 warningMsg.id = "warningMsg";
 warningMsg.style.display = "none";
@@ -70,6 +73,7 @@ function gameLoop(timestamp: number)
     workProjectsPanel.update();
     gameProjectsPanel.update();
     specialSkillsPanel.update();
+    navbar.update();
 
 }
 requestAnimationFrame(gameLoop);
