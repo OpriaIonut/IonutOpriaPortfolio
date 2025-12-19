@@ -22,6 +22,11 @@ export class CellWithPreview
         this._preview.style.objectFit = "cover";
         cellParent.appendChild(this._preview);
 
+        let clickMeTag = document.createElement("div");
+        clickMeTag.innerHTML = "Click Me";
+        clickMeTag.className = "clickMeTag";
+        cellParent.appendChild(clickMeTag);
+
         let progressBar = document.createElement("div");
         progressBar.className = "cellWithPreviewProgressBar";
         cellParent.appendChild(progressBar);
