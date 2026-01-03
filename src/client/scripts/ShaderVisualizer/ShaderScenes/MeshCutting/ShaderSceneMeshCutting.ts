@@ -1,14 +1,17 @@
-import { AmbientLight, BoxGeometry, DirectionalLight, DoubleSide, Mesh, MeshStandardMaterial, Plane, PlaneHelper, Scene, ShaderMaterial, Vector3 } from "three";
+import { AmbientLight, BoxGeometry, DirectionalLight, DoubleSide, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Plane, PlaneHelper, Scene, ShaderMaterial, Vector3 } from "three";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
 import { IShaderScene } from "../IShaderScene";
 import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
+import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
+import { Asset3D } from "../../../../types";
 
 export class ShaderSceneMeshCutting implements IShaderScene
 {
     private _visualizer!: ShaderVisualizer;
     private _scene: Scene = new Scene();
 
+    private _objectLoader!: ObjectLoader
     private _meshToCut!: Mesh;
 
     private _ambientLight!: AmbientLight;
@@ -35,68 +38,79 @@ export class ShaderSceneMeshCutting implements IShaderScene
         this._directionalLight.position.set(10.0, 10.0, 5.0);
         this._scene.add(this._directionalLight);
 
-        this._meshToCut = new Mesh(
-            new BoxGeometry(1, 1, 1, 1, 1, 1),
-            // new ShaderMaterial({
-            //     vertexShader: voronoiVertShader,
-            //     fragmentShader: voronoiFragShader,
-            //     uniforms: {
-            //         u_scale: { value: 2.0 }
-            //     },
-            //     wireframe: true
-            // })
-            new MeshStandardMaterial({wireframe: true})
-            // new ShaderMaterial({vertexShader: normalVisualizerVert, fragmentShader: normalVisualizerFrag, side: DoubleSide})
-        );
-        let scale = 1;
-        this._meshToCut.scale.setScalar(scale);
-        // this._meshToCut.position.set(3, 3, 3);
-        // this._meshToCut.rotateY(Math.PI / 4);
-        // this._meshToCut.rotateX(Math.PI / 8);
-        // this._meshToCut.rotateZ(Math.PI / 8);
-        this._scene.add(this._meshToCut);
+        this._objectLoader = new ObjectLoader();
+        this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
+            this._meshToCut = new Mesh(
+                new BoxGeometry(1, 1, 1, 1, 1, 1),
+                // new ShaderMaterial({
+                //     vertexShader: voronoiVertShader,
+                //     fragmentShader: voronoiFragShader,
+                //     uniforms: {
+                //         u_scale: { value: 2.0 }
+                //     },
+                //     wireframe: true
+                // })
+                new MeshStandardMaterial({wireframe: true})
+                // new ShaderMaterial({vertexShader: normalVisualizerVert, fragmentShader: normalVisualizerFrag, side: DoubleSide})
+            );
+            this._meshToCut = obj.model.children[0] as Mesh;
+            (this._meshToCut.material as MeshStandardMaterial).wireframe = true;
+            let scale = 1;
+            this._meshToCut.scale.setScalar(scale);
+            // this._meshToCut.position.set(3, 3, 3);
+            // this._meshToCut.rotateY(Math.PI / 4);
+            // this._meshToCut.rotateX(Math.PI / 8);
+            // this._meshToCut.rotateZ(Math.PI / 8);
+            // this._scene.add(this._meshToCut);
 
-        const plane1 = new Plane(new Vector3( 0, 1, 0 ), 0.3);
-        const plane2 = new Plane(new Vector3(1, 0, 0), 0.1);
-        const plane3 = new Plane(new Vector3(0, 0, 1), 0.1);
-        
-        let result1 = this.cutMesh([this._meshToCut], plane1);
-        // let result2 = this.cutMesh(result1, plane2);
-        // let result3 = this.cutMesh(result2, plane3);
-        
-        console.log(result1);
-        for(let index = 0; index < result1.length; ++index)
-        {
-            this._meshes.push(result1[index]);
-            this._explodeDir.push(result1[index].position.clone().sub(this._meshToCut.position));
-            this._centers.push(result1[index].position.clone());
-            this._meshes[index].scale.setScalar(scale);
-            this._scene.add(this._meshes[index]);
-        }
-
-        // Debug UI
-        this._debugUI = new DebugUI();
-        let guiHtml = this._debugUI.getGUIClass()!.domElement;
-        document.getElementById("shaderVisualizer")?.appendChild(guiHtml);
-        guiHtml.style.position = "absolute";
-        guiHtml.style.left = "0px";
-        guiHtml.style.top = "0px";
-
-        this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 10.0, "Explode Radius", (value) => {
-            for(let index = 0; index < this._meshes.length; ++index)
+            // const plane1 = new Plane(new Vector3( 0, 1, 0 ), 0.0);
+            // const plane2 = new Plane(new Vector3(1, 0, 0), 0.0);
+            // const plane3 = new Plane(new Vector3(0, 0, 1), 0.0);
+            
+            // let result1 = this.cutMesh([this._meshToCut], plane1);
+            // let result2 = this.cutMesh(result1, plane2);
+            // let result3 = this.cutMesh(result2, plane3);
+            
+            let numOfCuts = 10;
+            let cutMeshResults: Mesh[] = [this._meshToCut];
+            for(let index = 0; index < numOfCuts; ++index)
             {
-                let dir = this._explodeDir[index].clone().normalize();
-                this._meshes[index].position.copy(this._centers[index]).add(dir.multiplyScalar(this._debugUISettings.explodeRadius));
+                let plane = new Plane(new Vector3(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize(), Math.random() * 2.0 - 1.0);
+                cutMeshResults = this.cutMesh(cutMeshResults, plane);
             }
-        });
+
+            for(let index = 0; index < cutMeshResults.length; ++index)
+            {
+                this._meshes.push(cutMeshResults[index]);
+                this._explodeDir.push(cutMeshResults[index].position.clone().sub(this._meshToCut.position));
+                this._centers.push(cutMeshResults[index].position.clone());
+                this._meshes[index].scale.setScalar(scale);
+                this._scene.add(this._meshes[index]);
+            }
+
+            // Debug UI
+            this._debugUI = new DebugUI();
+            let guiHtml = this._debugUI.getGUIClass()!.domElement;
+            document.getElementById("shaderVisualizer")?.appendChild(guiHtml);
+            guiHtml.style.position = "absolute";
+            guiHtml.style.left = "0px";
+            guiHtml.style.top = "0px";
+
+            this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 10.0, "Explode Radius", (value) => {
+                for(let index = 0; index < this._meshes.length; ++index)
+                {
+                    let dir = this._explodeDir[index].clone().normalize();
+                    this._meshes[index].position.copy(this._centers[index]).add(dir.multiplyScalar(this._debugUISettings.explodeRadius));
+                }
+            });
+        }, () => {});
 
 
         /* To do:
-            Cut multiple times
             Optimize vertices by calculating proper indices
             Add visualizer for cut line
             Explode physics
-            Make different test scenarios (random planes, grid, etc.)
+            Make different test scenarios (random planes, grid, mouse, etc.)
             Test on skinned meshes
             Make prettier demonstration scenes
             Optimize code
@@ -124,7 +138,7 @@ export class ShaderSceneMeshCutting implements IShaderScene
         if(displayPlane)
         {
             const helper = new PlaneHelper( plane, 25, 0xffff00 );
-            this._scene.add( helper );
+            // this._scene.add( helper );
         }
 
         let results: Mesh[] = [];

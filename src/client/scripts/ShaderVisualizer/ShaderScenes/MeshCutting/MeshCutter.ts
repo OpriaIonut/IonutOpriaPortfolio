@@ -1,4 +1,4 @@
-import { BufferAttribute, InterleavedBufferAttribute, Mesh, MeshBasicMaterial, Plane, SphereGeometry, Vector2, Vector3 } from "three";
+import { BufferAttribute, Color, DoubleSide, InterleavedBufferAttribute, Mesh, MeshBasicMaterial, Plane, SphereGeometry, Vector2, Vector3 } from "three";
 import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
 import { shaderVisualizer } from "../../../../client";
@@ -13,7 +13,6 @@ export class MeshCutter
         let loopCuts: Edge[][] = [];
 
         let submeshIndices = originalMesh.geometry.index as BufferAttribute;
-        console.log(originalMesh);
         for(let index = 0; index < submeshIndices.array.length; index += 3)
         {
             let indexA = submeshIndices.array.at(index) as number;
@@ -86,16 +85,6 @@ export class MeshCutter
         //From single vertex, find intersection with the plane and define 2 new vertices in there (will call them D, E)
         let lineIntersection1 = this.getLineIntersection(cutter, singleVertex.pos, sideWithTwoVertices[0].pos);
         let lineIntersection2 = this.getLineIntersection(cutter, singleVertex.pos, sideWithTwoVertices[1].pos);
-        
-        let mesh1 = new Mesh(new SphereGeometry(), new MeshBasicMaterial({color: 0x00ffff}));
-        mesh1.position.copy(lineIntersection1!.point);
-        mesh1.scale.set(0.01, 0.01, 0.01);
-        shaderVisualizer._cameraManager.scene.add(mesh1);
-
-        let mesh2 = new Mesh(new SphereGeometry(), new MeshBasicMaterial({color: 0x00ffff}));
-        mesh2.position.copy(lineIntersection2!.point);
-        mesh2.scale.set(0.01, 0.01, 0.01);
-        shaderVisualizer._cameraManager.scene.add(mesh2);
 
         let intersectPoint1: SimpleVertex = {
             pos: lineIntersection1!.point,
@@ -172,7 +161,7 @@ export class MeshCutter
             for (let discardLoopCutIndex = foundIndices.length - 1; discardLoopCutIndex > 0; --discardLoopCutIndex) 
             {
                 loopCutVertices[foundIndices[0]] = loopCutVertices[foundIndices[0]].concat(loopCutVertices[foundIndices[discardLoopCutIndex]]);
-                loopCutVertices.splice(discardLoopCutIndex, 1);
+                loopCutVertices.splice(foundIndices[discardLoopCutIndex], 1);
             }
         }
     }
@@ -225,7 +214,7 @@ export class MeshCutter
 
     private getPlaneSide(plane: Plane, vertex: Vector3): boolean
     {
-        return (plane.normal.x * vertex.x + plane.normal.y * vertex.y + plane.normal.z * vertex.z + plane.constant) < 0.0;
+        return (plane.normal.x * vertex.x + plane.normal.y * vertex.y + plane.normal.z * vertex.z + plane.constant) < 0.0001;
     }
 
     private getLineIntersection(plane: Plane, point1: Vector3, point2: Vector3)
@@ -266,6 +255,7 @@ export class MeshCutter
     private fillGeometry(leftMesh: ProceduralGeometry, rightMesh: ProceduralGeometry, loopCuts: Edge[][], cutter: Plane) 
     {
         let center = new Vector3();
+
         for(let cutIndex = 0; cutIndex < loopCuts.length; ++cutIndex)
         {
             center.copy(loopCuts[cutIndex][0].pos1).add(loopCuts[cutIndex][0].pos2);
@@ -274,7 +264,6 @@ export class MeshCutter
                 center.add(loopCuts[cutIndex][index].pos1).add(loopCuts[cutIndex][index].pos2);
             }
             center.divideScalar(loopCuts[cutIndex].length * 2);
-            console.log(center, loopCuts[cutIndex][0]);
             for(let index = 0; index < loopCuts[cutIndex].length; ++index)
             {
                 let vertNorm = cutter.normal.clone();
@@ -307,7 +296,6 @@ export class MeshCutter
                 rightMesh.addTriangle(triangle);
             }
         }
-        console.log(loopCuts);
     }
 
     private vec3Equal(vec1: Vector3, vec2: Vector3, threshold = 0.00001)
