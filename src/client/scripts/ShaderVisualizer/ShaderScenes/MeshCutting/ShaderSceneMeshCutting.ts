@@ -5,6 +5,7 @@ import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
 import { Asset3D } from "../../../../types";
+import { CutLinePreviewShader } from "./CutLinePreviewShader";
 
 export class ShaderSceneMeshCutting implements IShaderScene
 {
@@ -12,7 +13,7 @@ export class ShaderSceneMeshCutting implements IShaderScene
     private _scene: Scene = new Scene();
 
     private _objectLoader!: ObjectLoader
-    private _meshToCut!: Mesh;
+    private _meshesToCut: Mesh[] = [];
 
     private _ambientLight!: AmbientLight;
     private _directionalLight!: DirectionalLight;
@@ -39,52 +40,57 @@ export class ShaderSceneMeshCutting implements IShaderScene
         this._scene.add(this._directionalLight);
 
         this._objectLoader = new ObjectLoader();
-        this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
-            this._meshToCut = new Mesh(
-                new BoxGeometry(1, 1, 1, 1, 1, 1),
-                // new ShaderMaterial({
-                //     vertexShader: voronoiVertShader,
-                //     fragmentShader: voronoiFragShader,
-                //     uniforms: {
-                //         u_scale: { value: 2.0 }
-                //     },
-                //     wireframe: true
-                // })
-                new MeshStandardMaterial({wireframe: true})
-                // new ShaderMaterial({vertexShader: normalVisualizerVert, fragmentShader: normalVisualizerFrag, side: DoubleSide})
-            );
-            this._meshToCut = obj.model.children[0] as Mesh;
-            (this._meshToCut.material as MeshStandardMaterial).wireframe = true;
-            let scale = 1;
-            this._meshToCut.scale.setScalar(scale);
-            // this._meshToCut.position.set(3, 3, 3);
-            // this._meshToCut.rotateY(Math.PI / 4);
-            // this._meshToCut.rotateX(Math.PI / 8);
-            // this._meshToCut.rotateZ(Math.PI / 8);
-            // this._scene.add(this._meshToCut);
+        // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
+        this._objectLoader.loadModel("models/MechaGirl.glb", (obj: Asset3D) => {
 
-            // const plane1 = new Plane(new Vector3( 0, 1, 0 ), 0.0);
-            // const plane2 = new Plane(new Vector3(1, 0, 0), 0.0);
-            // const plane3 = new Plane(new Vector3(0, 0, 1), 0.0);
-            
-            // let result1 = this.cutMesh([this._meshToCut], plane1);
-            // let result2 = this.cutMesh(result1, plane2);
-            // let result3 = this.cutMesh(result2, plane3);
-            
-            let numOfCuts = 10;
-            let cutMeshResults: Mesh[] = [this._meshToCut];
+            let numOfCuts = 5;
+            let cutPlanes: Plane[] = [];
+            let cutPlanesUniformNormals: Vector3[] = [];
+            let cutPlanesUniformPoints: Vector3[] = [];
+            for(let index = 0; index < 50; ++index) // Needs to match max planes in the shader
+            {
+                cutPlanesUniformNormals.push(new Vector3());
+                cutPlanesUniformPoints.push(new Vector3());
+            }
             for(let index = 0; index < numOfCuts; ++index)
             {
                 let plane = new Plane(new Vector3(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize(), Math.random() * 2.0 - 1.0);
-                cutMeshResults = this.cutMesh(cutMeshResults, plane);
+                cutPlanes.push(plane);
+                cutPlanesUniformNormals[index].copy(plane.normal);
+                cutPlanesUniformPoints[index].copy(plane.normal).multiplyScalar(-plane.constant);
             }
 
-            for(let index = 0; index < cutMeshResults.length; ++index)
+            console.log(obj)
+            this._scene.add(obj.model);
+            obj.model.traverse((item) => {
+                let mesh = item as Mesh;
+                if(mesh != undefined && mesh != null && mesh.geometry != undefined)
+                {
+                    let newMat = new CutLinePreviewShader({
+                        u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+                        u_LineThickness: { value: 0.01 },
+                        u_CutPlaneNormals: { value: cutPlanesUniformNormals },
+                        u_CutPlanePoints: { value: cutPlanesUniformPoints },
+                        u_NumOfCutPlanes: { value: numOfCuts }
+                    });
+                    newMat.copy(mesh.material as Material);
+                    mesh.material = newMat;
+                    this._meshesToCut.push(mesh);
+                }
+            });
+            console.log(this._meshesToCut);
+            
+            let cutMeshes = [...this._meshesToCut];
+            for(let index = 0; index < numOfCuts; ++index)
             {
-                this._meshes.push(cutMeshResults[index]);
-                this._explodeDir.push(cutMeshResults[index].position.clone().sub(this._meshToCut.position));
-                this._centers.push(cutMeshResults[index].position.clone());
-                this._meshes[index].scale.setScalar(scale);
+               cutMeshes = this.cutMesh(cutMeshes, cutPlanes[index]);
+            }
+
+            for(let index = 0; index < cutMeshes.length; ++index)
+            {
+                this._meshes.push(cutMeshes[index]);
+                this._explodeDir.push(cutMeshes[index].position.clone());//.sub(this._meshToCut.position));
+                this._centers.push(cutMeshes[index].position.clone());
                 this._scene.add(this._meshes[index]);
             }
 
@@ -105,15 +111,15 @@ export class ShaderSceneMeshCutting implements IShaderScene
             });
         }, () => {});
 
-
         /* To do:
+            Add texture/color to cut part
             Optimize vertices by calculating proper indices
-            Add visualizer for cut line
             Explode physics
-            Make different test scenarios (random planes, grid, mouse, etc.)
             Test on skinned meshes
-            Make prettier demonstration scenes
+            Be able to cut hierarchies
             Optimize code
+            Stress-test to know limitations
+            Make demonstration scenes
             Clean up the code
             Add code inspection (also add error checking for everything: check index 0, throw proper errors, etc.)
         */
