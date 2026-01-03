@@ -12,6 +12,7 @@
     height: 100%;
     background-color: #00000099;
     font-size: 1vw;
+    z-index: 100;
 }
 
 #threeModelView, #shaderVisualizer

@@ -28,6 +28,8 @@ export class DebugUI
 
     private _folders: Map<string, GUI> = new Map();
 
+    public getGUIClass() { return this._gui; }
+
     constructor()
     {
         this._gui = new GUI({width: 350});

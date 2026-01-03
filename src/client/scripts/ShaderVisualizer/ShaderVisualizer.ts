@@ -5,17 +5,18 @@ import { ShaderVisualizerCamera } from "./ShaderVisualizerCamera";
 import { ShaderSceneTest } from "./ShaderScenes/ShaderSceneTest";
 import { ShaderInspectorData } from "../../types";
 import { codePrettyPrinter } from "../../client";
+import { ShaderSceneMeshCutting } from "./ShaderScenes/MeshCutting/ShaderSceneMeshCutting";
 
 export enum ShaderSceneType
 {
     Test,
-    ProceduralSnow,
-    MeshCutting
+    MeshCutting,
+    ProceduralSnow
 }
 
 export class ShaderVisualizer
 {
-    private _currentScene?: IShaderScene;
+    public _currentScene?: IShaderScene; //To do: set to private when done debugging
     private _currentSceneType?: ShaderSceneType;
 
     private _panel!: HTMLDivElement;
@@ -26,7 +27,7 @@ export class ShaderVisualizer
 
     private _availableShaders: ShaderInspectorData[] = [];
 
-    private _cameraManager!: ShaderVisualizerCamera;
+    public _cameraManager!: ShaderVisualizerCamera; //To do: set to private when done debugging
     // private _objectLoader: any;
     // private _materialCache: any;
     // private onModelLoaded: any;
@@ -187,6 +188,7 @@ export class ShaderVisualizer
         switch(scene)
         {
             case ShaderSceneType.Test: return new ShaderSceneTest();
+            case ShaderSceneType.MeshCutting: return new ShaderSceneMeshCutting();
             default: undefined;
         }
     }

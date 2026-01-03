@@ -5,6 +5,8 @@
     left: 1vw;
     width: auto;
     height: auto;
+    background-color: #00000055;
+    backdrop-filter: blur(0.25vw);
 }
 
 #navbarBorder

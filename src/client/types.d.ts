@@ -1,4 +1,4 @@
-import { AnimationClip, Color, Object3D } from "three"
+import { AnimationClip, Color, Object3D, Vector2, Vector3 } from "three"
 
 export declare type ChartColorTheme = 
 {
@@ -89,4 +89,24 @@ export declare type ShaderInspectorData =
     name: string,
     code: string,
     btn: HTMLDivElement
+}
+
+export declare type SimpleVertex = 
+{
+    pos: Vector3,
+    normal: Vector3,
+    uv: Vector2
+}
+
+export declare type SimpleTriangle =
+{
+    vert1: SimpleVertex,
+    vert2: SimpleVertex,
+    vert3: SimpleVertex
+}
+
+export declare type Edge = 
+{
+    pos1: Vector3,
+    pos2: Vector3
 }
