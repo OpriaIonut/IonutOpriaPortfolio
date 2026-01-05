@@ -1,10 +1,20 @@
-import { BufferAttribute, Color, DoubleSide, InterleavedBufferAttribute, Mesh, MeshBasicMaterial, Plane, SphereGeometry, Vector2, Vector3 } from "three";
+import { BufferAttribute, Color, InterleavedBufferAttribute, Material, Mesh, MeshStandardMaterial, Plane, ShaderMaterial, Texture, TextureLoader, Vector2, Vector3 } from "three";
 import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
-import { shaderVisualizer } from "../../../../client";
+import { normalVisualizerFrag, normalVisualizerVert } from "./NormalVisualizer";
+import { CutFillMaterial } from "./SimpleTextureDisplayMaterial";
+import { CutLinePreviewShader } from "./CutLinePreviewShader";
 
 export class MeshCutter
 {
+    private _cutTexture!: Texture;
+    constructor()
+    {
+        new TextureLoader().load("images/orange.png", (texture) => {
+            this._cutTexture = texture;
+        });
+    }
+
     public cutGeometry(originalMesh: Mesh, cutter: Plane, fill: boolean = true, placeOriginInCenter: boolean = true)
     {
         let leftMesh = new ProceduralGeometry();
@@ -20,6 +30,17 @@ export class MeshCutter
             let indexC = submeshIndices.array.at(index + 2) as number;
 
             let currentTriangle = this.getTriangle(indexA, indexB, indexC, originalMesh);
+            let groupIndexA = this.getGroupIndex(indexA, originalMesh);
+            let groupIndexB = this.getGroupIndex(indexB, originalMesh);
+            let groupIndexC = this.getGroupIndex(indexC, originalMesh);
+
+            //Take the most "common" group (in case some vertices don't have the same group for whatever reason)
+            //Assume that groupA is the right one, then compare the remaining ones. 
+            //If the remaining groups are equal, this will fix both scenarios in which A is different than them or equal to them
+            //(ex: (0, 1, 0) -> will result in the first 0; (1, 0, 0) -> will result in the middle 0; (1, 1, 1) -> will result in the middle 1)
+            let groupIndex = groupIndexA;
+            if(groupIndexB == groupIndexC)
+                groupIndex = groupIndexB;
 
             let isALeftSide = this.getPlaneSide(cutter, currentTriangle.vert1.pos);
             let isBLeftSide = this.getPlaneSide(cutter, currentTriangle.vert2.pos);
@@ -27,15 +48,15 @@ export class MeshCutter
 
             if(isALeftSide && isBLeftSide && isCLeftSide)
             {
-                leftMesh.addTriangle(currentTriangle);
+                leftMesh.addTriangle(groupIndex, currentTriangle);
             }
             else if(!isALeftSide && !isBLeftSide && !isCLeftSide)
             {
-                rightMesh.addTriangle(currentTriangle);
+                rightMesh.addTriangle(groupIndex, currentTriangle);
             }
             else
             {
-                this.cutTriangle(cutter, currentTriangle, [isALeftSide, isBLeftSide, isCLeftSide], leftMesh, rightMesh, loopCuts);
+                this.cutTriangle(cutter, currentTriangle, groupIndex, [isALeftSide, isBLeftSide, isCLeftSide], leftMesh, rightMesh, loopCuts);
             }
         }
 
@@ -50,15 +71,35 @@ export class MeshCutter
             rightMesh.updateGeometryCenter();
         }
 
+        let newMaterials: Material[] = [];
+        if(Object.prototype.toString.call(originalMesh.material) === '[object Object]')
+            newMaterials.push(new MeshStandardMaterial().copy(originalMesh.material as Material));
+        else
+        {
+            let mat = originalMesh.material as Material[];
+            for(let index = 0; index < mat.length; ++index)
+            {
+                if(mat[index] instanceof CutLinePreviewShader)
+                    newMaterials.push(new MeshStandardMaterial().copy(mat[index]));
+                else
+                    newMaterials.push(mat[index]);
+            }
+        }
+        newMaterials.push(CutFillMaterial.createMaterial(new Color(1.0, 1.0, 1.0), this._cutTexture));
+
+        let generatedLeftMesh = new Mesh(leftMesh.constructGeometry(originalMesh.scale.x), newMaterials);
+        generatedLeftMesh.position.copy(leftMesh.getCenterPos());
+
+        let generatedRightMesh = new Mesh(rightMesh.constructGeometry(originalMesh.scale.x), newMaterials);
+        generatedRightMesh.position.copy(rightMesh.getCenterPos());
+
         return { 
-            leftMesh: leftMesh.constructGeometry(originalMesh.scale.x),
-            rightMesh: rightMesh.constructGeometry(originalMesh.scale.x),
-            leftCenter: leftMesh.getCenterPos(),
-            rightCenter: rightMesh.getCenterPos(),
+            leftMesh: generatedLeftMesh,
+            rightMesh: generatedRightMesh
         };
     }
 
-    private cutTriangle(cutter: Plane, originalTriangle: SimpleTriangle, isLeftSide: boolean[], leftMesh: ProceduralGeometry, rightMesh: ProceduralGeometry, loopCutVertices: Edge[][])
+    private cutTriangle(cutter: Plane, originalTriangle: SimpleTriangle, originalGroupIndex: number, isLeftSide: boolean[], leftMesh: ProceduralGeometry, rightMesh: ProceduralGeometry, loopCutVertices: Edge[][])
     {
         //Identify single vertex
         let leftVertices: SimpleVertex[] = [];
@@ -123,15 +164,15 @@ export class MeshCutter
 
         if(isLeftSideWithOneVertex)
         {
-            leftMesh.addTriangle(newTriangle1);
-            rightMesh.addTriangle(newTriangle2);
-            rightMesh.addTriangle(newTriangle3);
+            leftMesh.addTriangle(originalGroupIndex, newTriangle1);
+            rightMesh.addTriangle(originalGroupIndex, newTriangle2);
+            rightMesh.addTriangle(originalGroupIndex, newTriangle3);
         }
         else
         {
-            rightMesh.addTriangle(newTriangle1);
-            leftMesh.addTriangle(newTriangle2);
-            leftMesh.addTriangle(newTriangle3);
+            rightMesh.addTriangle(originalGroupIndex, newTriangle1);
+            leftMesh.addTriangle(originalGroupIndex, newTriangle2);
+            leftMesh.addTriangle(originalGroupIndex, newTriangle3);
         }
 
         //Find & define all loop cuts resulting from the plane cutting.
@@ -255,6 +296,8 @@ export class MeshCutter
     private fillGeometry(leftMesh: ProceduralGeometry, rightMesh: ProceduralGeometry, loopCuts: Edge[][], cutter: Plane) 
     {
         let center = new Vector3();
+        let newGroupIDLeft = leftMesh.getNumOfGroups();
+        let newGroupIDRight = rightMesh.getNumOfGroups();
 
         for(let cutIndex = 0; cutIndex < loopCuts.length; ++cutIndex)
         {
@@ -271,29 +314,29 @@ export class MeshCutter
                     vert1: {
                         pos: loopCuts[cutIndex][index].pos1,
                         normal: vertNorm,
-                        uv: new Vector2()
+                        uv: this.vertexToPolarUV(loopCuts[cutIndex][index].pos1, center, vertNorm)
                     },
                     vert2: {
                         pos: loopCuts[cutIndex][index].pos2,
                         normal: vertNorm,
-                        uv: new Vector2()
+                        uv: this.vertexToPolarUV(loopCuts[cutIndex][index].pos2, center, vertNorm)
                     },
                     vert3: {
                         pos: center.clone(),
                         normal: vertNorm,
-                        uv: new Vector2()
+                        uv: new Vector2(0.5, 0.5)
                     }
                 }
 
                 this.fixTriangleWindingOrder(triangle, cutter.normal);
-                leftMesh.addTriangle(triangle);
+                leftMesh.addTriangle(newGroupIDLeft, triangle);
 
                 vertNorm.multiplyScalar(-1);
                 triangle.vert1.normal.copy(vertNorm);
                 triangle.vert2.normal.copy(vertNorm);
                 triangle.vert3.normal.copy(vertNorm);
                 this.fixTriangleWindingOrder(triangle, cutter.normal.clone().multiplyScalar(-1));
-                rightMesh.addTriangle(triangle);
+                rightMesh.addTriangle(newGroupIDRight, triangle);
             }
         }
     }
@@ -301,5 +344,30 @@ export class MeshCutter
     private vec3Equal(vec1: Vector3, vec2: Vector3, threshold = 0.00001)
     {
         return (Math.abs(vec1.x - vec2.x) < threshold) && (Math.abs(vec1.y - vec2.y) < threshold) && (Math.abs(vec1.z - vec2.z) < threshold);
+    }
+
+    private vertexToPolarUV(position: Vector3, center: Vector3, normal: Vector3)
+    {
+        let tangent = new Vector3(1, 0, 0);
+        if (Math.abs(tangent.dot(normal)) > 0.99)
+            tangent.set(0, 1, 0);
+        tangent.cross(normal).normalize();
+        let bitangent = normal.clone().cross(tangent);
+        let dir = position.clone().sub(center);
+        let uvPlanar = new Vector2(dir.dot(tangent), dir.dot(bitangent));
+        let angle = Math.atan2(uvPlanar.y, uvPlanar.x);
+        return new Vector2(0.5 + Math.cos(angle) * 0.5, 0.5 + Math.sin(angle) * 0.5);
+    }
+
+    public getGroupIndex(vertIndex: number, mesh: Mesh)
+    {
+        for(let index = 0; index < mesh.geometry.groups.length; ++index)
+        {
+            if(vertIndex >= mesh.geometry.groups[index].start && vertIndex <= mesh.geometry.groups[index].start + mesh.geometry.groups[index].count)
+            {
+                return index;
+            }
+        }
+        return 0;
     }
 }

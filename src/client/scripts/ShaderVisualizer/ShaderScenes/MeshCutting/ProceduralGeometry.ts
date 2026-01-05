@@ -3,37 +3,51 @@ import { SimpleTriangle, SimpleVertex } from "../../../../types";
 
 export class ProceduralGeometry
 {
-    private vertices: SimpleVertex[] = [];
+    private vertices: SimpleVertex[][] = [];
     private indices: number[] = [];
     private center: Vector3 = new Vector3();
 
     private _firstFreeIndex: number = 0;
 
     public getCenterPos() { return this.center; }
+    public getNumOfGroups() { return this.vertices.length; }
 
     public constructGeometry(originalMeshScale: number): BufferGeometry
     {
         let geom = new BufferGeometry();
 
-        let indicesArr = new Uint16BufferAttribute(this.indices, 1);
-        let vertArr = new Float32Array(this.vertices.length * 3);
-        let normArr = new Float32Array(this.vertices.length * 3);
-        let uvArr = new Float32Array(this.vertices.length * 2);
-
-        for(let index = 0; index < this.vertices.length; ++index)
+        let count = 0;
+        for(let groupIndex = 0; groupIndex < this.vertices.length; ++groupIndex)
         {
-            let vertIndex = index * 3;
-            //We converted vertices to world space, so the vertices were already multiplied with the scale of the object. We are doing it reverse to keep things consistent
-            vertArr[vertIndex] = this.vertices[index].pos.x / originalMeshScale;
-            vertArr[vertIndex + 1] = this.vertices[index].pos.y / originalMeshScale;
-            vertArr[vertIndex + 2] = this.vertices[index].pos.z / originalMeshScale;
+            count += this.vertices[groupIndex].length;
+        }
 
-            normArr[vertIndex] = this.vertices[index].normal.x;
-            normArr[vertIndex + 1] = this.vertices[index].normal.y;
-            normArr[vertIndex + 2] = this.vertices[index].normal.z;
+        let indicesArr = new Uint16BufferAttribute(this.indices, 1);
+        let vertArr = new Float32Array(count * 3);
+        let normArr = new Float32Array(count * 3);
+        let uvArr = new Float32Array(count * 2);
 
-            uvArr[vertIndex] = this.vertices[index].uv.x;
-            uvArr[vertIndex + 1] = this.vertices[index].uv.y;
+        let vertIndex = 0;
+        let uvIndex = 0;
+        for(let groupIndex = 0; groupIndex < this.vertices.length; ++groupIndex)
+        {
+            for(let index2 = 0; index2 < this.vertices[groupIndex].length; ++index2)
+            {
+                //We converted vertices to world space, so the vertices were already multiplied with the scale of the object. We are doing it reverse to keep things consistent
+                vertArr[vertIndex] = this.vertices[groupIndex][index2].pos.x / originalMeshScale;
+                vertArr[vertIndex + 1] = this.vertices[groupIndex][index2].pos.y / originalMeshScale;
+                vertArr[vertIndex + 2] = this.vertices[groupIndex][index2].pos.z / originalMeshScale;
+
+                normArr[vertIndex] = this.vertices[groupIndex][index2].normal.x;
+                normArr[vertIndex + 1] = this.vertices[groupIndex][index2].normal.y;
+                normArr[vertIndex + 2] = this.vertices[groupIndex][index2].normal.z;
+
+                uvArr[uvIndex] = this.vertices[groupIndex][index2].uv.x;
+                uvArr[uvIndex + 1] = this.vertices[groupIndex][index2].uv.y;
+
+                vertIndex += 3;
+                uvIndex += 2;
+            }
         }
 
         geom.setAttribute("position", new BufferAttribute(vertArr, 3));
@@ -42,13 +56,24 @@ export class ProceduralGeometry
 
         geom.setIndex(indicesArr);
 
+        let counter = 0;
+        for(let index = 0; index < this.vertices.length; ++index)
+        {
+            geom.addGroup(counter, this.vertices[index].length, index);
+            counter += this.vertices[index].length;
+        }
+
         return geom;
     }
 
-    public addTriangle(triangle: SimpleTriangle)
+    public addTriangle(groupIndex: number, triangle: SimpleTriangle)
     {
+        while(this.vertices.length <= groupIndex)
+        {
+            this.vertices.push([]);
+        }
         //Clone the triangles to make sure no 2 triangles share the same data (produces wrong results when modifiying vertices)
-        this.vertices.push(
+        this.vertices[groupIndex].push(
         {
             pos: triangle.vert1.pos.clone(),
             normal: triangle.vert1.normal.clone(),
@@ -72,7 +97,10 @@ export class ProceduralGeometry
     {
         for(let index = 0; index < this.vertices.length; ++index)
         {
-            this.vertices[index].pos.sub(offset);
+            for(let index2 = 0; index2 < this.vertices[index].length; ++index2)
+            {
+                this.vertices[index][index2].pos.sub(offset);
+            }
         }
     }
 
@@ -83,13 +111,22 @@ export class ProceduralGeometry
             this.center.set(0.0, 0.0, 0.0);
             return;
         }
+        let count = 0;
+        let firstAdd = true;
         for(let index = 0; index < this.vertices.length; ++index)
         {
-            if (index == 0)
-                this.center.copy(this.vertices[index].pos);
-            this.center.add(this.vertices[index].pos);
+            count += this.vertices[index].length;
+            for(let index2 = 0; index2 < this.vertices[index].length; ++index2)
+            {
+                if (firstAdd)
+                {
+                    this.center.copy(this.vertices[index][index2].pos);
+                    firstAdd = false;
+                }
+                this.center.add(this.vertices[index][index2].pos);
+            }
         }
-        this.center.divideScalar(this.vertices.length);
+        this.center.divideScalar(count);
 
         this.offsetVertices(this.center);
     }

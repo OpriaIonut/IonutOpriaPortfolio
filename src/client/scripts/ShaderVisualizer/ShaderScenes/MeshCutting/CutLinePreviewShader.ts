@@ -21,7 +21,6 @@ export class CutLinePreviewShader extends MeshStandardMaterial
             shader.uniforms.u_CutPlaneNormals = extraUniforms.u_CutPlaneNormals;
             shader.uniforms.u_CutPlanePoints = extraUniforms.u_CutPlanePoints;
             shader.uniforms.u_NumOfCutPlanes = extraUniforms.u_NumOfCutPlanes;
-            console.log(shader.uniforms);
 
             shader.vertexShader = `
 varying vec3 v_posW;
