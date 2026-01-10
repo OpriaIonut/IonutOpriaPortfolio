@@ -42,8 +42,8 @@ export class CameraManager
     private _cameraRight:  Vector3 = new Vector3();
     private _cameraUp: Vector3 = new Vector3();
 
-    private _ambientLight: THREE.AmbientLight;
-    private _directionalLight: THREE.DirectionalLight;
+    private _ambientLight: AmbientLight;
+    private _directionalLight: DirectionalLight;
     private _directionalLightBasePosition: Vector3 = new Vector3(10, 10, 10);
 
     private _controls: OrbitControls | undefined;

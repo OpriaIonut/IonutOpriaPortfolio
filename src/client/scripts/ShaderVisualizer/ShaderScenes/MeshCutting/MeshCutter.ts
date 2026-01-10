@@ -60,7 +60,7 @@ export class MeshCutter
             }
         }
 
-        if(fill)
+        if(fill && loopCuts.length > 0)
         {
             this.fillGeometry(leftMesh, rightMesh, loopCuts, cutter);
         }
