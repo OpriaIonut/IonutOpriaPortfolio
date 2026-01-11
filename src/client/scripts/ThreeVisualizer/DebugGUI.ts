@@ -51,6 +51,32 @@ export class DebugUI
         this._gui!.domElement.style.display = "none";
     }
 
+    public reset()
+    {
+        if (!this._gui) 
+            return;
+
+        // Remove root controllers
+        [...this._gui.__controllers].forEach(c => {
+            this._gui!.remove(c);
+        });
+
+        // Remove folders (children first)
+        const folders = [...this._folders.values()].reverse();
+
+        for (const folder of folders) {
+            if (folder.parent && folder.parent.__folders) {
+                try {
+                    folder.parent.removeFolder(folder);
+                } catch {
+                    // already removed → ignore
+                }
+            }
+        }
+
+        this._folders.clear();
+    }
+
     public addFolder(folderName: string, parentName: string)
     {
         if(!this._folders.has(folderName))

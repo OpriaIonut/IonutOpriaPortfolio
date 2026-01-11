@@ -1,21 +1,12 @@
-import { BufferAttribute, Color, InterleavedBufferAttribute, Material, Mesh, MeshStandardMaterial, Plane, ShaderMaterial, Texture, TextureLoader, Vector2, Vector3 } from "three";
+import { BufferAttribute, Color, InterleavedBufferAttribute, Material, Mesh, MeshStandardMaterial, Plane, Texture, Vector2, Vector3 } from "three";
 import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
-import { normalVisualizerFrag, normalVisualizerVert } from "./NormalVisualizer";
 import { CutFillMaterial } from "./SimpleTextureDisplayMaterial";
 import { CutLinePreviewShader } from "./CutLinePreviewShader";
 
 export class MeshCutter
 {
-    private _cutTexture!: Texture;
-    constructor()
-    {
-        new TextureLoader().load("images/orange.png", (texture) => {
-            this._cutTexture = texture;
-        });
-    }
-
-    public cutGeometry(originalMesh: Mesh, cutter: Plane, fill: boolean = true, placeOriginInCenter: boolean = true)
+    public cutGeometry(originalMesh: Mesh, cutter: Plane, cutTexture: Texture, fill: boolean = true, placeOriginInCenter: boolean = true)
     {
         let leftMesh = new ProceduralGeometry();
         let rightMesh = new ProceduralGeometry();
@@ -85,7 +76,7 @@ export class MeshCutter
                     newMaterials.push(mat[index]);
             }
         }
-        newMaterials.push(CutFillMaterial.createMaterial(new Color(1.0, 1.0, 1.0), this._cutTexture));
+        newMaterials.push(CutFillMaterial.createMaterial(new Color(1.0, 1.0, 1.0), cutTexture));
 
         let generatedLeftMesh = new Mesh(leftMesh.constructGeometry(originalMesh.scale.x), newMaterials);
         generatedLeftMesh.position.copy(leftMesh.getCenterPos());

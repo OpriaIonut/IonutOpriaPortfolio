@@ -10,7 +10,8 @@ export class CutFillMaterial
             uniforms: {
                 u_DiffuseColor: { value: color ?? new Color(1.0, 1.0, 1.0) },
                 u_DiffuseMap: { value: texture },
-                u_UseDiffuseMap: { value: texture != null && texture != undefined }
+                u_UseDiffuseMap: { value: texture != null && texture != undefined },
+                u_HideShader: { value: false }
             }
         });
     }
@@ -29,15 +30,19 @@ void main()
 const cutFillFrag = `
 varying vec2 v_uv;
 
+uniform bool u_HideShader;
 uniform bool u_UseDiffuseMap;
 uniform vec3 u_DiffuseColor;
 uniform sampler2D u_DiffuseMap;
 
 void main()
 {
+    if(u_HideShader)
+        discard;
+
     vec3 colorOut = u_DiffuseColor;
     if(u_UseDiffuseMap)
-        colorOut *= texture(u_DiffuseMap, v_uv).rgb;
+        colorOut = texture(u_DiffuseMap, v_uv).rgb;
     gl_FragColor = vec4(colorOut, 1.0);
 }
 `;

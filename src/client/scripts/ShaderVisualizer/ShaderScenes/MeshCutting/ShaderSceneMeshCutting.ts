@@ -1,131 +1,170 @@
-import { AmbientLight, DirectionalLight, Group, Material, MathUtils, Mesh, Plane, PlaneHelper, Scene, Vector3 } from "three";
-import { ShaderVisualizer } from "../../ShaderVisualizer";
-import { IShaderScene } from "../IShaderScene";
+import { AmbientLight, Box3, BoxGeometry, Color, DirectionalLight, Group, Material, MathUtils, Mesh, Object3D, Plane, Scene, ShaderMaterial, Texture, TextureLoader, Vector3 } from "three";
 import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
-import { Asset3D } from "../../../../types";
 import { CutLinePreviewShader } from "./CutLinePreviewShader";
+import { ShaderVisualizer } from "../../ShaderVisualizer";
 
-declare type CutGroupData = 
-{
+declare type CutGroup = {
     group: Group,
-    expandDir: Vector3,
-    referencePos: Vector3
+    referencePos: Vector3,
+    expandDir: Vector3
 }
 
-export class ShaderSceneMeshCutting implements IShaderScene
+export class ShaderSceneMeshCutting
 {
-    private _visualizer!: ShaderVisualizer;
     private _scene: Scene = new Scene();
-
-    private _objectLoader!: ObjectLoader
     private _meshesToCut: Mesh[] = [];
+    private _meshCutter = new MeshCutter();
+    private _cutMeshes: CutGroup[] = [];
+    private _cutPlanes: Plane[] = [];
+    private _cutPlaneNormals: Vector3[] = [];
+    private _cutPlanePoints: Vector3[] = [];
+    private _isMeshCut: boolean = false;
+    private _modelFullyLoaded: boolean = false;
+    private _modelBounds: Box3 = new Box3();
 
-    private _ambientLight!: AmbientLight;
-    private _directionalLight!: DirectionalLight;
+    private _sceneBaseModel?: Object3D;
 
-    private _meshCutter: MeshCutter = new MeshCutter();
-    private _cutMeshes: CutGroupData[] = [];
-
+    private _visualizer!: ShaderVisualizer;
+    private _objectLoader!: ObjectLoader;
+    private _textureLoader!: TextureLoader;
     private _debugUI!: DebugUI;
-    private _debugUISettings = {
-        explodeRadius: 0.0
-    }
 
-    public init(visualizer: ShaderVisualizer): void 
+    private _currentFillTexture: string = "";
+    private _loadedFillTextures: Map<string, Texture> = new Map();
+
+    private _debugUISettings = {
+        numOfPlanes: 5,
+        explodeRadius: 0.0,
+
+        currentMesh: "Mecha Girl",
+        availableMeshes: ["Cube", "Heart", "Knight", "Mecha Girl", "God Eater Sword"],
+
+        cutMode: "Random",
+        availableCutModes: ["Horizontal", "Vertical", "Depth", "Grid", "Random"],
+
+        fillType: "Texture Fill",
+        availableFillTypes: ["No Fill", "Color Fill", "Texture Fill"],
+
+        fillTexture: "Rock",
+        availableFillTextures: ["Orange", "Watermelon", "Rock", "Wood", "Lava", "Blood", "Blood Veins"],
+        fillColor: new Color(0x2e70a6),
+
+        currentAnimation: "Default",
+        availableAnimations: ["Default"],
+
+        cut: () => { this.runCuttingAlgoritm(); },
+        reset: () => { this.resetState(); },
+        download: () => { this.downloadResult(); },
+    };
+
+    public init(visualizer: ShaderVisualizer)
     {
         this._visualizer = visualizer;
-
-        this._ambientLight = new AmbientLight(0xffffff, 0.25);
-        this._scene.add(this._ambientLight);
-
-        this._directionalLight = new DirectionalLight(0xffffff, 1.0);
-        this._directionalLight.position.set(10.0, 10.0, 5.0);
-        this._scene.add(this._directionalLight);
-
         this._objectLoader = new ObjectLoader();
-        // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
-        // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/MixamoKnight.glb", (obj: Asset3D) => {
-        this._objectLoader.loadModel("models/MechaGirl.glb", (obj: Asset3D) => {
+        this._textureLoader = new TextureLoader();
+        this._debugUI = new DebugUI();
 
-            let numOfCuts = 10;
-            let cutPlanes: Plane[] = [];
-            let cutPlanesUniformNormals: Vector3[] = [];
-            let cutPlanesUniformPoints: Vector3[] = [];
-            for(let index = 0; index < 50; ++index) // Needs to match max planes in the shader
-            {
-                cutPlanesUniformNormals.push(new Vector3());
-                cutPlanesUniformPoints.push(new Vector3());
-            }
-            for(let index = 0; index < numOfCuts; ++index)
-            {
-                let plane = new Plane(new Vector3(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize(), Math.random() * 2.0 - 1.0);
-                // let plane = new Plane(new Vector3(0, 1, 0).normalize(), MathUtils.lerp(-2.25, -0.1, Math.random()));
-                cutPlanes.push(plane);
-                cutPlanesUniformNormals[index].copy(plane.normal);
-                cutPlanesUniformPoints[index].copy(plane.normal).multiplyScalar(-plane.constant);
-            }
+        let guiHtml = this._debugUI.getGUIClass()!.domElement;
+        let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
+        guiParent.appendChild(guiHtml);
+        guiHtml.style.position = "absolute";
+        guiHtml.style.left = "0px";
+        guiHtml.style.top = "0px";
 
-            this._scene.add(obj.model);
-            obj.model.name = "Hello World";
-            obj.model.traverse((item) => {
-                let mesh = item as Mesh;
-                if(mesh != undefined && mesh != null && mesh.geometry != undefined)
-                {
-                    let newMat = new CutLinePreviewShader({
-                        u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
-                        u_LineThickness: { value: 0.01 },
-                        u_CutPlaneNormals: { value: cutPlanesUniformNormals },
-                        u_CutPlanePoints: { value: cutPlanesUniformPoints },
-                        u_NumOfCutPlanes: { value: numOfCuts }
-                    });
-                    newMat.copy(mesh.material as Material);
-                    mesh.material = newMat;
-                    this._meshesToCut.push(mesh);
-                }
-            });
-            
-            setTimeout(() => {
-                this._cutMeshes.push({
-                    group: new Group(),
-                    expandDir: new Vector3(),
-                    referencePos: new Vector3()
-                });
-                for(let index = 0; index < this._meshesToCut.length; ++index)
-                {
-                    this._cutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
-                }
-                for(let index = 0; index < numOfCuts; ++index)
-                {
-                    this._cutMeshes = this.cutMesh(this._cutMeshes, cutPlanes[index], false);
-                }
+        let ambientLight = new AmbientLight(0xffffff, 0.25);
+        this._scene.add(ambientLight);
+        
+        let directionalLight = new DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(10.0, 10.0, 5.0);
+        this._scene.add(directionalLight);
 
-                for(let index = 0; index < this._cutMeshes.length; ++index)
-                {
-                    this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0));
-                    this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
-                    this._scene.add(this._cutMeshes[index].group);
-                }
-            }, 1000);
-            
+        for (let index = 0; index < 50; ++index) // Needs to match max planes in the shader
+         {
+            this._cutPlaneNormals.push(new Vector3());
+            this._cutPlanePoints.push(new Vector3());
+        }
 
-            // Debug UI
-            this._debugUI = new DebugUI();
-            let guiHtml = this._debugUI.getGUIClass()!.domElement;
-            document.getElementById("shaderVisualizer")?.appendChild(guiHtml);
-            guiHtml.style.position = "absolute";
-            guiHtml.style.left = "0px";
-            guiHtml.style.top = "0px";
+        this.onMeshChanged = this.onMeshChanged.bind(this);
+        this.onCutModeChanged = this.onCutModeChanged.bind(this);
+        this.onNumOfPlanesChanged = this.onNumOfPlanesChanged.bind(this);
+        this.onFillTypeChanged = this.onFillTypeChanged.bind(this);
+        this.onFillTextureChanged = this.onFillTextureChanged.bind(this);
+        this.onFillColorChanged = this.onFillColorChanged.bind(this);
 
-            this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 3.0, "Expand Radius", (value) => {
-                this._scene.children[2].position.set(0, 0, 0);
-                for(let index = 0; index < this._cutMeshes.length; ++index)
-                {
-                    this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
-                }
-            });
-        }, () => {});
+        this.displayCutMenu();
+        this.onFillTextureChanged();
+        this.onMeshChanged();
+
+        // // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
+        // // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/MixamoKnight.glb", (obj: Asset3D) => {
+        // this._objectLoader.loadModel("models/MechaGirl.glb", (obj: Asset3D) => {
+        //     let numOfCuts = 10;
+        //     let cutPlanes: Plane[] = [];
+        //     let cutPlanesUniformNormals: Vector3[] = [];
+        //     let cutPlanesUniformPoints: Vector3[] = [];
+        //     for(let index = 0; index < 50; ++index) // Needs to match max planes in the shader
+        //     {
+        //         cutPlanesUniformNormals.push(new Vector3());
+        //         cutPlanesUniformPoints.push(new Vector3());
+        //     }
+        //     for(let index = 0; index < numOfCuts; ++index)
+        //     {
+        //         let plane = new Plane(new Vector3(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize(), Math.random() * 2.0 - 1.0);
+        //         // let plane = new Plane(new Vector3(0, 1, 0).normalize(), MathUtils.lerp(-2.25, -0.1, Math.random()));
+        //         cutPlanes.push(plane);
+        //         cutPlanesUniformNormals[index].copy(plane.normal);
+        //         cutPlanesUniformPoints[index].copy(plane.normal).multiplyScalar(-plane.constant);
+        //     }
+        //     this._scene.add(obj.model);
+        //     obj.model.name = "Hello World";
+        //     obj.model.traverse((item) => {
+        //         let mesh = item as Mesh;
+        //         if(mesh != undefined && mesh != null && mesh.geometry != undefined)
+        //         {
+        //             let newMat = new CutLinePreviewShader({
+        //                 u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+        //                 u_LineThickness: { value: 0.01 },
+        //                 u_CutPlaneNormals: { value: cutPlanesUniformNormals },
+        //                 u_CutPlanePoints: { value: cutPlanesUniformPoints },
+        //                 u_NumOfCutPlanes: { value: numOfCuts }
+        //             });
+        //             newMat.copy(mesh.material as Material);
+        //             mesh.material = newMat;
+        //             this._meshesToCut.push(mesh);
+        //         }
+        //     });
+        //     setTimeout(() => {
+        //         this._cutMeshes.push({
+        //             group: new Group(),
+        //             expandDir: new Vector3(),
+        //             referencePos: new Vector3()
+        //         });
+        //         for(let index = 0; index < this._meshesToCut.length; ++index)
+        //         {
+        //             this._cutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
+        //         }
+        //         for(let index = 0; index < numOfCuts; ++index)
+        //         {
+        //             this._cutMeshes = this.cutMesh(this._cutMeshes, cutPlanes[index], false);
+        //         }
+        //         for(let index = 0; index < this._cutMeshes.length; ++index)
+        //         {
+        //             this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0));
+        //             this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
+        //             this._scene.add(this._cutMeshes[index].group);
+        //         }
+        //     }, 1000);
+        //     // Debug UI
+        //     this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 3.0, "Expand Radius", (value) => {
+        //         this._scene.children[2].position.set(0, 0, 0);
+        //         for(let index = 0; index < this._cutMeshes.length; ++index)
+        //         {
+        //             this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
+        //         }
+        //     });
+        // }, () => {});
 
         /* To do:
             Test on skinned meshes
@@ -133,7 +172,9 @@ export class ShaderSceneMeshCutting implements IShaderScene
                 * Animate mesh and make cut parts also animated
             Optimize code
             Stress-test to know limitations
-            Make demonstration scenes
+            Put all characters in default "cut pose"
+            Why does cut objs spawn at different y coordinates?
+            Add some stats around geometry cut & time it took
             Explode physics?
             Clean up the code
             Add code inspection (also add error checking for everything: check index 0, throw proper errors, etc.)
@@ -141,61 +182,435 @@ export class ShaderSceneMeshCutting implements IShaderScene
         */
     }
 
-    public update(deltaTime: number): void 
+    public update(deltaTime: number)
     {
 
     }
 
-    public hide(): void 
+    public hide()
     {
-        
+
     }
 
-    public getScene(): Scene { return this._scene; }
+    public getScene() { return this._scene; }
+
+    private runCuttingAlgoritm()
+    {
+        this._cutMeshes.push({
+            group: new Group(),
+            expandDir: new Vector3(),
+            referencePos: new Vector3()
+        });
+        for (let index = 0; index < this._meshesToCut.length; ++index)
+        {
+            this._cutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
+        }
+        for (let index = 0; index < this._cutPlanes.length; ++index)
+        {
+            this._cutMeshes = this.cutMesh(this._cutMeshes, this._cutPlanes[index]);
+        }
+
+        for (let index = 0; index < this._cutMeshes.length; ++index)
+        {
+            this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0));
+            this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
+            this._scene.add(this._cutMeshes[index].group);
+        }
+
+        this._isMeshCut = true;
+        this.displayResetMenu();
+    }
+
+    private resetState()
+    {
+        for(let index = 0; index < this._cutMeshes.length; ++index)
+        {
+            this._scene.remove(this._cutMeshes[index].group);
+            this._cutMeshes[index].group.traverse((obj) => {
+                this.disposeObject(obj);
+            });
+        }
+        this._cutMeshes = [];
+
+        this._isMeshCut = false;
+        this.displayCutMenu();
+    }
+
+    private downloadResult()
+    {
+
+    }
+
+    private disposeObject(obj: Object3D)
+    {
+        obj.traverse((item) => {
+            if(item instanceof Mesh)
+            {
+                let mesh = item as Mesh;
+                if(Object.prototype.toString.call(mesh.material) === '[object Object]')
+                    (mesh.material as Material).dispose();
+                else
+                {
+                    let material = mesh.material as Material[];
+                    for(let index = 0; index < material.length; ++index)
+                    {
+                        material[index].dispose();
+                    }
+                }
+                mesh.geometry.dispose();
+            }
+        });
+    }
 
     //Artificial offset is used because we are setting the origin of the cut meshes in the center of the new geometry.
     //This shifts the coordinate space that they are in, and for consequent cuts it produces wrong results
-    private cutMesh(meshes: CutGroupData[], plane: Plane, displayPlane: boolean = true)
+    private cutMesh(meshes: CutGroup[], plane: Plane)
     {
-        if(displayPlane)
-        {
-            const helper = new PlaneHelper( plane, 25, 0xffff00 );
-            this._scene.add( helper );
-        }
-
+        let results: CutGroup[] = [];
         let planeCenter = plane.normal.clone().multiplyScalar(-plane.constant);
 
-        let results: CutGroupData[] = [];
-        for(let index = 0; index < meshes.length; ++index)
+        for (let index = 0; index < meshes.length; ++index)
         {
-            const left: CutGroupData = {
+            const left: CutGroup = {
+                group: new Group(),
+                expandDir: meshes[index].expandDir.clone(),
+                referencePos: new Vector3()
+            };
+            const right = {
                 group: new Group(),
                 expandDir: meshes[index].expandDir.clone(),
                 referencePos: new Vector3()
             };
 
-            const right: CutGroupData = {
-                group: new Group(),
-                expandDir: meshes[index].expandDir.clone(),
-                referencePos: new Vector3()
-            };
             left.group.position.copy(planeCenter);
             right.group.position.copy(planeCenter);
 
             left.expandDir.sub(plane.normal);
             right.expandDir.add(plane.normal);
-            for(let index2 = 0; index2 < meshes[index].group.children.length; ++index2)
+
+            for (let index2 = 0; index2 < meshes[index].group.children.length; ++index2)
             {
-                let result = this._meshCutter.cutGeometry(meshes[index].group.children[index2] as Mesh, plane, true, true);
+                let texture = this._loadedFillTextures.get(this._debugUISettings.fillTexture)!;
+                let result = this._meshCutter.cutGeometry(meshes[index].group.children[index2] as Mesh, plane, texture, true, true);
                 result.leftMesh.position.sub(left.group.position);
                 result.rightMesh.position.sub(right.group.position);
-
                 left.group.add(result.leftMesh);
                 right.group.add(result.rightMesh);
             }
             results.push(left, right);
         }
-
         return results;
+    }
+
+    private displayCutMenu()
+    {
+        this._debugUI.reset();
+
+        this._debugUI.addDropdown("", this._debugUISettings, "currentMesh", this._debugUISettings.availableMeshes, "Mesh", this.onMeshChanged);
+        this._debugUI.addDropdown("", this._debugUISettings, "cutMode", this._debugUISettings.availableCutModes, "Cut Mode", this.onCutModeChanged);
+
+        let maxCutPlanes = this._debugUISettings.cutMode == "Grid" ? 5 : 10;
+        this._debugUI.addSlider("", this._debugUISettings, "numOfPlanes", 1, maxCutPlanes, "Number of Cuts", this.onNumOfPlanesChanged);
+
+        this._debugUI.addDropdown("", this._debugUISettings, "fillType", this._debugUISettings.availableFillTypes, "Fill Type", this.onFillTypeChanged);
+        if (this._debugUISettings.fillType == "Texture Fill")
+            this._debugUI.addDropdown("", this._debugUISettings, "fillTexture", this._debugUISettings.availableFillTextures, "Fill Texture", this.onFillTextureChanged);
+        if (this._debugUISettings.fillType == "Color Fill")
+            this._debugUI.addColorPicker("", this._debugUISettings, "fillColor", "Fill Color", this.onFillColorChanged);
+
+        this._debugUI.addButton("", this._debugUISettings, "cut", "Cut");
+    }
+    
+    private displayResetMenu()
+    {
+        this._debugUI.reset();
+
+        this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 3.0, "Expand Radius", () => {
+            for (let index = 0; index < this._cutMeshes.length; ++index) {
+                this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
+            }
+        });
+
+        this._debugUI.addDropdown("", this._debugUISettings, "fillType", this._debugUISettings.availableFillTypes, "Fill Type", this.onFillTypeChanged);
+        if (this._debugUISettings.fillType == "Texture Fill")
+            this._debugUI.addDropdown("", this._debugUISettings, "fillTexture", this._debugUISettings.availableFillTextures, "Fill Texture", this.onFillTextureChanged);
+        if (this._debugUISettings.fillType == "Color Fill")
+            this._debugUI.addColorPicker("", this._debugUISettings, "fillColor", "Fill Color", this.onFillColorChanged);
+
+        this._debugUI.addButton("", this._debugUISettings, "reset", "Reset");
+        this._debugUI.addButton("", this._debugUISettings, "download", "Download");
+    }
+
+    private onMeshChanged()
+    {
+        if (this._sceneBaseModel != undefined)
+        {
+            this._scene.remove(this._sceneBaseModel);
+            this._sceneBaseModel = undefined;
+        }
+
+        this._modelFullyLoaded = false;
+        if (this._debugUISettings.currentMesh == "Cube")
+        {
+            let mesh = new Mesh(new BoxGeometry(), new CutLinePreviewShader({
+                u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+                u_LineThickness: { value: 0.01 },
+                u_CutPlaneNormals: { value: this._cutPlaneNormals },
+                u_CutPlanePoints: { value: this._cutPlanePoints },
+                u_NumOfCutPlanes: { value: 0 }
+            }));
+            this._meshesToCut.push(mesh);
+            this._scene.add(mesh);
+            this._sceneBaseModel = mesh;
+            this._modelBounds.setFromObject(this._sceneBaseModel);
+            this._modelFullyLoaded = true;
+            this.updateCutPlanes();
+        }
+        else {
+            let path = this.getPathFromModel(this._debugUISettings.currentMesh);
+            this._objectLoader.loadModel(path, (obj) => {
+                this._scene.add(obj.model);
+                this._sceneBaseModel = obj.model;
+                obj.model.traverse((item) => {
+                    let mesh = item as Mesh;
+                    if (mesh != undefined && mesh != null && mesh.geometry != undefined) {
+                        let newMat = new CutLinePreviewShader({
+                            u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+                            u_LineThickness: { value: 0.01 },
+                            u_CutPlaneNormals: { value: this._cutPlaneNormals },
+                            u_CutPlanePoints: { value: this._cutPlanePoints },
+                            u_NumOfCutPlanes: { value: 0 }
+                        });
+                        newMat.copy(mesh.material as Material);
+                        mesh.material = newMat;
+                        this._meshesToCut.push(mesh);
+                    }
+                });
+                this._modelFullyLoaded = true;
+                setTimeout(() => {
+                    this._modelBounds.setFromObject(this._sceneBaseModel!, true);
+                    let center = new Vector3();
+                    this._modelBounds.getCenter(center);
+                    this._sceneBaseModel!.position.sub(center);
+                    this._modelBounds.setFromObject(this._sceneBaseModel!, true); //Update bounds after the shift
+                    // const box = new Box3Helper( this._modelBounds, new Color(0x00ffff) );
+                    // this._scene.add( box );
+                    this.updateCutPlanes();
+                }, 1);
+            }, () => { });
+        }
+    }
+
+    private onCutModeChanged()
+    {
+        if (this._debugUISettings.cutMode == "Grid")
+            this._debugUISettings.numOfPlanes = MathUtils.clamp(this._debugUISettings.numOfPlanes, 1, 5);
+        this.displayCutMenu();
+        this.updateCutPlanes();
+    }
+    
+    private onNumOfPlanesChanged()
+    {
+        this.updateCutPlanes();
+    }
+    
+    private onFillTypeChanged()
+    {
+        if (!this._isMeshCut)
+            this.displayCutMenu();
+        else
+            this.displayResetMenu();
+        this.updateCutMeshesMaterial();
+    }
+    
+    private onFillTextureChanged()
+    {
+        if(this._loadedFillTextures.has(this._debugUISettings.fillTexture))
+        {
+            this.updateCutMeshesMaterial();
+        }
+        else
+        {
+            let texPath = this.getPathFromFillTexture(this._debugUISettings.fillTexture);
+            this._textureLoader.load(texPath, (texture: Texture) => {
+                this._loadedFillTextures.set(this._debugUISettings.fillTexture, texture);
+                this.updateCutMeshesMaterial();
+            });
+        }
+    }
+    
+    private onFillColorChanged(value: any)
+    {
+        this._debugUISettings.fillColor.setStyle(value);
+        this.updateCutMeshesMaterial();
+    }
+    
+    private getPathFromModel(modelName: string)
+    {
+        switch (modelName)
+        {
+            case "Heart": 
+                return "models/ShaderProjects/MeshCutting/Heart.glb";
+            case "Knight": 
+                return "models/ShaderProjects/MeshCutting/MixamoKnight.glb";
+            case "Mecha Girl": 
+                return "models/MechaGirl.glb";
+            case "God Eater Sword": 
+                return "models/GodEaterChainsaw.glb";
+        }
+        return "";
+    }
+
+    private getPathFromFillTexture(textureName: string)
+    {
+        switch(textureName)
+        {
+            case "Orange":
+                return "images/textures/orange.png";
+            case "Watermelon":
+                return "images/textures/watermelon.png";
+            case "Wood":
+                return "images/textures/wood.jpg";
+            case "Rock":
+                return "images/textures/rock.jpg";
+            case "Lava":
+                return "images/textures/lava.jpg";
+            case "Blood":
+                return "images/textures/blood.jpg";
+            case "Blood Veins":
+                return "images/textures/blood-veins.jpg";
+        }
+        return "";
+    }
+    
+    private updateCutPlanes()
+    {
+        this._cutPlanes = [];
+
+        let boundsCenter = new Vector3();
+        let boundsSize = new Vector3();
+        this._modelBounds.getSize(boundsSize);
+        this._modelBounds.getCenter(boundsCenter);
+
+        let constant = 0;
+        let increment = 0;
+        let numOfPlanes = Math.floor(this._debugUISettings.numOfPlanes);
+
+        if (this._debugUISettings.cutMode == "Grid")
+        {
+            for (let width = 0; width < numOfPlanes; ++width)
+            {
+                let normal = new Vector3(1, 0, 0);
+                increment = boundsSize.x / (numOfPlanes + 1);
+                constant = this._modelBounds.min.x + increment * (width + 1);
+                this._cutPlanes.push(new Plane(normal, -constant));
+            }
+            for (let height = 0; height < numOfPlanes; ++height)
+            {
+                let normal = new Vector3(0, 1, 0);
+                increment = boundsSize.y / (numOfPlanes + 1);
+                constant = this._modelBounds.min.y + increment * (height + 1);
+                this._cutPlanes.push(new Plane(normal, -constant));
+            }
+            for (let depth = 0; depth < numOfPlanes; ++depth)
+            {
+                let normal = new Vector3(0, 0, 1);
+                increment = boundsSize.z / (numOfPlanes + 1);
+                constant = this._modelBounds.min.z + increment * (depth + 1);
+                this._cutPlanes.push(new Plane(normal, -constant));
+            }
+            for (let index = 0; index < this._cutPlanes.length; ++index)
+            {
+                this._cutPlaneNormals[index].copy(this._cutPlanes[index].normal);
+                this._cutPlanePoints[index].copy(this._cutPlanes[index].normal).multiplyScalar(-this._cutPlanes[index].constant);
+                // const helper = new PlaneHelper( this._cutPlanes[index], 5, 0xffff00 );
+                // this._scene.add( helper );
+            }
+        }
+        else
+        {
+            for (let index = 0; index < numOfPlanes; ++index)
+            {
+                let normal = new Vector3(0, 0, 0);
+                switch (this._debugUISettings.cutMode)
+                {
+                    case "Horizontal":
+                        normal.set(1, 0, 0);
+                        increment = boundsSize.x / (numOfPlanes + 1);
+                        constant = this._modelBounds.min.x + increment * (index + 1);
+                        break;
+                    case "Vertical":
+                        normal.set(0, 1, 0);
+                        increment = boundsSize.y / (numOfPlanes + 1);
+                        constant = this._modelBounds.min.y + increment * (index + 1);
+                        break;
+                    case "Depth":
+                        normal.set(0, 0, 1);
+                        increment = boundsSize.z / (numOfPlanes + 1);
+                        constant = this._modelBounds.min.z + increment * (index + 1);
+                        break;
+                    case "Random":
+                        normal.set(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize();
+                        let boundsSizeToUse = boundsSize.x;
+                        if (normal.y > normal.x)
+                            boundsSizeToUse = boundsSize.y;
+                        if (normal.z > normal.y)
+                            boundsSizeToUse = boundsSize.z;
+                        constant = MathUtils.lerp(-boundsSizeToUse / 4.0, boundsSizeToUse / 4.0, Math.random());
+                        break;
+                }
+                this._cutPlanes.push(new Plane(normal, -constant));
+                this._cutPlaneNormals[index].copy(normal);
+                this._cutPlanePoints[index].copy(normal).multiplyScalar(constant);
+                // const helper = new PlaneHelper( this._cutPlanes[index], 5, 0xffff00 );
+                // this._scene.add( helper );
+            }
+        }
+        this.updateBaseMeshMaterial();
+    }
+
+    private updateBaseMeshMaterial()
+    {
+        for (let index = 0; index < this._meshesToCut.length; ++index)
+        {
+            let mat = this._meshesToCut[index].material as CutLinePreviewShader;
+            mat.updateUniforms({
+                u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+                u_LineThickness: { value: 0.01 },
+                u_CutPlaneNormals: { value: this._cutPlaneNormals },
+                u_CutPlanePoints: { value: this._cutPlanePoints },
+                u_NumOfCutPlanes: { value: this._cutPlanes.length }
+            });
+        }
+    }
+
+    private updateCutMeshesMaterial()
+    {
+        for(let index = 0; index < this._cutMeshes.length; ++index)
+        {
+            this._cutMeshes[index].group.traverse((obj) => {
+                if(obj instanceof Mesh)
+                {
+                    let mesh = obj as Mesh;
+                    let materials = mesh.material as Material[];
+                    for(let index2 = 0; index2 < materials.length; ++index2)
+                    {
+                        if(materials[index2] instanceof ShaderMaterial)
+                        {
+                            let shader = materials[index2] as ShaderMaterial;
+                            if(shader.uniforms.u_DiffuseColor && shader.uniforms.u_DiffuseMap && shader.uniforms.u_UseDiffuseMap && shader.uniforms.u_HideShader)
+                            {
+                                shader.uniforms.u_UseDiffuseMap.value = (this._debugUISettings.fillType == "Texture Fill");
+                                shader.uniforms.u_HideShader.value = (this._debugUISettings.fillType == "No Fill");
+                                shader.uniforms.u_DiffuseColor.value = this._debugUISettings.fillColor;
+                                if(this._loadedFillTextures.has(this._debugUISettings.fillTexture))
+                                    shader.uniforms.u_DiffuseMap.value = this._loadedFillTextures.get(this._debugUISettings.fillTexture);
+
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, MeshStandardMaterialParameters, Vector3 } from "three";
+import { MeshStandardMaterial, MeshStandardMaterialParameters, Shader, Vector3 } from "three";
 
 export declare type CutLinePreviewShaderUniforms =
 {
@@ -11,11 +11,14 @@ export declare type CutLinePreviewShaderUniforms =
 
 export class CutLinePreviewShader extends MeshStandardMaterial
 {
+    private _shader!: Shader;
+
     constructor(extraUniforms: CutLinePreviewShaderUniforms, props?: MeshStandardMaterialParameters)
     {
         super(props);
 
         this.onBeforeCompile = (shader) => {
+            this._shader = shader;
             shader.uniforms.u_LineColor = extraUniforms.u_LineColor;
             shader.uniforms.u_LineThickness = extraUniforms.u_LineThickness;
             shader.uniforms.u_CutPlaneNormals = extraUniforms.u_CutPlaneNormals;
@@ -46,5 +49,14 @@ uniform int u_NumOfCutPlanes;
     outgoingLight = mix(outgoingLight, u_LineColor, cutLinesMask);
 `);
         };
+    }
+
+    public updateUniforms(unif: CutLinePreviewShaderUniforms)
+    {
+        this._shader.uniforms.u_LineColor = unif.u_LineColor;
+        this._shader.uniforms.u_LineThickness = unif.u_LineThickness;
+        this._shader.uniforms.u_CutPlaneNormals = unif.u_CutPlaneNormals;
+        this._shader.uniforms.u_CutPlanePoints = unif.u_CutPlanePoints;
+        this._shader.uniforms.u_NumOfCutPlanes = unif.u_NumOfCutPlanes;
     }
 }
