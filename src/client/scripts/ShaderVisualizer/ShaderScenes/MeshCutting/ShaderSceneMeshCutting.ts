@@ -23,6 +23,7 @@ export class ShaderSceneMeshCutting
     private _isMeshCut: boolean = false;
     private _modelFullyLoaded: boolean = false;
     private _modelBounds: Box3 = new Box3();
+    private _boundsCenter: Vector3 = new Vector3();
 
     private _sceneBaseModel?: Object3D;
 
@@ -97,87 +98,20 @@ export class ShaderSceneMeshCutting
         this.onFillTextureChanged();
         this.onMeshChanged();
 
-        // // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/Heart.glb", (obj: Asset3D) => {
-        // // this._objectLoader.loadModel("models/ShaderProjects/MeshCutting/MixamoKnight.glb", (obj: Asset3D) => {
-        // this._objectLoader.loadModel("models/MechaGirl.glb", (obj: Asset3D) => {
-        //     let numOfCuts = 10;
-        //     let cutPlanes: Plane[] = [];
-        //     let cutPlanesUniformNormals: Vector3[] = [];
-        //     let cutPlanesUniformPoints: Vector3[] = [];
-        //     for(let index = 0; index < 50; ++index) // Needs to match max planes in the shader
-        //     {
-        //         cutPlanesUniformNormals.push(new Vector3());
-        //         cutPlanesUniformPoints.push(new Vector3());
-        //     }
-        //     for(let index = 0; index < numOfCuts; ++index)
-        //     {
-        //         let plane = new Plane(new Vector3(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).normalize(), Math.random() * 2.0 - 1.0);
-        //         // let plane = new Plane(new Vector3(0, 1, 0).normalize(), MathUtils.lerp(-2.25, -0.1, Math.random()));
-        //         cutPlanes.push(plane);
-        //         cutPlanesUniformNormals[index].copy(plane.normal);
-        //         cutPlanesUniformPoints[index].copy(plane.normal).multiplyScalar(-plane.constant);
-        //     }
-        //     this._scene.add(obj.model);
-        //     obj.model.name = "Hello World";
-        //     obj.model.traverse((item) => {
-        //         let mesh = item as Mesh;
-        //         if(mesh != undefined && mesh != null && mesh.geometry != undefined)
-        //         {
-        //             let newMat = new CutLinePreviewShader({
-        //                 u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
-        //                 u_LineThickness: { value: 0.01 },
-        //                 u_CutPlaneNormals: { value: cutPlanesUniformNormals },
-        //                 u_CutPlanePoints: { value: cutPlanesUniformPoints },
-        //                 u_NumOfCutPlanes: { value: numOfCuts }
-        //             });
-        //             newMat.copy(mesh.material as Material);
-        //             mesh.material = newMat;
-        //             this._meshesToCut.push(mesh);
-        //         }
-        //     });
-        //     setTimeout(() => {
-        //         this._cutMeshes.push({
-        //             group: new Group(),
-        //             expandDir: new Vector3(),
-        //             referencePos: new Vector3()
-        //         });
-        //         for(let index = 0; index < this._meshesToCut.length; ++index)
-        //         {
-        //             this._cutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
-        //         }
-        //         for(let index = 0; index < numOfCuts; ++index)
-        //         {
-        //             this._cutMeshes = this.cutMesh(this._cutMeshes, cutPlanes[index], false);
-        //         }
-        //         for(let index = 0; index < this._cutMeshes.length; ++index)
-        //         {
-        //             this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0));
-        //             this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
-        //             this._scene.add(this._cutMeshes[index].group);
-        //         }
-        //     }, 1000);
-        //     // Debug UI
-        //     this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 3.0, "Expand Radius", (value) => {
-        //         this._scene.children[2].position.set(0, 0, 0);
-        //         for(let index = 0; index < this._cutMeshes.length; ++index)
-        //         {
-        //             this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
-        //         }
-        //     });
-        // }, () => {});
-
         /* To do:
             Test on skinned meshes
                 * Doesn't cut pose, cuts only base position. Is this ok?
                 * Animate mesh and make cut parts also animated
+                * Put all characters in default "cut pose"
             Optimize code
             Stress-test to know limitations
-            Put all characters in default "cut pose"
-            Why does cut objs spawn at different y coordinates?
             Add some stats around geometry cut & time it took
-            Explode physics?
+            Add a complex scene to be cut
+
             Clean up the code
             Add code inspection (also add error checking for everything: check index 0, throw proper errors, etc.)
+            Add proper screenshot to preview
+
             Bunny 3D model base color view broken
         */
     }
@@ -212,10 +146,12 @@ export class ShaderSceneMeshCutting
 
         for (let index = 0; index < this._cutMeshes.length; ++index)
         {
-            this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0));
+            this._cutMeshes[index].group.position.add(new Vector3(3, 0, 0)).sub(this._boundsCenter);
             this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
             this._scene.add(this._cutMeshes[index].group);
         }
+
+        this._debugUISettings.explodeRadius = 0.05;
 
         this._isMeshCut = true;
         this.displayResetMenu();
@@ -325,6 +261,10 @@ export class ShaderSceneMeshCutting
     {
         this._debugUI.reset();
 
+        //Update positions to current slider value
+        for (let index = 0; index < this._cutMeshes.length; ++index) {
+            this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
+        }
         this._debugUI.addSlider("", this._debugUISettings, "explodeRadius", 0.0, 3.0, "Expand Radius", () => {
             for (let index = 0; index < this._cutMeshes.length; ++index) {
                 this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, this._debugUISettings.explodeRadius);
@@ -346,8 +286,18 @@ export class ShaderSceneMeshCutting
         if (this._sceneBaseModel != undefined)
         {
             this._scene.remove(this._sceneBaseModel);
+            this.disposeObject(this._sceneBaseModel);
             this._sceneBaseModel = undefined;
         }
+
+        for(let index = 0; index < this._meshesToCut.length; ++index)
+        {
+            this._scene.remove(this._meshesToCut[index]);
+            this._meshesToCut[index].traverse((obj) => {
+                this.disposeObject(obj);
+            });
+        }
+        this._meshesToCut = [];
 
         this._modelFullyLoaded = false;
         if (this._debugUISettings.currentMesh == "Cube")
@@ -364,7 +314,7 @@ export class ShaderSceneMeshCutting
             this._sceneBaseModel = mesh;
             this._modelBounds.setFromObject(this._sceneBaseModel);
             this._modelFullyLoaded = true;
-            this.updateCutPlanes();
+            setTimeout(() => { this.updateCutPlanes(); }, 100); //Set a small timeout to allow the shader to compile properly
         }
         else {
             let path = this.getPathFromModel(this._debugUISettings.currentMesh);
@@ -389,14 +339,13 @@ export class ShaderSceneMeshCutting
                 this._modelFullyLoaded = true;
                 setTimeout(() => {
                     this._modelBounds.setFromObject(this._sceneBaseModel!, true);
-                    let center = new Vector3();
-                    this._modelBounds.getCenter(center);
-                    this._sceneBaseModel!.position.sub(center);
+                    this._modelBounds.getCenter(this._boundsCenter);
+                    this._sceneBaseModel!.position.sub(this._boundsCenter);
                     this._modelBounds.setFromObject(this._sceneBaseModel!, true); //Update bounds after the shift
                     // const box = new Box3Helper( this._modelBounds, new Color(0x00ffff) );
                     // this._scene.add( box );
                     this.updateCutPlanes();
-                }, 1);
+                }, 100);
             }, () => { });
         }
     }
