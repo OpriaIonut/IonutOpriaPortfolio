@@ -415,6 +415,8 @@ export class ThreeModelView
                         map = child.material.emissiveMap;
                     if(child.material.name == "Outline" || child.material.name == "outline")
                         color = new THREE.Color(0x000000);
+                    else if(this._currentModelName == "BloodyBunny")
+                        color = new THREE.Color(0xffffff);
                     child.material = new THREE.MeshBasicMaterial({ color: color, map: map });
                 }
             });

@@ -116,7 +116,6 @@ export class ShaderSceneMeshCutting
             Test on skinned meshes
                 * Doesn't cut pose, cuts only base position. Is this ok?
                 * Animate mesh and make cut parts also animated
-            Bunny 3D model base color view broken
         */
     }
 
