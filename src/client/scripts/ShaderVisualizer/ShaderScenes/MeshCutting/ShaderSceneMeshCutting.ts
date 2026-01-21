@@ -1,4 +1,4 @@
-import { AmbientLight, Box3, BoxGeometry, Color, DirectionalLight, Group, Material, MathUtils, Mesh, MeshStandardMaterial, Object3D, Plane, PlaneHelper, Scene, ShaderMaterial, SkinnedMesh, Texture, TextureLoader, Vector3 } from "three";
+import { AmbientLight, Box3, BoxGeometry, Color, DirectionalLight, Group, Material, MathUtils, Mesh, MeshStandardMaterial, Object3D, Plane, PlaneHelper, Scene, ShaderMaterial, SkinnedMesh, Texture, TextureLoader, TorusKnotGeometry, Vector3 } from "three";
 import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
@@ -36,12 +36,14 @@ export class ShaderSceneMeshCutting
     private _currentFillTexture: string = "";
     private _loadedFillTextures: Map<string, Texture> = new Map();
 
+    private _artistCredits!: HTMLDivElement;
+
     private _debugUISettings = {
         numOfPlanes: 5,
         explodeRadius: 0.0,
 
-        currentMesh: "Mecha Girl",
-        availableMeshes: ["Cube", "Heart", "Knight", "Mecha Girl", "God Eater Sword"],
+        currentMesh: "Heart",
+        availableMeshes: ["Torus Knot", "Heart", "Mecha Girl", "God Eater Sword", "City"],
 
         cutMode: "Vertical",
         availableCutModes: ["Horizontal", "Vertical", "Depth", "Grid", "Random"],
@@ -77,6 +79,12 @@ export class ShaderSceneMeshCutting
         guiHtml.style.left = "0px";
         guiHtml.style.top = "0px";
 
+        this._artistCredits = document.createElement("div");
+        this._artistCredits.id = "artistCredits";
+        this._artistCredits.style.display = "none";
+        this._artistCredits.innerHTML = "Please credit <a href='https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324'>SpatialNeglect</a> for the 3D model";
+        guiParent.appendChild(this._artistCredits);
+
         let ambientLight = new AmbientLight(0xffffff, 0.25);
         this._scene.add(ambientLight);
         
@@ -102,17 +110,12 @@ export class ShaderSceneMeshCutting
         this.onMeshChanged();
 
         /* To do:
-            Optimize code
-            Add a complex scene to be cut
-
             Clean up the code
             Add code inspection (also add error checking for everything: check index 0, throw proper errors, etc.)
-            Add proper screenshot to preview
 
             Test on skinned meshes
                 * Doesn't cut pose, cuts only base position. Is this ok?
                 * Animate mesh and make cut parts also animated
-                * 
             Bunny 3D model base color view broken
         */
     }
@@ -228,7 +231,6 @@ export class ShaderSceneMeshCutting
 
             for (let index2 = 0; index2 < meshes[index].group.children.length; ++index2)
             {
-                // meshes[index].group.children[index2].position.sub(this._boundsCenter);
                 let texture = this._loadedFillTextures.get(this._debugUISettings.fillTexture)!;
                 let result = this._meshCutter.cutGeometry(meshes[index].group.children[index2] as Mesh, plane, texture, true, true);
                 result.leftMesh.position.sub(left.group.position);
@@ -249,6 +251,9 @@ export class ShaderSceneMeshCutting
         this._debugUI.addDropdown("", this._debugUISettings, "cutMode", this._debugUISettings.availableCutModes, "Cut Mode", this.onCutModeChanged);
 
         let maxCutPlanes = this._debugUISettings.cutMode == "Grid" ? 5 : 10;
+        if(this._debugUISettings.currentMesh == "City")
+            maxCutPlanes = this._debugUISettings.cutMode == "Grid" ? 3 : 6;
+
         if(this._debugUISettings.numOfPlanes > maxCutPlanes)
             this._debugUISettings.numOfPlanes = maxCutPlanes;
         this._debugUI.addSlider("", this._debugUISettings, "numOfPlanes", 1, maxCutPlanes, "Number of Cuts", this.onNumOfPlanesChanged);
@@ -308,9 +313,9 @@ export class ShaderSceneMeshCutting
         this._meshesToCut = [];
 
         this._modelFullyLoaded = false;
-        if (this._debugUISettings.currentMesh == "Cube")
+        if (this._debugUISettings.currentMesh == "Torus Knot")
         {
-            let mesh = new Mesh(new BoxGeometry(), new CutLinePreviewShader({
+            let mesh = new Mesh(new TorusKnotGeometry(1, 0.4, 256, 32), new CutLinePreviewShader({
                 u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
                 u_LineThickness: { value: 0.01 },
                 u_CutPlaneNormals: { value: this._cutPlaneNormals },
@@ -339,7 +344,8 @@ export class ShaderSceneMeshCutting
                             u_CutPlanePoints: { value: this._cutPlanePoints },
                             u_NumOfCutPlanes: { value: 0 }
                         });
-                        newMat.copy(mesh.material as Material);
+                        if(mesh.material instanceof MeshStandardMaterial)
+                            newMat.copy(mesh.material as Material);
                         mesh.material = newMat;
                         this._meshesToCut.push(mesh);
 
@@ -351,13 +357,13 @@ export class ShaderSceneMeshCutting
                     }
                 });
                 this._modelFullyLoaded = true;
+                this._artistCredits.style.display = this._debugUISettings.currentMesh == "City" ? "block" : "none";
                 setTimeout(() => {
                     this._modelBounds.setFromObject(this._sceneBaseModel!, true);
                     this._modelBounds.getCenter(this._boundsCenter);
                     this._sceneBaseModel!.position.sub(this._boundsCenter);
                     this._modelBounds.setFromObject(this._sceneBaseModel!, true); //Update bounds after the shift
-                    // const box = new Box3Helper( this._modelBounds, new Color(0x00ffff) );
-                    // this._scene.add( box );
+                    this.displayCutMenu();
                     this.updateCutPlanes();
                 }, 100);
             }, () => { });
@@ -414,12 +420,12 @@ export class ShaderSceneMeshCutting
         {
             case "Heart": 
                 return "models/ShaderProjects/MeshCutting/Heart.glb";
-            case "Knight": 
-                return "models/ShaderProjects/MeshCutting/MixamoKnight.glb";
             case "Mecha Girl": 
                 return "models/MechaGirl.glb";
             case "God Eater Sword": 
                 return "models/GodEaterChainsaw.glb";
+            case "City":
+                return "models/ShaderProjects/MeshCutting/City.glb";
         }
         return "";
     }

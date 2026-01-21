@@ -25,7 +25,7 @@ export class ShaderProjectsPanel
         parentNode.appendChild(title);
 
         const cellsPerWidth = isPortraitMode.value ? 2 : 4;
-        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "BloodyBunny", "images/models/BloodyBunny.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
+        this._cells.push(new CellWithPreview(parentNode, cellsPerWidth, "MeshCutting.jpg", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
 
         let separator = document.createElement("div");
         separator.className = "separator";
