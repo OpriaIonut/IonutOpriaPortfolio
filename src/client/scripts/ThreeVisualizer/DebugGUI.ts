@@ -98,13 +98,20 @@ export class DebugUI
      * @param propName Name of a string property from the target object
      * @param displayName 
      */
-    public addText(folderName: string, target: Object, propName: string, displayName: string, onChange?: (value: any) => void)
+    public addText(folderName: string, target: Object, propName: string, displayName: string, editable: boolean, onChange?: (value: any) => void)
     {
         let folder = this._folders.get(folderName);
         let targetGUI = folder !== undefined ? folder : this._gui;
 
         let message = `${folderName}_${propName}_${displayName}`;
-        targetGUI?.add(target, propName as any).name(displayName).onChange((value) => { if(onChange !== undefined) onChange(value) }).listen();
+        let controller = targetGUI?.add(target, propName as any).name(displayName).onChange((value) => { if(onChange !== undefined) onChange(value) }).listen();
+        if(!editable && controller)
+        {
+            const input = controller.domElement.querySelector('input');
+            if (input) {
+                input.disabled = true; // makes it non-editable
+            }
+        }
         return message;
     }
 

@@ -3,9 +3,13 @@ import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
 import { CutFillMaterial } from "./SimpleTextureDisplayMaterial";
 import { CutLinePreviewShader } from "./CutLinePreviewShader";
+import { GenericPool } from "./GenericPool";
 
 export class MeshCutter
 {
+    private _vec3Pool = new GenericPool<Vector3>(5, () => { return new Vector3(); });
+    private _vec2Pool = new GenericPool<Vector2>(5, () => { return new Vector2(); });
+
     public cutGeometry(originalMesh: Mesh, cutter: Plane, cutTexture: Texture, fill: boolean = true, placeOriginInCenter: boolean = true)
     {
         let leftMesh = new ProceduralGeometry();
@@ -16,9 +20,9 @@ export class MeshCutter
         let submeshIndices = originalMesh.geometry.index as BufferAttribute;
         for(let index = 0; index < submeshIndices.array.length; index += 3)
         {
-            let indexA = submeshIndices.array.at(index) as number;
-            let indexB = submeshIndices.array.at(index + 1) as number;
-            let indexC = submeshIndices.array.at(index + 2) as number;
+            let indexA = submeshIndices.array[index];
+            let indexB = submeshIndices.array[index + 1];
+            let indexC = submeshIndices.array[index + 2];
 
             let currentTriangle = this.getTriangle(indexA, indexB, indexC, originalMesh);
             let groupIndexA = this.getGroupIndex(indexA, originalMesh);
@@ -49,6 +53,16 @@ export class MeshCutter
             {
                 this.cutTriangle(cutter, currentTriangle, groupIndex, [isALeftSide, isBLeftSide, isCLeftSide], leftMesh, rightMesh, loopCuts);
             }
+
+            this._vec3Pool.release(currentTriangle.vert1.pos);
+            this._vec3Pool.release(currentTriangle.vert1.normal);
+            this._vec2Pool.release(currentTriangle.vert1.uv);
+            this._vec3Pool.release(currentTriangle.vert2.pos);
+            this._vec3Pool.release(currentTriangle.vert2.normal);
+            this._vec2Pool.release(currentTriangle.vert2.uv);
+            this._vec3Pool.release(currentTriangle.vert3.pos);
+            this._vec3Pool.release(currentTriangle.vert3.normal);
+            this._vec2Pool.release(currentTriangle.vert3.uv);
         }
 
         if(fill && loopCuts.length > 0)
@@ -120,13 +134,13 @@ export class MeshCutter
 
         let intersectPoint1: SimpleVertex = {
             pos: lineIntersection1!.point,
-            normal: singleVertex.normal.clone().lerp(sideWithTwoVertices[0].normal, lineIntersection1!.lerpFactor),
-            uv: singleVertex.uv.clone().lerp(sideWithTwoVertices[0].uv, lineIntersection1!.lerpFactor)
+            normal: this._vec3Pool.reserve().copy(singleVertex.normal).lerp(sideWithTwoVertices[0].normal, lineIntersection1!.lerpFactor),
+            uv: this._vec2Pool.reserve().copy(singleVertex.uv).lerp(sideWithTwoVertices[0].uv, lineIntersection1!.lerpFactor)
         }
         let intersectPoint2: SimpleVertex = {
             pos: lineIntersection2!.point,
-            normal: singleVertex.normal.clone().lerp(sideWithTwoVertices[1].normal, lineIntersection2!.lerpFactor),
-            uv: singleVertex.uv.clone().lerp(sideWithTwoVertices[1].uv, lineIntersection2!.lerpFactor)
+            normal: this._vec3Pool.reserve().copy(singleVertex.normal).lerp(sideWithTwoVertices[1].normal, lineIntersection2!.lerpFactor),
+            uv: this._vec2Pool.reserve().copy(singleVertex.uv).lerp(sideWithTwoVertices[1].uv, lineIntersection2!.lerpFactor)
         }
 
         //Make triangle A, D, E
@@ -152,6 +166,7 @@ export class MeshCutter
         this.fixTriangleWindingOrder(newTriangle1, originalTriangleNormal);
         this.fixTriangleWindingOrder(newTriangle2, originalTriangleNormal);
         this.fixTriangleWindingOrder(newTriangle3, originalTriangleNormal);
+        this._vec3Pool.release(originalTriangleNormal);
 
         if(isLeftSideWithOneVertex)
         {
@@ -196,14 +211,19 @@ export class MeshCutter
                 loopCutVertices.splice(foundIndices[discardLoopCutIndex], 1);
             }
         }
+        
+        this._vec3Pool.release(intersectPoint1.normal);
+        this._vec2Pool.release(intersectPoint1.uv);
+        this._vec3Pool.release(intersectPoint2.normal);
+        this._vec2Pool.release(intersectPoint2.uv);
     }
 
     private extractVertex3(vertex: Vector3, index: number, vertexArray: BufferAttribute | InterleavedBufferAttribute, originalMesh: Mesh, convertToWorld: boolean): Vector3
     {
        vertex.set(
-            vertexArray.array.at(index * 3) as number,
-            vertexArray.array.at(index * 3 + 1) as number,
-            vertexArray.array.at(index * 3 + 2) as number
+            vertexArray.array[index * 3],
+            vertexArray.array[index * 3 + 1],
+            vertexArray.array[index * 3 + 2]
         );
         if(convertToWorld)
             vertex = originalMesh.localToWorld(vertex);
@@ -212,8 +232,8 @@ export class MeshCutter
     private extractVertex2(vertex: Vector2, index: number, vertexArray: BufferAttribute | InterleavedBufferAttribute): Vector2
     {
        vertex.set(
-            vertexArray.array.at(index * 2) as number,
-            vertexArray.array.at(index * 2 + 1) as number
+            vertexArray.array[index * 2],
+            vertexArray.array[index * 2 + 1]
         );
         return vertex;
     }
@@ -226,19 +246,19 @@ export class MeshCutter
 
         let triangle: SimpleTriangle = {
             vert1: {
-                pos: this.extractVertex3(new Vector3(), indexA, meshVertices, originalMesh, true),
-                normal: this.extractVertex3(new Vector3(), indexA, meshNormals, originalMesh, false),
-                uv: this.extractVertex2(new Vector2(), indexA, meshUVs)
+                pos: this.extractVertex3(this._vec3Pool.reserve(), indexA, meshVertices, originalMesh, true),
+                normal: this.extractVertex3(this._vec3Pool.reserve(), indexA, meshNormals, originalMesh, false),
+                uv: this.extractVertex2(this._vec2Pool.reserve(), indexA, meshUVs)
             },
             vert2: {
-                pos: this.extractVertex3(new Vector3(), indexB, meshVertices, originalMesh, true),
-                normal: this.extractVertex3(new Vector3(), indexB, meshNormals, originalMesh, false),
-                uv: this.extractVertex2(new Vector2(), indexB, meshUVs)
+                pos: this.extractVertex3(this._vec3Pool.reserve(), indexB, meshVertices, originalMesh, true),
+                normal: this.extractVertex3(this._vec3Pool.reserve(), indexB, meshNormals, originalMesh, false),
+                uv: this.extractVertex2(this._vec2Pool.reserve(), indexB, meshUVs)
             },
             vert3: {
-                pos: this.extractVertex3(new Vector3(), indexC, meshVertices, originalMesh, true),
-                normal: this.extractVertex3(new Vector3(), indexC, meshNormals, originalMesh, false),
-                uv: this.extractVertex2(new Vector2(), indexC, meshUVs)
+                pos: this.extractVertex3(this._vec3Pool.reserve(), indexC, meshVertices, originalMesh, true),
+                normal: this.extractVertex3(this._vec3Pool.reserve(), indexC, meshNormals, originalMesh, false),
+                uv: this.extractVertex2(this._vec2Pool.reserve(), indexC, meshUVs)
             },
         }
         return triangle;
@@ -246,21 +266,24 @@ export class MeshCutter
 
     private getPlaneSide(plane: Plane, vertex: Vector3): boolean
     {
-        return (plane.normal.x * vertex.x + plane.normal.y * vertex.y + plane.normal.z * vertex.z + plane.constant) < 0.0001;
+        return plane.distanceToPoint(vertex) < 0.0001;
     }
 
     private getLineIntersection(plane: Plane, point1: Vector3, point2: Vector3)
     {
-        let dir = point2.clone().sub(point1).normalize();
-        let nDotDir = plane.normal.dot(dir);
+        let aux = this._vec3Pool.reserve().subVectors(point2, point1).normalize();
+        let nDotDir = plane.normal.dot(aux);
         if (Math.abs(nDotDir) < 1e-6)
             return null;
 
         let nDotA = plane.normal.dot(point1);
         let distance = -(plane.constant + nDotA) / nDotDir;
 
+        let point = this._vec3Pool.reserve().copy(point1).add(aux.multiplyScalar(distance));
+        this._vec3Pool.release(aux);
+
         return {
-            point: point1.clone().add(dir.multiplyScalar(distance)),
+            point: point,
             distance: distance,
             lerpFactor: Math.abs(distance / point1.distanceTo(point2))
         }
@@ -268,9 +291,12 @@ export class MeshCutter
 
     private computeTriangleNormal(triangle: SimpleTriangle) 
     {
-        let edge1 = triangle.vert2.pos.clone().sub(triangle.vert1.pos);
-        let edge2 = triangle.vert3.pos.clone().sub(triangle.vert1.pos);
-        return edge1.cross(edge2).normalize();
+        let vec1 = this._vec3Pool.reserve().copy(triangle.vert2.pos).sub(triangle.vert1.pos);
+        let vec2 = this._vec3Pool.reserve().copy(triangle.vert3.pos).sub(triangle.vert1.pos);
+        
+        vec1.cross(vec2).normalize();
+        this._vec3Pool.release(vec2);
+        return vec1;
     }
 
     private fixTriangleWindingOrder(triangle: SimpleTriangle, originalTriangleNormal: Vector3)
@@ -282,11 +308,12 @@ export class MeshCutter
             triangle.vert2 = triangle.vert3;
             triangle.vert3 = aux;
         }
+        this._vec3Pool.release(norm);
     }
     
     private fillGeometry(leftMesh: ProceduralGeometry, rightMesh: ProceduralGeometry, loopCuts: Edge[][], cutter: Plane) 
     {
-        let center = new Vector3();
+        let center = this._vec3Pool.reserve();
         let newGroupIDLeft = leftMesh.getNumOfGroups();
         let newGroupIDRight = rightMesh.getNumOfGroups();
 
@@ -300,7 +327,7 @@ export class MeshCutter
             center.divideScalar(loopCuts[cutIndex].length * 2);
             for(let index = 0; index < loopCuts[cutIndex].length; ++index)
             {
-                let vertNorm = cutter.normal.clone();
+                let vertNorm = this._vec3Pool.reserve().copy(cutter.normal);
                 let triangle: SimpleTriangle = {
                     vert1: {
                         pos: loopCuts[cutIndex][index].pos1,
@@ -315,7 +342,7 @@ export class MeshCutter
                     vert3: {
                         pos: center.clone(),
                         normal: vertNorm,
-                        uv: new Vector2(0.5, 0.5)
+                        uv: this._vec2Pool.reserve().set(0.5, 0.5)
                     }
                 }
 
@@ -326,10 +353,23 @@ export class MeshCutter
                 triangle.vert1.normal.copy(vertNorm);
                 triangle.vert2.normal.copy(vertNorm);
                 triangle.vert3.normal.copy(vertNorm);
-                this.fixTriangleWindingOrder(triangle, cutter.normal.clone().multiplyScalar(-1));
+
+                let inverseCutterNorm = this._vec3Pool.reserve().copy(cutter.normal).multiplyScalar(-1);
+                this.fixTriangleWindingOrder(triangle, inverseCutterNorm);
                 rightMesh.addTriangle(newGroupIDRight, triangle);
+                
+                this._vec3Pool.release(loopCuts[cutIndex][index].pos1);
+                this._vec3Pool.release(loopCuts[cutIndex][index].pos2);
+                this._vec3Pool.release(vertNorm);
+                this._vec3Pool.release(inverseCutterNorm);
+                
+                this._vec2Pool.release(triangle.vert1.uv);
+                this._vec2Pool.release(triangle.vert2.uv);
+                this._vec2Pool.release(triangle.vert3.uv);
             }
         }
+
+        this._vec3Pool.release(center);
     }
 
     private vec3Equal(vec1: Vector3, vec2: Vector3, threshold = 0.00001)
@@ -339,18 +379,23 @@ export class MeshCutter
 
     private vertexToPolarUV(position: Vector3, center: Vector3, normal: Vector3)
     {
-        let tangent = new Vector3(1, 0, 0);
+        let tangent = this._vec3Pool.reserve().set(1, 0, 0);
         if (Math.abs(tangent.dot(normal)) > 0.99)
             tangent.set(0, 1, 0);
         tangent.cross(normal).normalize();
-        let bitangent = normal.clone().cross(tangent);
-        let dir = position.clone().sub(center);
-        let uvPlanar = new Vector2(dir.dot(tangent), dir.dot(bitangent));
+        let bitangent = this._vec3Pool.reserve().copy(normal).cross(tangent);
+        let dir = this._vec3Pool.reserve().copy(position).sub(center);
+        let uvPlanar = this._vec2Pool.reserve().set(dir.dot(tangent), dir.dot(bitangent));
         let angle = Math.atan2(uvPlanar.y, uvPlanar.x);
-        return new Vector2(0.5 + Math.cos(angle) * 0.5, 0.5 + Math.sin(angle) * 0.5);
+
+        this._vec3Pool.release(bitangent);
+        this._vec3Pool.release(dir);
+        this._vec3Pool.release(tangent);
+        this._vec2Pool.release(uvPlanar);
+        return this._vec2Pool.reserve().set(0.5 + Math.cos(angle) * 0.5, 0.5 + Math.sin(angle) * 0.5);
     }
 
-    public getGroupIndex(vertIndex: number, mesh: Mesh)
+    private getGroupIndex(vertIndex: number, mesh: Mesh)
     {
         for(let index = 0; index < mesh.geometry.groups.length; ++index)
         {
