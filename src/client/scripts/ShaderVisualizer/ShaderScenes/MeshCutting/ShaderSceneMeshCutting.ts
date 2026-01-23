@@ -2,7 +2,7 @@ import { AmbientLight, Box3, Color, DirectionalLight, Group, Material, MathUtils
 import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
-import { CutLinePreviewShader } from "./CutLinePreviewShader";
+import { CutLinePreviewShader } from "./Materials/CutLinePreviewShader";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
 
 declare type CutGroup = {
@@ -140,6 +140,11 @@ export class ShaderSceneMeshCutting
             this._scene.remove(this._sceneBaseModel);
             this.disposeObject(this._sceneBaseModel);
         }
+
+        let guiHtml = this._debugUI.getGUIClass()!.domElement;
+        let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
+        guiParent.removeChild(guiHtml);
+        guiParent.removeChild(this._artistCredits);
     }
 
     public getScene() { return this._scene; }

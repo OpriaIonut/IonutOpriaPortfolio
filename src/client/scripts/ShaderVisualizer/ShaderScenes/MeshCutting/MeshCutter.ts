@@ -1,9 +1,9 @@
 import { BufferAttribute, Color, InterleavedBufferAttribute, Material, Mesh, MeshStandardMaterial, Plane, Texture, Vector2, Vector3 } from "three";
 import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
-import { CutFillMaterial } from "./SimpleTextureDisplayMaterial";
-import { CutLinePreviewShader } from "./CutLinePreviewShader";
-import { GenericPool } from "./GenericPool";
+import { CutFillMaterial } from "./Materials/CutFillMaterial";
+import { CutLinePreviewShader } from "./Materials/CutLinePreviewShader";
+import { GenericPool } from "../../../Helper/GenericPool";
 
 export class MeshCutter
 {

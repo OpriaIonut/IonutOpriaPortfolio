@@ -1,15 +1,12 @@
-import { Scene } from "three";
 import { IShaderScene } from "./ShaderScenes/IShaderScene";
 import { getGPUTier } from "detect-gpu";
 import { ShaderVisualizerCamera } from "./ShaderVisualizerCamera";
-import { ShaderSceneTest } from "./ShaderScenes/ShaderSceneTest";
 import { ShaderInspectorData } from "../../types";
 import { codePrettyPrinter } from "../../client";
 import { ShaderSceneMeshCutting } from "./ShaderScenes/MeshCutting/ShaderSceneMeshCutting";
 
 export enum ShaderSceneType
 {
-    Test,
     MeshCutting,
     ProceduralSnow
 }
@@ -187,7 +184,6 @@ export class ShaderVisualizer
     {
         switch(scene)
         {
-            case ShaderSceneType.Test: return new ShaderSceneTest();
             case ShaderSceneType.MeshCutting: return new ShaderSceneMeshCutting();
             default: undefined;
         }
