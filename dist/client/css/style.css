@@ -98,6 +98,21 @@ body
     background-color: var(--secondary-color);
 }
 
+.cellWithPreviewTitle
+{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: aliceblue;
+    border-radius: 5vw 5vw 0vw 0vw;
+    color: var(--secondary-color);
+    font-size: 1.0vw;
+    padding-top: 0.25vw;
+    padding-bottom: 0.25vw;
+    font-weight: bold;
+}
+
 .clickMeTag
 {
     position: absolute;

@@ -4,7 +4,7 @@ export class CellWithPreview
 {
     private _preview: HTMLImageElement;
 
-    constructor(parentNode: HTMLElement, cellsPerWidth: number, modelName: string, imagePath: string, onClick: (projectName: string, progressBar: HTMLDivElement) => void)
+    constructor(parentNode: HTMLElement, title: string, cellsPerWidth: number, modelName: string, imagePath: string, onClick: (projectName: string, progressBar: HTMLDivElement) => void)
     {
         let baseWidthForCalc = 75;
         if(window.innerWidth / window.innerHeight > 2.5 / 1.0)
@@ -31,12 +31,31 @@ export class CellWithPreview
         progressBar.className = "cellWithPreviewProgressBar";
         cellParent.appendChild(progressBar);
 
+        let titleBox: HTMLDivElement | undefined;
+        if(title != "")
+        {
+            titleBox = document.createElement("div");
+            titleBox.className = "cellWithPreviewTitle";
+            titleBox.innerHTML = title;
+            cellParent.appendChild(titleBox);
+        }
+
         cellParent.addEventListener('mouseenter', () => {
             cellParent.style.cursor = 'pointer';
+            if(titleBox)
+            {
+                titleBox.style.backgroundColor = "var(--secondary-color)";
+                titleBox.style.color = "aliceblue";
+            }
         });
 
         cellParent.addEventListener('mouseleave', () => {
             cellParent.style.cursor = 'default';
+            if(titleBox)
+            {
+                titleBox.style.backgroundColor = "aliceblue";
+                titleBox.style.color = "var(--secondary-color)";
+            }
         });
 
         cellParent.onclick = () => {

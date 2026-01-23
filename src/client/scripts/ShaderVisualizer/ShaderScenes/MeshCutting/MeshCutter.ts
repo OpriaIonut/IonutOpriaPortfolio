@@ -7,9 +7,11 @@ import { GenericPool } from "./GenericPool";
 
 export class MeshCutter
 {
-    private _vec3Pool = new GenericPool<Vector3>(5, () => { return new Vector3(); });
-    private _vec2Pool = new GenericPool<Vector2>(5, () => { return new Vector2(); });
+    //Pulls of reutilizable objects to reduce allocations
+    private _vec3Pool = new GenericPool<Vector3>(10, () => { return new Vector3(); });
+    private _vec2Pool = new GenericPool<Vector2>(10, () => { return new Vector2(); });
 
+    //Main function which cuts a geometry into 2 parts based on a cut plane
     public cutGeometry(originalMesh: Mesh, cutter: Plane, cutTexture: Texture, fill: boolean = true, placeOriginInCenter: boolean = true)
     {
         let leftMesh = new ProceduralGeometry();

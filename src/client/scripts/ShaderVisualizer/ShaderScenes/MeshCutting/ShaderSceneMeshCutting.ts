@@ -1,10 +1,9 @@
-import { AmbientLight, Box3, BoxGeometry, Color, DirectionalLight, Group, Material, MathUtils, Mesh, MeshStandardMaterial, Object3D, Plane, PlaneHelper, Scene, ShaderMaterial, SkinnedMesh, Texture, TextureLoader, TorusKnotGeometry, Vector3 } from "three";
+import { AmbientLight, Box3, Color, DirectionalLight, Group, Material, MathUtils, Mesh, MeshStandardMaterial, Object3D, Plane, Scene, ShaderMaterial, SkinnedMesh, Texture, TextureLoader, TorusKnotGeometry, Vector3 } from "three";
 import { MeshCutter } from "./MeshCutter";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { ObjectLoader } from "../../../ThreeVisualizer/ObjectLoader";
 import { CutLinePreviewShader } from "./CutLinePreviewShader";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
-import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 
 declare type CutGroup = {
     group: Group,
@@ -33,7 +32,6 @@ export class ShaderSceneMeshCutting
     private _textureLoader!: TextureLoader;
     private _debugUI!: DebugUI;
 
-    private _currentFillTexture: string = "";
     private _loadedFillTextures: Map<string, Texture> = new Map();
 
     private _artistCredits!: HTMLDivElement;
@@ -126,7 +124,22 @@ export class ShaderSceneMeshCutting
 
     public hide()
     {
+        for(let index = 0; index < this._cutMeshes.length; ++index)
+        {
+            this._scene.remove(this._cutMeshes[index].group);
+            this._cutMeshes[index].group.traverse((obj) => {
+                this.disposeObject(obj);
+            });
+        }
+        this._cutMeshes = [];
+        this._meshesToCut = [];
+        this._isMeshCut = false;
 
+        if(this._sceneBaseModel)
+        {
+            this._scene.remove(this._sceneBaseModel);
+            this.disposeObject(this._sceneBaseModel);
+        }
     }
 
     public getScene() { return this._scene; }
@@ -170,9 +183,7 @@ export class ShaderSceneMeshCutting
         for(let index = 0; index < this._cutMeshes.length; ++index)
         {
             this._scene.remove(this._cutMeshes[index].group);
-            this._cutMeshes[index].group.traverse((obj) => {
-                this.disposeObject(obj);
-            });
+            this.disposeObject(this._cutMeshes[index].group);
         }
         this._cutMeshes = [];
         this._scene.add(this._sceneBaseModel!);
