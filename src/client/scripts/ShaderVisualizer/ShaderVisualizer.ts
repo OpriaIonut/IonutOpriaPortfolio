@@ -56,6 +56,7 @@ export class ShaderVisualizer
             this._cameraManager.scene.remove(this._currentScene.getScene());
             this._currentScene = undefined;
         }
+        this._cameraManager.resetCamera();
         this._panel.style.display = "none";
         this._codePanelParent.style.display = "none";
         this.updateCodeActivationBtnStyle();

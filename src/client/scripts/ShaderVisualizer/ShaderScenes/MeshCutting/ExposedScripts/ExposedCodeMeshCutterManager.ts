@@ -1,3 +1,4 @@
+export const exposedCodeMeshCutterManager = `
 import { Group, Vector3, Plane, Mesh, MathUtils, Object3D, Scene, Material, Box3, ShaderMaterial, Color, SkinnedMesh, MeshStandardMaterial } from "three";
 import { CutLinePreviewShader } from "../Materials/CutLinePreviewShader";
 import { MeshCutter } from "../MeshCutter";
@@ -11,7 +12,7 @@ declare type CutGroup =
     expandDir: Vector3
 }
 
-export class MeshCutterLogic
+export class MeshCutterManager
 {
     private _scene: Scene;
     private _meshCutter = new MeshCutter(); //Script that contains all of our cutting logic
@@ -359,3 +360,4 @@ export class MeshCutterLogic
         return results;
     }
 }
+`;

@@ -1,3 +1,4 @@
+export const exposedCodeMeshCutter = `
 import { BufferAttribute, Color, InterleavedBufferAttribute, Material, Mesh, MeshStandardMaterial, Plane, Texture, Vector2, Vector3 } from "three";
 import { ProceduralGeometry } from "./ProceduralGeometry";
 import { Edge, SimpleTriangle, SimpleVertex } from "../../../../types";
@@ -475,3 +476,4 @@ export class MeshCutter
         return newMaterials;
     }
 }
+`;

@@ -31,8 +31,11 @@
     white-space: pre-wrap;
     font-size: 0.75vw;
     font-family: "Roboto";
+    color: rgb(225, 225, 225);
+    padding-left: 1.0vw;
+    box-sizing: border-box;
 
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 #codePanelInspector > span
