@@ -1,12 +1,13 @@
 import { Color } from "three";
 import { DebugUI } from "../../../../ThreeVisualizer/DebugGUI";
 
+//Utility script to handle ui-management for the mesh cutting experiment
 export class MeshCutterUIManager
 {
     private _debugUI: DebugUI;
     private _artistCredits: HTMLDivElement;
 
-    //Callbacks
+    //Callbacks for all events that can be created by player input
     private _cutCallbacks: (() => void)[] = [];
     private _resetCallbacks: (() => void)[] = [];
     private _randomizeCutsCallbacks: (() => void)[] = [];
@@ -19,12 +20,13 @@ export class MeshCutterUIManager
     private _fillTextureChangedCallbacks: (() => void)[] = [];
     private _fillColorChangedCallbacks: (() => void)[] = [];
 
-    //Arrays which hold the possible values that we can have in our dropdowns
+    //Arrays which holds the possible values that we can have in our dropdowns
     private _availableMeshNames = ["Torus Knot", "Heart", "Mecha Girl", "God Eater Sword", "City"];
     private _availableCutModeNames = ["Horizontal", "Vertical", "Depth", "Grid", "Random"];
     private _availableFillTypeNames = ["No Fill", "Color Fill", "Texture Fill"];
     private _availableTextureNames = ["Orange", "Watermelon", "Rock", "Wood", "Lava", "Blood", "Blood Veins"];
 
+    //Object that holds all settings that can be found in the ui
     private _debugUISettings = {
         numOfPlanes: 5,
         expandRadius: 0.0,
@@ -42,8 +44,10 @@ export class MeshCutterUIManager
 
     constructor()
     {
+        //Create the ui
         this._debugUI = new DebugUI();
 
+        //Add the ui to the screen and position it on the top-right
         let guiHtml = this._debugUI.getGUIClass()!.domElement;
         let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
         guiParent.appendChild(guiHtml);
@@ -51,12 +55,14 @@ export class MeshCutterUIManager
         guiHtml.style.left = "0px";
         guiHtml.style.top = "0px";
 
+        //Create a div that can be used to credit artists for their work (for meshes taken from the internet)
         this._artistCredits = document.createElement("div");
         this._artistCredits.id = "artistCredits";
         this._artistCredits.style.display = "none";
         this._artistCredits.innerHTML = "Please credit <a href='https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324'>SpatialNeglect</a> for the 3D model";
         guiParent.appendChild(this._artistCredits);
 
+        //Bind functions to work properly in callbacks
         this.onMeshChanged = this.onMeshChanged.bind(this);
         this.onNumOfCutsChanged = this.onNumOfCutsChanged.bind(this);
         this.onCutModeChanged = this.onCutModeChanged.bind(this);
@@ -65,6 +71,7 @@ export class MeshCutterUIManager
         this.onFillTextureChanged = this.onFillTextureChanged.bind(this);
     }
 
+    //Called when we hide the experiment, resets the ui to it's default state
     public reset()
     {
         let guiHtml = this._debugUI.getGUIClass()!.domElement;
@@ -100,6 +107,7 @@ export class MeshCutterUIManager
     public setArtistCreditsName(name: string) { this._artistCredits.innerHTML = name; }
 
     //---------------------------UI Menu
+    //Cut menu is the menu that you see by default (before the mesh is cut)
     public displayCutMenu() 
     {
         this._debugUI.reset();
@@ -107,12 +115,14 @@ export class MeshCutterUIManager
         this._debugUI.addDropdown("", this._debugUISettings, "currentMesh", this._availableMeshNames, "Mesh", this.onMeshChanged);
         this._debugUI.addDropdown("", this._debugUISettings, "cutMode", this._availableCutModeNames, "Cut Mode", this.onCutModeChanged);
 
+        //Based on the cut mode and the meshes selected, limit how many planes we can have
         let maxCutPlanes = this._debugUISettings.cutMode == "Grid" ? 5 : 10;
         if (this._debugUISettings.currentMesh == "City")
             maxCutPlanes = this._debugUISettings.cutMode == "Grid" ? 3 : 6;
 
         if (this._debugUISettings.numOfPlanes > maxCutPlanes)
             this._debugUISettings.numOfPlanes = maxCutPlanes;
+
         this._debugUI.addSlider("", this._debugUISettings, "numOfPlanes", 1, maxCutPlanes, "Number of Cuts", this.onNumOfCutsChanged);
         if (this._debugUISettings.cutMode == "Random")
             this._debugUI.addButton("", this._debugUISettings, "randomizeCuts", "Randomize Cuts");
@@ -120,6 +130,7 @@ export class MeshCutterUIManager
         this._debugUI.addButton("", this._debugUISettings, "cut", "Cut");
     }
 
+    //Reset menu is the menu that you see after you cut a mesh
     public displayResetMenu() 
     {
         this._debugUI.reset();

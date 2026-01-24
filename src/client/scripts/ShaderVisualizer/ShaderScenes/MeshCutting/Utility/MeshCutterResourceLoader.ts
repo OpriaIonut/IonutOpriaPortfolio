@@ -1,81 +1,60 @@
-import { Material, Mesh, MeshStandardMaterial, Object3D, SkinnedMesh, Texture, TextureLoader, TorusKnotGeometry, Vector3 } from "three";
-import { CutLinePreviewShader } from "../Materials/CutLinePreviewShader";
+import { Mesh, MeshStandardMaterial, Object3D, Texture, TextureLoader, TorusKnotGeometry } from "three";
 import { ObjectLoader } from "../../../../ThreeVisualizer/ObjectLoader";
-import { MeshCutterLogic } from "./MeshCutterLogic";
 
+//Utility script to handle object loading and caching of it
 export class MeshCutterResourceLoader
 {
-    private _objectLoader!: ObjectLoader;
+    private _objectLoader!: ObjectLoader; //ObjectLoaded already caches meshes, so we don't need to do the same on our side
     private _textureLoader!: TextureLoader;
     
+    //Maps that are used to cache load results (to not load same assets over the network multiple times)
     private _loadedFillTextures: Map<string, Texture> = new Map();
-    private _cutData: MeshCutterLogic;
 
-    constructor(sceneData: MeshCutterLogic)
+    constructor()
     {
         this._objectLoader = new ObjectLoader();
         this._textureLoader = new TextureLoader();
-        this._cutData = sceneData;
     }
 
-    public isTextureLoaded(texName: string)
-    {
-        return this._loadedFillTextures.has(texName);
-    }
+    public getTexture(texName: string) { return this._loadedFillTextures.get(texName); }
 
-    public getTexture(texName: string)
-    {
-        return this._loadedFillTextures.get(texName);
-    }
-
+    //Load texture or retrieve it from the cache
     public loadTexture(texName: string, onTextureLoaded: (tex: Texture) => void)
     {
         let texPath = this.getPathFromFillTexture(texName);
-        this._textureLoader.load(texPath, (texture: Texture) => {
-            this._loadedFillTextures.set(texName, texture);
-            onTextureLoaded(texture);
-        });
+        if(this._loadedFillTextures.has(texName))
+            onTextureLoaded(this._loadedFillTextures.get(texName)!);
+        else
+        {
+            this._textureLoader.load(texPath, (texture: Texture) => {
+                this._loadedFillTextures.set(texName, texture);
+                onTextureLoaded(texture);
+            });
+        }
     }
 
+    //Pure meshes will contain only meshes from the loaded objects (it can have other things, such as lights, camera, groups, empty transforms, etc.)
     public loadMesh(meshName: string, onModelLoaded: (parent: Object3D, pureMeshes: Mesh[]) => void)
     {
         let results: Mesh[] = [];
 
+        //If it is a geometry that we can create with three.js, create it instantly
         if (meshName == "Torus Knot")
         {
-            let mesh = new Mesh(new TorusKnotGeometry(1, 0.4, 256, 32), new CutLinePreviewShader({
-                u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
-                u_LineThickness: { value: 0.01 },
-                u_CutPlaneNormals: { value: this._cutData.getCutPlaneNormals() },
-                u_CutPlanePoints: { value: this._cutData.getCutPlanePoints() },
-                u_NumOfCutPlanes: { value: 0 }
-            }));
+            let mesh = new Mesh(new TorusKnotGeometry(1, 0.4, 256, 32), new MeshStandardMaterial());
             results.push(mesh);
             onModelLoaded(mesh, results);
         }
-        else {
+        else
+        {
+            //Otherwise, we need to load it from the given path
             let path = this.getPathFromModel(meshName);
             this._objectLoader.loadModel(path, (obj) => {
                 obj.model.traverse((item) => {
-                    let mesh = item as Mesh;
-                    if (mesh != undefined && mesh != null && mesh.geometry != undefined) {
-                        let newMat = new CutLinePreviewShader({
-                            u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
-                            u_LineThickness: { value: 0.01 },
-                            u_CutPlaneNormals: { value: this._cutData.getCutPlaneNormals() },
-                            u_CutPlanePoints: { value: this._cutData.getCutPlanePoints() },
-                            u_NumOfCutPlanes: { value: 0 }
-                        });
-                        if(mesh.material instanceof MeshStandardMaterial)
-                            newMat.copy(mesh.material as Material);
-                        mesh.material = newMat;
+                    if (item instanceof Mesh)
+                    {
+                        let mesh = item as Mesh;
                         results.push(mesh);
-
-                        if(item instanceof SkinnedMesh)
-                        {
-                            item.skeleton.pose();
-                            item.updateMatrixWorld(true);
-                        }
                     }
                 });
                 onModelLoaded(obj.model, results);
@@ -83,6 +62,7 @@ export class MeshCutterResourceLoader
         }
     }
 
+    //Utility function to get a path from a mesh name
     private getPathFromModel(modelName: string)
     {
         switch (modelName)
@@ -99,6 +79,7 @@ export class MeshCutterResourceLoader
         return "";
     }
 
+    //Utility function to get a path from a texture name
     private getPathFromFillTexture(textureName: string)
     {
         switch (textureName)

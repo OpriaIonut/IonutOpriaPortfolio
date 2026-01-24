@@ -3,6 +3,8 @@ import { ShaderVisualizer } from "../../ShaderVisualizer";
 import { MeshCutterUIManager } from "./Utility/MeshCutterUIManager";
 import { MeshCutterLogic } from "./Utility/MeshCutterLogic";
 
+//Demo scene with the mesh cutting project
+//Handles high-level management of the scene and it's components
 export class ShaderSceneMeshCutting
 {
     private _scene: Scene = new Scene();
@@ -15,6 +17,7 @@ export class ShaderSceneMeshCutting
     {
         this._visualizer = visualizer;
 
+        //Set up lights in the scene
         let ambientLight = new AmbientLight(0xffffff, 0.25);
         this._scene.add(ambientLight);
         
@@ -22,9 +25,11 @@ export class ShaderSceneMeshCutting
         directionalLight.position.set(10.0, 10.0, 5.0);
         this._scene.add(directionalLight);
 
+        //Create logic scripts
         this._uiManager = new MeshCutterUIManager();
         this._cutLogic = new MeshCutterLogic(this._scene);
 
+        //Subscribe to needed events
         this._uiManager.subscribe_OnCutClicked(() => { this.runCuttingAlgoritm(); });
         this._uiManager.subscribe_OnResetClicked(() => { this.resetState(); });
         this._uiManager.subscribe_OnRandomizeCutsClicked(() => { this._cutLogic.updateCutPlanes(this._uiManager.getNumOfCutPlanes(), this._uiManager.getCutMode()); });
@@ -37,6 +42,7 @@ export class ShaderSceneMeshCutting
         this._uiManager.subscribe_OnFillColorChanged(() => { this._cutLogic.updateCutMeshesMaterial(this._uiManager.getFillType(), this._uiManager.getCurrentTextureName(), this._uiManager.getFillColor()); } );
         this._uiManager.subscribe_OnFillTextureChanged(() => { this.onFillTextureChanged(); });
 
+        //Activate base state of the scene
         this._uiManager.displayCutMenu();
         this.onFillTextureChanged();
         this.onMeshChanged();
@@ -47,16 +53,17 @@ export class ShaderSceneMeshCutting
 
     }
 
+    //Called when you deactivate the view, dispose & reset everything
     public hide()
     {
         this._cutLogic.reset(true);
         this._cutLogic.disposeBaseModel();
         this._uiManager.reset(); //Events will also unsubscribe here
-        console.log(this._scene);
     }
 
     public getScene() { return this._scene; }
 
+    //Called when you click "reset" on the ui
     private resetState()
     {
         this._cutLogic.reset(false);
@@ -64,6 +71,7 @@ export class ShaderSceneMeshCutting
         this._uiManager.displayCutMenu();
     }
 
+    //Called when you click "cut" on the ui, will cut the geometry and display a different menu
     public runCuttingAlgoritm()
     {
         const start = performance.now();
@@ -75,18 +83,21 @@ export class ShaderSceneMeshCutting
         this._uiManager.displayResetMenu();
     }
 
+    //Called when you change the "expand" radius slider after the mesh is cut
     private onExpandRadiusChanged()
     {
         let expandRadius = this._uiManager.getExpandRadius();
         this._cutLogic.expandCutMeshes(expandRadius);
     }
 
+    //Called when you change the texture selected
     private onFillTextureChanged()
     {
         let textureName = this._uiManager.getCurrentTextureName();
         this._cutLogic.updateFillTexture(textureName, this._uiManager.getFillType(), this._uiManager.getCurrentTextureName(), this._uiManager.getFillColor());
     }
 
+    //Called when you change the mesh selected
     private onMeshChanged()
     {
         this._cutLogic.disposeBaseModel();

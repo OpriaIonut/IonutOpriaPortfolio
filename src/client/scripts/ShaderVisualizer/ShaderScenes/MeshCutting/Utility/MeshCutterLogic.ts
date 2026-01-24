@@ -1,8 +1,9 @@
-import { Group, Vector3, Plane, Mesh, MathUtils, Object3D, Scene, Material, Box3, ShaderMaterial, Color } from "three";
+import { Group, Vector3, Plane, Mesh, MathUtils, Object3D, Scene, Material, Box3, ShaderMaterial, Color, SkinnedMesh, MeshStandardMaterial } from "three";
 import { CutLinePreviewShader } from "../Materials/CutLinePreviewShader";
 import { MeshCutter } from "../MeshCutter";
 import { MeshCutterResourceLoader } from "./MeshCutterResourceLoader";
 
+//For cut meshes we group them on the sides of the planes they are. This makes expanding objects easier
 declare type CutGroup =
 {
     group: Group,
@@ -13,15 +14,17 @@ declare type CutGroup =
 export class MeshCutterLogic
 {
     private _scene: Scene;
-    private _meshCutter = new MeshCutter();
-    private _resourceLoader!: MeshCutterResourceLoader;
+    private _meshCutter = new MeshCutter(); //Script that contains all of our cutting logic
+    private _resourceLoader!: MeshCutterResourceLoader; //Utility script to load and cache resources
     
-    private _sceneBaseModel?: Object3D;
-    private _modelBounds: Box3 = new Box3();
-    private _boundsCenter: Vector3 = new Vector3();
+    private _sceneBaseModel?: Object3D; //Model that you see in the scene before cutting it
+    private _modelBounds: Box3 = new Box3(); //Bounding box of the model that you see in the scene
+    private _boundsCenter: Vector3 = new Vector3(); //Center of the bounding box
     
-    private _meshesToCut: Mesh[] = [];
-    private _cutMeshes: CutGroup[] = [];
+    private _meshesToCut: Mesh[] = []; //Meshes that will be cut when you run the cutting algorithm
+    private _generatedCutMeshes: CutGroup[] = []; //Meshes that were generated after running the cut algorithm
+
+    //Plane data used in the cutting logic
     private _cutPlanes: Plane[] = [];
     private _cutPlaneNormals: Vector3[] = [];
     private _cutPlanePoints: Vector3[] = [];
@@ -29,7 +32,7 @@ export class MeshCutterLogic
     constructor(scene: Scene)
     {
         this._scene = scene;
-        this._resourceLoader = new MeshCutterResourceLoader(this);
+        this._resourceLoader = new MeshCutterResourceLoader();
         for (let index = 0; index < 50; ++index) // Needs to match max planes in the shader
         {
             this._cutPlaneNormals.push(new Vector3());
@@ -37,30 +40,28 @@ export class MeshCutterLogic
         }
     }
 
+    //Getters and setters
     public getSceneBaseModel() { return this._sceneBaseModel; }
     public getCutPlanes() { return this._cutPlanes; }
     public getCutPlanePoints() { return this._cutPlanePoints; }
     public getCutPlaneNormals() { return this._cutPlaneNormals; }
 
-    public setMeshesToCut(meshes: Mesh[])
-    {
-        this._meshesToCut = meshes;
-    }
-
+    //Dispose of the generated data and reset the current state of the script
     public reset(resetMeshesToCut: boolean)
     {
-        for(let index = 0; index < this._cutMeshes.length; ++index)
+        for(let index = 0; index < this._generatedCutMeshes.length; ++index)
         {
-            this._scene.remove(this._cutMeshes[index].group);
-            this._cutMeshes[index].group.traverse((obj) => {
+            this._scene.remove(this._generatedCutMeshes[index].group);
+            this._generatedCutMeshes[index].group.traverse((obj) => {
                 this.disposeObject(obj);
             });
         }
-        this._cutMeshes = [];
+        this._generatedCutMeshes = [];
         if(resetMeshesToCut)
             this._meshesToCut = [];
     }
 
+    //Utility script to destroy an deallocate all data of the model that you see in the scene
     public disposeBaseModel()
     {
         if(this._sceneBaseModel)
@@ -70,6 +71,7 @@ export class MeshCutterLogic
         }
     }
 
+    //Called when you change the mesh in the scene
     public loadNewMesh(meshName: string, onMeshLoadedCallback: () => void)
     {
         this._resourceLoader.loadMesh(meshName, (parent: Object3D, pureMeshes: Mesh[]) => {
@@ -77,33 +79,43 @@ export class MeshCutterLogic
         });
     }
 
+    //Start cutting the mesh
     public runCuttingAlgoritm(fillTextureName: string)
     {
-        this._cutMeshes.push({
+        //Create a single group that holds all of the meshes that we need to cut
+        this._generatedCutMeshes.push({
             group: new Group(),
             expandDir: new Vector3(),
             referencePos: new Vector3()
         });
-        this._cutMeshes[0].group.position.copy(this._sceneBaseModel!.position);
-        for (let index = 0; index < this._meshesToCut.length; ++index) {
-            this._cutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
+        this._generatedCutMeshes[0].group.position.copy(this._sceneBaseModel!.position);
+        for (let index = 0; index < this._meshesToCut.length; ++index)
+        {
+            this._generatedCutMeshes[0].group.add(this._meshesToCut[index].clone(true)); //Clone to keep original mesh visible
         }
-        for (let index = 0; index < this._cutPlanes.length; ++index) {
-            this._cutMeshes = this.cutMesh(this._cutMeshes, this._cutPlanes[index], fillTextureName);
+        //For each of the cut planes, run the cutting algorithm over all of the meshes
+        //This will generate additional groups (ex: we have a single group, we run the algorithm and this will return 2 groups: a "left" and "right" group)
+        //Grouping helps in expanding objects by slider after the cut
+        for (let index = 0; index < this._cutPlanes.length; ++index)
+        {
+            this._generatedCutMeshes = this.cutMesh(this._generatedCutMeshes, this._cutPlanes[index], fillTextureName);
         }
 
-        for (let index = 0; index < this._cutMeshes.length; ++index) {
-            this._cutMeshes[index].referencePos.copy(this._cutMeshes[index].group.position);
-            this._scene.add(this._cutMeshes[index].group);
+        //Add the new generated meshes to the scene and remove the base model to not see it
+        for (let index = 0; index < this._generatedCutMeshes.length; ++index)
+        {
+            this._generatedCutMeshes[index].referencePos.copy(this._generatedCutMeshes[index].group.position);
+            this._scene.add(this._generatedCutMeshes[index].group);
         }
-
         this._scene.remove(this._sceneBaseModel!);
     }
 
+    //Recalculate the data for all of the cut planes
     public updateCutPlanes(numOfPlanes: number, cutMode: string)
     {
         this._cutPlanes = [];
 
+        //We are using the bounds data for the cut planes to make sure that we don't cut "empty space"
         let boundsCenter = new Vector3();
         let boundsSize = new Vector3();
         this._modelBounds.getSize(boundsSize);
@@ -112,8 +124,10 @@ export class MeshCutterLogic
         let constant = 0;
         let increment = 0;
 
+        //Based on the cut mode selected, calculate the planes
         if (cutMode == "Grid")
         {
+            //Create a grid on the X and Y planes 
             for (let width = 0; width < Math.floor(numOfPlanes); ++width)
             {
                 let normal = new Vector3(1, 0, 0);
@@ -128,14 +142,9 @@ export class MeshCutterLogic
                 constant = this._modelBounds.min.y + increment * (height + 1);
                 this._cutPlanes.push(new Plane(normal, -constant));
             }
-            // for (let depth = 0; depth < Math.floor(numOfPlanes); ++depth)
-            // {
-            //     let normal = new Vector3(0, 0, 1);
-            //     increment = boundsSize.z / (numOfPlanes + 1);
-            //     constant = this._modelBounds.min.z + increment * (depth + 1);
-            //     this._cutPlanes.push(new Plane(normal, -constant));
-            // }
-            for (let index = 0; index < this._cutPlanes.length; ++index) {
+            //Calculate data for the generated planes
+            for (let index = 0; index < this._cutPlanes.length; ++index)
+            {
                 this._cutPlaneNormals[index].copy(this._cutPlanes[index].normal);
                 this._cutPlanePoints[index].copy(this._cutPlanes[index].normal).multiplyScalar(-this._cutPlanes[index].constant);
             }
@@ -177,9 +186,11 @@ export class MeshCutterLogic
                 this._cutPlanePoints[index].copy(normal).multiplyScalar(constant);
             }
         }
+        //Finally, update materials on the scene model, to display where it will be cut
         this.updateBaseMeshMaterial();
     }
 
+    //Utility script to deallocate memory for a given object
     public disposeObject(obj: Object3D)
     {
         obj.traverse((item) => {
@@ -201,20 +212,15 @@ export class MeshCutterLogic
         });
     }
 
+    //Change the texture displayed on the cut parts
     public updateFillTexture(textureName: string, fillType: string, fillTextureName: string, fillColor: Color)
     {
-        if(this._resourceLoader.isTextureLoaded(textureName))
-        {
+        this._resourceLoader.loadTexture(textureName, (tex) => {
             this.updateCutMeshesMaterial(fillType, fillTextureName, fillColor);
-        }
-        else
-        {
-            this._resourceLoader.loadTexture(textureName, (tex) => {
-                this.updateCutMeshesMaterial(fillType, fillTextureName, fillColor);
-            });
-        }
+        });
     }
 
+    //Update the material for scene model (before the cut)
     public updateBaseMeshMaterial()
     {
         for (let index = 0; index < this._meshesToCut.length; ++index)
@@ -230,11 +236,12 @@ export class MeshCutterLogic
         }
     }
 
+    //Update the materials for the generated meshes after the cut
     public updateCutMeshesMaterial(fillType: string, fillTextureName: string, fillColor: Color)
     {
-        for(let index = 0; index < this._cutMeshes.length; ++index)
+        for(let index = 0; index < this._generatedCutMeshes.length; ++index)
         {
-            this._cutMeshes[index].group.traverse((obj) => {
+            this._generatedCutMeshes[index].group.traverse((obj) => {
                 if(obj instanceof Mesh)
                 {
                     let mesh = obj as Mesh;
@@ -249,9 +256,7 @@ export class MeshCutterLogic
                                 shader.uniforms.u_UseDiffuseMap.value = (fillType == "Texture Fill");
                                 shader.uniforms.u_HideShader.value = (fillType == "No Fill");
                                 shader.uniforms.u_DiffuseColor.value = fillColor;
-                                if(this._resourceLoader.isTextureLoaded(fillTextureName))
-                                    shader.uniforms.u_DiffuseMap.value = this._resourceLoader.getTexture(fillTextureName);
-
+                                shader.uniforms.u_DiffuseMap.value = this._resourceLoader.getTexture(fillTextureName);
                             }
                         }
                     }
@@ -260,21 +265,47 @@ export class MeshCutterLogic
         }
     }
 
+    //Move the generated groups closer or father to one another
     public expandCutMeshes(value: number)
     {
-        for (let index = 0; index < this._cutMeshes.length; ++index)
+        for (let index = 0; index < this._generatedCutMeshes.length; ++index)
         {
-            this._cutMeshes[index].group.position.copy(this._cutMeshes[index].referencePos).addScaledVector(this._cutMeshes[index].expandDir, value);
+            this._generatedCutMeshes[index].group.position.copy(this._generatedCutMeshes[index].referencePos).addScaledVector(this._generatedCutMeshes[index].expandDir, value);
         }
     }
 
+    //Called when we finished loading a new mesh
     private onMeshLoaded(meshName: string, parent: Object3D, pureMeshes: Mesh[], onMeshLoadedCallback: () => void)
     {
+        //Go through each loaded mesh and set up preview material
+        for(let index = 0; index < pureMeshes.length; ++index)
+        {
+            let newMat = new CutLinePreviewShader({
+                u_LineColor: { value: new Vector3(1.0, 1.0, 0.0) },
+                u_LineThickness: { value: 0.01 },
+                u_CutPlaneNormals: { value: this.getCutPlaneNormals() },
+                u_CutPlanePoints: { value: this.getCutPlanePoints() },
+                u_NumOfCutPlanes: { value: 0 }
+            });
+            if (pureMeshes[index].material instanceof MeshStandardMaterial)
+                newMat.copy(pureMeshes[index].material as Material);
+            pureMeshes[index].material = newMat;
+
+            //If it is a skinned mesh, set to default pose
+            if (pureMeshes[index] instanceof SkinnedMesh)
+            {
+                (pureMeshes[index] as SkinnedMesh).skeleton.pose();
+                pureMeshes[index].updateMatrixWorld(true);
+            }
+        }
+
+        //Add the model and store required data
         this._scene.add(parent);
         this._sceneBaseModel = parent;
-        this.setMeshesToCut(pureMeshes);
+        this._meshesToCut = pureMeshes;
 
-        setTimeout(() => { this.processLoadedMesh(meshName, onMeshLoadedCallback); }, 100); //Set a small timeout to allow the shader to compile properly
+        //After a small timeout, process the loaded mesh. This timeout is required to allow shaders and object data to compile properly
+        setTimeout(() => { this.processLoadedMesh(meshName, onMeshLoadedCallback); }, 100); 
     }
 
     private processLoadedMesh(meshName: string, onMeshLoadedCallback: () => void)
@@ -289,8 +320,7 @@ export class MeshCutterLogic
         onMeshLoadedCallback();
     }
 
-    //Artificial offset is used because we are setting the origin of the cut meshes in the center of the new geometry.
-    //This shifts the coordinate space that they are in, and for consequent cuts it produces wrong results
+    //Cut the meshes into multiple parts based on the cut plane
     private cutMesh(meshes: CutGroup[], plane: Plane, fillTextureName: string)
     {
         let results: CutGroup[] = [];

@@ -3,11 +3,13 @@ import { SimpleTriangle, SimpleVertex } from "../../../../types";
 
 export class ProceduralGeometry
 {
+    //For the geometry we will use multiple groups to be able to add more easily custom materials on the cut sides
+    //The first array is that of the groups and will hold an array of the vertices present in that group
     private vertices: SimpleVertex[][] = [];
     private indices: number[] = [];
-    private center: Vector3 = new Vector3();
+    private center: Vector3 = new Vector3(); //Center of this geometry
 
-    private _firstFreeIndex: number = 0;
+    private firstFreeIndex: number = 0; //Used to generate indices for the geometry
 
     public getCenterPos() { return this.center; }
     public getNumOfGroups() { return this.vertices.length; }
@@ -16,17 +18,20 @@ export class ProceduralGeometry
     {
         let geom = new BufferGeometry();
 
+        //Count how many vertices we have in total (all of the groups added together)
         let count = 0;
         for(let groupIndex = 0; groupIndex < this.vertices.length; ++groupIndex)
         {
             count += this.vertices[groupIndex].length;
         }
 
+        //Allocate memory for the geometry
         let indicesArr = new Uint16BufferAttribute(this.indices, 1);
         let vertArr = new Float32Array(count * 3);
         let normArr = new Float32Array(count * 3);
         let uvArr = new Float32Array(count * 2);
 
+        //Copy the data into the arrays allocated above
         let vertIndex = 0;
         let uvIndex = 0;
         for(let groupIndex = 0; groupIndex < this.vertices.length; ++groupIndex)
@@ -50,12 +55,13 @@ export class ProceduralGeometry
             }
         }
 
+        //Construct the geometry
         geom.setAttribute("position", new BufferAttribute(vertArr, 3));
         geom.setAttribute("normal", new BufferAttribute(normArr, 3));
         geom.setAttribute("uv", new BufferAttribute(uvArr, 2));
-
         geom.setIndex(indicesArr);
 
+        //Define the groups
         let counter = 0;
         for(let index = 0; index < this.vertices.length; ++index)
         {
@@ -68,6 +74,7 @@ export class ProceduralGeometry
 
     public addTriangle(groupIndex: number, triangle: SimpleTriangle)
     {
+        //If we added a group with an index greater that what we currently have, fill the data until that specific group
         while(this.vertices.length <= groupIndex)
         {
             this.vertices.push([]);
@@ -89,10 +96,11 @@ export class ProceduralGeometry
             normal: triangle.vert3.normal.clone(),
             uv: triangle.vert3.uv.clone()
         });
-        this.indices.push(this._firstFreeIndex, this._firstFreeIndex + 1, this._firstFreeIndex + 2);
-        this._firstFreeIndex += 3;
+        this.indices.push(this.firstFreeIndex, this.firstFreeIndex + 1, this.firstFreeIndex + 2);
+        this.firstFreeIndex += 3;
     }
 
+    //Apply an offset to the local position of each vertex
     public offsetVertices(offset: Vector3)
     {
         for(let index = 0; index < this.vertices.length; ++index)
@@ -104,30 +112,24 @@ export class ProceduralGeometry
         }
     }
 
-    public updateGeometryCenter()
+    //Calculate the center of the geometry based on all of the vertices
+    //Simply add together all vertices and then divide based on how many there are
+    public calculateGeometryCenter()
     {
+        this.center.set(0.0, 0.0, 0.0);
         if(this.vertices.length == 0)
-        {
-            this.center.set(0.0, 0.0, 0.0);
             return;
-        }
+
+        //We need to go through each group and then through each vertex in said group
         let count = 0;
-        let firstAdd = true;
         for(let index = 0; index < this.vertices.length; ++index)
         {
             count += this.vertices[index].length;
             for(let index2 = 0; index2 < this.vertices[index].length; ++index2)
             {
-                if (firstAdd)
-                {
-                    this.center.copy(this.vertices[index][index2].pos);
-                    firstAdd = false;
-                }
                 this.center.add(this.vertices[index][index2].pos);
             }
         }
         this.center.divideScalar(count);
-
-        this.offsetVertices(this.center);
     }
 }
