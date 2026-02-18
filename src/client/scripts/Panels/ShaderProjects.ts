@@ -25,7 +25,8 @@ export class ShaderProjectsPanel
         parentNode.appendChild(title);
 
         const cellsPerWidth = isPortraitMode.value ? 2 : 4;
-        this._cells.push(new CellWithPreview(parentNode, "Mesh Cutting", cellsPerWidth, "MeshCutting.jpg", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
+        this._cells.push(new CellWithPreview(parentNode, "Mesh Cutting", cellsPerWidth, "MeshCutting", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
+        this._cells.push(new CellWithPreview(parentNode, "Volumetric Clouds (not finished)", cellsPerWidth, "VolumetricClouds", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.VolumetricClouds); }));
 
         let separator = document.createElement("div");
         separator.className = "separator";

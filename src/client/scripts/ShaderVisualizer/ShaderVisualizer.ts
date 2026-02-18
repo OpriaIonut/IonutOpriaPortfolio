@@ -4,11 +4,13 @@ import { ShaderVisualizerCamera } from "./ShaderVisualizerCamera";
 import { ShaderInspectorData } from "../../types";
 import { codePrettyPrinter } from "../../client";
 import { ShaderSceneMeshCutting } from "./ShaderScenes/MeshCutting/ShaderSceneMeshCutting";
+import { ShaderSceneVolumetricClouds } from "./ShaderScenes/VolumetricClouds/ShaderSceneVolumetricClouds";
 
 export enum ShaderSceneType
 {
     MeshCutting,
-    ProceduralSnow
+    ProceduralSnow,
+    VolumetricClouds
 }
 
 export class ShaderVisualizer
@@ -186,6 +188,7 @@ export class ShaderVisualizer
         switch(scene)
         {
             case ShaderSceneType.MeshCutting: return new ShaderSceneMeshCutting();
+            case ShaderSceneType.VolumetricClouds: return new ShaderSceneVolumetricClouds();
             default: undefined;
         }
     }

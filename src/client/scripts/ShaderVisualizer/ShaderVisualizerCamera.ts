@@ -1,8 +1,10 @@
-import { Camera, Color, NoToneMapping, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { Camera, Color, DepthTexture, NoToneMapping, PerspectiveCamera, Scene, SRGBColorSpace, UnsignedByteType, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { FirstPersonControls } from "three/examples/jsm/controls/FirstPersonControls";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
@@ -43,6 +45,7 @@ export class ShaderVisualizerCamera
         });
         this._renderer.shadowMap.enabled = false;
         this._renderer.toneMapping = NoToneMapping;
+        this._renderer.outputColorSpace = SRGBColorSpace;
         
         this._scene = new Scene();
         // new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
@@ -52,8 +55,8 @@ export class ShaderVisualizerCamera
 
         let aspect = window.innerWidth / window.innerHeight;
         this._camera = new PerspectiveCamera(40, aspect, 0.01, 100);
-        this._effectComposer = new EffectComposer(this._renderer);
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.setupPostProcessing();
 
         this.onResize = this.onResize.bind(this);
         window.addEventListener('resize', this.onResize, false);
@@ -61,6 +64,19 @@ export class ShaderVisualizerCamera
         this.resetCamera();
 
         this.refreshCameraVectors();
+    }
+
+    private setupPostProcessing()
+    {
+        const postProcessingRT = new WebGLRenderTarget(
+            window.innerWidth,
+            window.innerHeight
+        );
+        postProcessingRT.depthTexture = new DepthTexture(window.innerWidth, window.innerHeight, UnsignedByteType);
+
+        this._effectComposer = new EffectComposer(this._renderer!, postProcessingRT);
+        const renderPass = new RenderPass(this._scene, this._camera!);
+        this._effectComposer.addPass(renderPass);   
     }
     
     public resetCamera()
@@ -83,7 +99,7 @@ export class ShaderVisualizerCamera
         this.refreshCameraVectors();
         this.controls?.update(deltaTime);
 
-        if(this.usePostProcessing && !this.isMobile)
+        if(this.usePostProcessing)
             this._effectComposer?.render(deltaTime);
         else
             this._renderer?.render(this._scene, this._camera as Camera);
@@ -113,5 +129,15 @@ export class ShaderVisualizerCamera
 
         this._cameraUp.copy(upDir);
         this._camera?.localToWorld(this._cameraUp);
+    }
+
+    public addPostProcessingPass(pass: Pass)
+    {
+        this._effectComposer?.addPass(pass);
+    }
+
+    public removePostProcessingPass(pass: Pass)
+    {
+        this._effectComposer?.removePass(pass);
     }
 }
