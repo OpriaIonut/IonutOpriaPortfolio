@@ -20,13 +20,15 @@ export class ShaderProjectsPanel
 
         let title = document.createElement("div");
         title.className = "sectionTitle";
-        title.innerHTML = "Shader Projects";
+        title.innerHTML = "Live Experiments";
         title.style.paddingBottom = "2vw";
         parentNode.appendChild(title);
 
         const cellsPerWidth = isPortraitMode.value ? 2 : 4;
         this._cells.push(new CellWithPreview(parentNode, "Mesh Cutting", cellsPerWidth, "MeshCutting", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
         this._cells.push(new CellWithPreview(parentNode, "Volumetric Clouds (not finished)", cellsPerWidth, "VolumetricClouds", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.VolumetricClouds); }));
+        this._cells.push(new CellWithPreview(parentNode, "Octree (not finished)", cellsPerWidth, "Octree", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Octree); }));
+        this._cells.push(new CellWithPreview(parentNode, "Boids (not finished)", cellsPerWidth, "Boids", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Boids); }));
 
         let separator = document.createElement("div");
         separator.className = "separator";

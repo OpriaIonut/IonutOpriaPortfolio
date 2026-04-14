@@ -26,12 +26,12 @@ export class ObjectLoader
             let isFBX = path.includes(".fbx");
             let loader = isFBX ? this._fbxLoader : this._glbLoader;
 
-            loader.load(path, (loadedObj) => {
+            loader.load(path, (loadedObj: any) => {
                 let asset: Asset3D = {
                     model: isFBX ? (loadedObj as THREE.Group) : (loadedObj as GLTF).scene,
                     animations: loadedObj.animations
                 };
-                asset.model.traverse((child) => {
+                asset.model.traverse((child: any) => {
                     if(child instanceof THREE.Mesh || child instanceof THREE.SkinnedMesh)
                     {
                         if(child.material.metalness > 0.5)

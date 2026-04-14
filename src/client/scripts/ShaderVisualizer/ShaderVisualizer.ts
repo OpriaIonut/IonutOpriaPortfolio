@@ -5,12 +5,17 @@ import { ShaderInspectorData } from "../../types";
 import { codePrettyPrinter } from "../../client";
 import { ShaderSceneMeshCutting } from "./ShaderScenes/MeshCutting/ShaderSceneMeshCutting";
 import { ShaderSceneVolumetricClouds } from "./ShaderScenes/VolumetricClouds/ShaderSceneVolumetricClouds";
+import { ShaderSceneBoids } from "./ShaderScenes/Boids/ShaderSceneBoids";
+import { ShaderSceneOctree } from "./ShaderScenes/Octree/ShaderSceneOctree";
+import { ObjectLoader } from "../ThreeVisualizer/ObjectLoader";
 
 export enum ShaderSceneType
 {
     MeshCutting,
     ProceduralSnow,
-    VolumetricClouds
+    VolumetricClouds,
+    Boids,
+    Octree
 }
 
 export class ShaderVisualizer
@@ -27,7 +32,7 @@ export class ShaderVisualizer
     private _availableShaders: ShaderInspectorData[] = [];
 
     public _cameraManager!: ShaderVisualizerCamera; //To do: set to private when done debugging
-    // private _objectLoader: any;
+    public _objectLoader: ObjectLoader
     // private _materialCache: any;
     // private onModelLoaded: any;
     // private onModelProgress: any;
@@ -35,6 +40,7 @@ export class ShaderVisualizer
 
     constructor()
     {
+        this._objectLoader = new ObjectLoader();
         this.initializeView();
     }
 
@@ -189,6 +195,8 @@ export class ShaderVisualizer
         {
             case ShaderSceneType.MeshCutting: return new ShaderSceneMeshCutting();
             case ShaderSceneType.VolumetricClouds: return new ShaderSceneVolumetricClouds();
+            case ShaderSceneType.Boids: return new ShaderSceneBoids();
+            case ShaderSceneType.Octree: return new ShaderSceneOctree();
             default: undefined;
         }
     }

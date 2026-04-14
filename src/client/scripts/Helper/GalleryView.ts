@@ -14,7 +14,7 @@ export class GalleryView
     private _isMouseOverGallery: boolean = false;
 
     private _imageDuration: number = 0;
-    private _currentDuration: number = 10000;
+    private _currentDuration: number = 10.0;
     private _startTime: number = 0;
 
     constructor(parentNode: HTMLElement, id: string, imagesPath: string, imageCount: number, videoFormatIndices: number[], durationMs: number, imgExtension?: string)
@@ -78,9 +78,9 @@ export class GalleryView
                 this._isImageItem.push(false);
                 if(index == 0)
                 {
-                    video.addEventListener("loadedmetadata", () => {
-                        this._currentDuration = video.duration * 1000 + 500;
-                    });
+                    // video.addEventListener("loadedmetadata", () => {
+                    //     this._currentDuration = video.duration + 0.5;
+                    // });
                 }
             }
             else
@@ -116,7 +116,7 @@ export class GalleryView
 
     public update()
     {
-        if(timeStats.currentTime > 3000 && timeStats.currentTime - this._startTime > this._currentDuration)
+        if(timeStats.currentTime > 3.0 && timeStats.currentTime - this._startTime > this._currentDuration)
         {
             if(!this.isElementInViewport())
             {
@@ -145,7 +145,7 @@ export class GalleryView
             {
                 if(userInteractedWithPage.value)
                     vid.play();
-                this._currentDuration = (vid.duration - vid.currentTime) * 1000 + 500;
+                this._currentDuration = (vid.duration - vid.currentTime) + 0.5;
                 this._startTime = timeStats.currentTime;
             }
             else
@@ -180,7 +180,7 @@ export class GalleryView
         else
         {
             let vid = this._actualItems[this._currentSelectedIndex] as HTMLVideoElement;
-            this._currentDuration = vid.duration * 1000 + 500;
+            this._currentDuration = vid.duration + 0.5;
         }
 
         this._galleryItem.style.marginLeft = `-${100 / this._navLabels.length * this._currentSelectedIndex}%`;

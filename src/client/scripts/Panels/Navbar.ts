@@ -16,7 +16,7 @@ export class NavBar
             { name: "Skills", target: document.getElementById("skillCharts")!, navbarBtn: undefined },
             { name: "Professional Projects", target: document.getElementById("workProjectsPanel")!, navbarBtn: undefined },
             { name: "Personal Projects", target: document.getElementById("gameProjectsPanel")!, navbarBtn: undefined },
-            { name: "Shader Projects", target: document.getElementById("shaderProjectsPanel")!, navbarBtn: undefined },
+            { name: "Live Experiments", target: document.getElementById("shaderProjectsPanel")!, navbarBtn: undefined },
             { name: "3D Models", target: document.getElementById("artProjectsPanel")!, navbarBtn: undefined },
         ];
 

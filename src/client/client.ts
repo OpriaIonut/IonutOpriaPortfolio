@@ -26,7 +26,7 @@ const pageParent = document.createElement("div");
 pageParent.id = "pageParent";
 document.body.appendChild(pageParent);
 
-export const mouseAnim = new MouseAnimation(0.75, 0.4);
+export const mouseAnim = new MouseAnimation(7.5, 4.0);
 const colorThemeButtons = new ColorThemeButtons();
 
 export const shaderVisualizer = new ShaderVisualizer();
@@ -60,11 +60,11 @@ function gameLoop(timestamp: number)
 
     isPortraitMode.value = window.innerWidth / window.innerHeight < 1.0;
 
-    let frameTime = timestamp;
-    let deltaTime = (frameTime - previousFrameTime) * 0.01;
+    let frameTime = timestamp * 0.001;
+    let deltaTime = (frameTime - previousFrameTime);
     previousFrameTime = frameTime;
 
-    timeStats.currentTime = timestamp;
+    timeStats.currentTime = frameTime;
     timeStats.deltaTime = deltaTime;
 
     mouseAnim.update();
