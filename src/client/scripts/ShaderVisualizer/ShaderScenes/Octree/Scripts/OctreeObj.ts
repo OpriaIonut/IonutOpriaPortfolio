@@ -2,6 +2,7 @@ import { Box3, Color, Object3D } from "three";
 import { OctreeNode } from "./OctreeNode";
 import { OctreeVisualizer } from "./OctreeVisualizer";
 import { OctreeHelper } from "./OctreeHelper";
+import { ThreeHelpers } from "../../../../Helper/ThreeHelpers";
 
 //This script is used to keep track of relevant data for the objects that are inserted into the octree.
 //Most octree operations work with this
@@ -37,7 +38,7 @@ export class OctreeObj
     {
         //Custom function to recalculate bounding box of the mesh. In Three.js Box3 doesn't update automatically and unfortunately has to be recalculated whenever needed.
         //Three.js has the function Box3.setFromObject() but that one is extremely slow, so I created my own version of it which is faster
-        OctreeHelper.recomputeBoundsFast(this.bounds, this.obj);
+        ThreeHelpers.recomputeBoundsFast(this.bounds, this.obj);
     }
 
     public getBounds(): Box3

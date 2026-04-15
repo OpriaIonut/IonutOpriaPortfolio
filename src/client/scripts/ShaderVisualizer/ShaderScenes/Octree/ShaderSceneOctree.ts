@@ -135,6 +135,7 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
         this.camera.position.copy(this.defaultCameraPos);
         this.camera.far = this.defaultCameraFar;
         this.camera.near = this.defaultCameraNear;
+        this.camera.updateProjectionMatrix();
         
         this.visualizer.removeScript("OctreeObj.ts");
         this.visualizer.removeScript("Octree.ts");
