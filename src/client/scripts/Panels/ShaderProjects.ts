@@ -26,9 +26,9 @@ export class ShaderProjectsPanel
 
         const cellsPerWidth = isPortraitMode.value ? 2 : 4;
         this._cells.push(new CellWithPreview(parentNode, "Mesh Cutting", cellsPerWidth, "MeshCutting", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.MeshCutting); }));
-        this._cells.push(new CellWithPreview(parentNode, "Volumetric Clouds (not finished)", cellsPerWidth, "VolumetricClouds", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.VolumetricClouds); }));
-        this._cells.push(new CellWithPreview(parentNode, "Octree (not finished)", cellsPerWidth, "Octree", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Octree); }));
+        this._cells.push(new CellWithPreview(parentNode, "Octree", cellsPerWidth, "Octree", "images/shaders/OctreePreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Octree); }));
         this._cells.push(new CellWithPreview(parentNode, "Boids (not finished)", cellsPerWidth, "Boids", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Boids); }));
+        this._cells.push(new CellWithPreview(parentNode, "Volumetric Clouds (not finished)", cellsPerWidth, "VolumetricClouds", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.VolumetricClouds); }));
 
         let separator = document.createElement("div");
         separator.className = "separator";

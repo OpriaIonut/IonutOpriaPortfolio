@@ -78,7 +78,7 @@ export class Octree
 
     public AddObject(obj: OctreeObj)
     {
-        if (!OctreeHelper.ContainsBounds(this.root.bounds, obj.GetBounds()))
+        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), obj.GetBounds()))
         {
             if(Octree.DisplayErrors)
                 console.error("Cannot add objects outside the bounds!. Please create a bigger octree.");
@@ -102,7 +102,7 @@ export class Octree
             }
         }
 
-        if (!OctreeHelper.ContainsBounds(this.root.bounds, objBounds))
+        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), objBounds))
         {
             if (Octree.DisplayErrors)
                 console.error("Cannot remove objects outside the bounds!. Please create a bigger octree.");
@@ -121,7 +121,7 @@ export class Octree
     public SetMovingObjectFlag(obj: Object3D, canMove: boolean)
     {
         let objBounds = new Box3().setFromObject(obj);
-        if (!OctreeHelper.ContainsBounds(this.root.bounds, objBounds))
+        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), objBounds))
         {
             if (Octree.DisplayErrors)
                 console.error("Object is outside of the octree bounds, this is not allowed.");
@@ -178,7 +178,7 @@ export class Octree
 
             let objBounds = obj.GetBounds();
 
-            if (OctreeHelper.ContainsBounds(parent.bounds, objBounds))
+            if (OctreeHelper.ContainsBounds(parent.GetBounds(), objBounds))
             {
                 let smallerNode = parent.FindSmallestEncompasingNode(obj);
                 if(smallerNode.res == true && smallerNode.node != parent)
@@ -195,7 +195,7 @@ export class Octree
             parent = parent.GetParent();
             while(parent != undefined)
             {
-                if(OctreeHelper.ContainsBounds(parent.bounds, objBounds))
+                if(OctreeHelper.ContainsBounds(parent.GetBounds(), objBounds))
                 {
                     parent.AddObject(obj);
                     foundNewParent = true;

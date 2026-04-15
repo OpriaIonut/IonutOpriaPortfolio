@@ -1,4 +1,4 @@
-import { Box3, Box3Helper, BoxGeometry, Color, EdgesGeometry, LineBasicMaterial, LineSegments, Material, Mesh, MeshBasicMaterial, Scene, Vector3 } from "three";
+import { Box3, Box3Helper, Color, LineBasicMaterial, Scene } from "three";
 import { GenericPool } from "../../../../Helper/GenericPool";
 
 export class OctreeVisualizer

@@ -12,49 +12,49 @@ import { exposedCodeMeshCutterManager } from "./ExposedScripts/ExposedCodeMeshCu
 //Handles high-level management of the scene and it's components
 export class ShaderSceneMeshCutting
 {
-    private _scene: Scene = new Scene();
-    private _visualizer!: ShaderVisualizer;
+    private scene: Scene = new Scene();
+    private visualizer!: ShaderVisualizer;
 
-    private _uiManager!: MeshCutterUIManager;
-    private _cutLogic!: MeshCutterManager;
+    private uiManager!: MeshCutterUIManager;
+    private cutLogic!: MeshCutterManager;
 
     public init(visualizer: ShaderVisualizer)
     {
-        this._visualizer = visualizer;
+        this.visualizer = visualizer;
 
         //Set up lights in the scene
         let ambientLight = new AmbientLight(0xffffff, 0.25);
-        this._scene.add(ambientLight);
+        this.scene.add(ambientLight);
         
         let directionalLight = new DirectionalLight(0xffffff, 1.0);
         directionalLight.position.set(10.0, 10.0, 5.0);
-        this._scene.add(directionalLight);
+        this.scene.add(directionalLight);
 
         //Create logic scripts
-        this._uiManager = new MeshCutterUIManager();
-        this._cutLogic = new MeshCutterManager(this._scene);
+        this.uiManager = new MeshCutterUIManager();
+        this.cutLogic = new MeshCutterManager(this.scene);
 
         //Subscribe to needed events
-        this._uiManager.subscribe_OnCutClicked(() => { this.runCuttingAlgoritm(); });
-        this._uiManager.subscribe_OnResetClicked(() => { this.resetState(); });
-        this._uiManager.subscribe_OnRandomizeCutsClicked(() => { this._cutLogic.updateCutPlanes(this._uiManager.getNumOfCutPlanes(), this._uiManager.getCutMode()); });
+        this.uiManager.subscribe_OnCutClicked(() => { this.runCuttingAlgoritm(); });
+        this.uiManager.subscribe_OnResetClicked(() => { this.resetState(); });
+        this.uiManager.subscribe_OnRandomizeCutsClicked(() => { this.cutLogic.updateCutPlanes(this.uiManager.getNumOfCutPlanes(), this.uiManager.getCutMode()); });
 
-        this._uiManager.subscribe_OnExpandRadiusChanged(() => { this.onExpandRadiusChanged(); });
-        this._uiManager.subscribe_OnCutModeChanged(() => { this._cutLogic.updateCutPlanes(this._uiManager.getNumOfCutPlanes(), this._uiManager.getCutMode()); });
-        this._uiManager.subscribe_OnMeshChanged(() => { this.onMeshChanged(); });
-        this._uiManager.subscribe_OnNumOfPlanesChanged(() => { this._cutLogic.updateCutPlanes(this._uiManager.getNumOfCutPlanes(), this._uiManager.getCutMode()); });
-        this._uiManager.subscribe_OnFillTypeChanged(() => { this._cutLogic.updateCutMeshesMaterial(this._uiManager.getFillType(), this._uiManager.getCurrentTextureName(), this._uiManager.getFillColor()); } );
-        this._uiManager.subscribe_OnFillColorChanged(() => { this._cutLogic.updateCutMeshesMaterial(this._uiManager.getFillType(), this._uiManager.getCurrentTextureName(), this._uiManager.getFillColor()); } );
-        this._uiManager.subscribe_OnFillTextureChanged(() => { this.onFillTextureChanged(); });
+        this.uiManager.subscribe_OnExpandRadiusChanged(() => { this.onExpandRadiusChanged(); });
+        this.uiManager.subscribe_OnCutModeChanged(() => { this.cutLogic.updateCutPlanes(this.uiManager.getNumOfCutPlanes(), this.uiManager.getCutMode()); });
+        this.uiManager.subscribe_OnMeshChanged(() => { this.onMeshChanged(); });
+        this.uiManager.subscribe_OnNumOfPlanesChanged(() => { this.cutLogic.updateCutPlanes(this.uiManager.getNumOfCutPlanes(), this.uiManager.getCutMode()); });
+        this.uiManager.subscribe_OnFillTypeChanged(() => { this.cutLogic.updateCutMeshesMaterial(this.uiManager.getFillType(), this.uiManager.getCurrentTextureName(), this.uiManager.getFillColor()); } );
+        this.uiManager.subscribe_OnFillColorChanged(() => { this.cutLogic.updateCutMeshesMaterial(this.uiManager.getFillType(), this.uiManager.getCurrentTextureName(), this.uiManager.getFillColor()); } );
+        this.uiManager.subscribe_OnFillTextureChanged(() => { this.onFillTextureChanged(); });
 
-        this._visualizer.addScript("MeshCutter.ts", exposedCodeMeshCutter);
-        this._visualizer.addScript("ProceduralGeometry.ts", exposedCodeProceduralGeometry);
-        this._visualizer.addScript("MeshCutterManager.ts", exposedCodeMeshCutterManager);
-        this._visualizer.addScript("CutLinePreviewShader.ts", exposedCodeCutLineShader);
-        this._visualizer.addScript("CutFillMaterial.ts", exposedCodeCutFillMaterial);
+        this.visualizer.addScript("MeshCutter.ts", exposedCodeMeshCutter);
+        this.visualizer.addScript("ProceduralGeometry.ts", exposedCodeProceduralGeometry);
+        this.visualizer.addScript("MeshCutterManager.ts", exposedCodeMeshCutterManager);
+        this.visualizer.addScript("CutLinePreviewShader.ts", exposedCodeCutLineShader);
+        this.visualizer.addScript("CutFillMaterial.ts", exposedCodeCutFillMaterial);
 
         //Activate base state of the scene
-        this._uiManager.displayCutMenu();
+        this.uiManager.displayCutMenu();
         this.onFillTextureChanged();
         this.onMeshChanged();
     }
@@ -67,64 +67,64 @@ export class ShaderSceneMeshCutting
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {
-        this._cutLogic.reset(true);
-        this._cutLogic.disposeBaseModel();
-        this._uiManager.reset(); //Events will also unsubscribe here
+        this.cutLogic.reset(true);
+        this.cutLogic.disposeBaseModel();
+        this.uiManager.reset(); //Events will also unsubscribe here
 
-        this._visualizer.removeScript("MeshCutter.ts");
-        this._visualizer.removeScript("ProceduralGeometry.ts");
-        this._visualizer.removeScript("MeshCutterManager.ts");
-        this._visualizer.removeScript("CutLinePreviewShader.ts");
-        this._visualizer.removeScript("CutFillMaterial.ts");
+        this.visualizer.removeScript("MeshCutter.ts");
+        this.visualizer.removeScript("ProceduralGeometry.ts");
+        this.visualizer.removeScript("MeshCutterManager.ts");
+        this.visualizer.removeScript("CutLinePreviewShader.ts");
+        this.visualizer.removeScript("CutFillMaterial.ts");
     }
 
-    public getScene() { return this._scene; }
+    public getScene() { return this.scene; }
 
     //Called when you click "reset" on the ui
     private resetState()
     {
-        this._cutLogic.reset(false);
-        this._scene.add(this._cutLogic.getSceneBaseModel()!);
-        this._uiManager.displayCutMenu();
+        this.cutLogic.reset(false);
+        this.scene.add(this.cutLogic.getSceneBaseModel()!);
+        this.uiManager.displayCutMenu();
     }
 
     //Called when you click "cut" on the ui, will cut the geometry and display a different menu
     public runCuttingAlgoritm()
     {
         const start = performance.now();
-        this._cutLogic.runCuttingAlgoritm(this._uiManager.getCurrentTextureName());
+        this.cutLogic.runCuttingAlgoritm(this.uiManager.getCurrentTextureName());
 
-        this._uiManager.setExpandRadius(0.05);
-        this._uiManager.setCutDuration(performance.now() - start);
+        this.uiManager.setExpandRadius(0.05);
+        this.uiManager.setCutDuration(performance.now() - start);
 
-        this._uiManager.displayResetMenu();
+        this.uiManager.displayResetMenu();
     }
 
     //Called when you change the "expand" radius slider after the mesh is cut
     private onExpandRadiusChanged()
     {
-        let expandRadius = this._uiManager.getExpandRadius();
-        this._cutLogic.expandCutMeshes(expandRadius);
+        let expandRadius = this.uiManager.getExpandRadius();
+        this.cutLogic.expandCutMeshes(expandRadius);
     }
 
     //Called when you change the texture selected
     private onFillTextureChanged()
     {
-        let textureName = this._uiManager.getCurrentTextureName();
-        this._cutLogic.updateFillTexture(textureName, this._uiManager.getFillType(), this._uiManager.getCurrentTextureName(), this._uiManager.getFillColor());
+        let textureName = this.uiManager.getCurrentTextureName();
+        this.cutLogic.updateFillTexture(textureName, this.uiManager.getFillType(), this.uiManager.getCurrentTextureName(), this.uiManager.getFillColor());
     }
 
     //Called when you change the mesh selected
     private onMeshChanged()
     {
-        this._cutLogic.disposeBaseModel();
-        this._cutLogic.reset(true);
+        this.cutLogic.disposeBaseModel();
+        this.cutLogic.reset(true);
 
-        let meshName = this._uiManager.getCurrentMeshName();
-        this._uiManager.setArtistCreditsDisplay(meshName == "City");
-        this._cutLogic.loadNewMesh(meshName, () => {
-            this._uiManager.displayCutMenu();
-            this._cutLogic.updateCutPlanes(this._uiManager.getNumOfCutPlanes(), this._uiManager.getCutMode());
+        let meshName = this.uiManager.getCurrentMeshName();
+        this.uiManager.setArtistCreditsDisplay(meshName == "City");
+        this.cutLogic.loadNewMesh(meshName, () => {
+            this.uiManager.displayCutMenu();
+            this.cutLogic.updateCutPlanes(this.uiManager.getNumOfCutPlanes(), this.uiManager.getCutMode());
         });
     }
 }

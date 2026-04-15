@@ -4,30 +4,30 @@ import { ObjectLoader } from "../../../../ThreeVisualizer/ObjectLoader";
 //Utility script to handle object loading and caching of it
 export class MeshCutterResourceLoader
 {
-    private _objectLoader!: ObjectLoader; //ObjectLoaded already caches meshes, so we don't need to do the same on our side
-    private _textureLoader!: TextureLoader;
+    private objectLoader!: ObjectLoader; //ObjectLoaded already caches meshes, so we don't need to do the same on our side
+    private textureLoader!: TextureLoader;
     
     //Maps that are used to cache load results (to not load same assets over the network multiple times)
-    private _loadedFillTextures: Map<string, Texture> = new Map();
+    private loadedFillTextures: Map<string, Texture> = new Map();
 
     constructor()
     {
-        this._objectLoader = new ObjectLoader();
-        this._textureLoader = new TextureLoader();
+        this.objectLoader = new ObjectLoader();
+        this.textureLoader = new TextureLoader();
     }
 
-    public getTexture(texName: string) { return this._loadedFillTextures.get(texName); }
+    public getTexture(texName: string) { return this.loadedFillTextures.get(texName); }
 
     //Load texture or retrieve it from the cache
     public loadTexture(texName: string, onTextureLoaded: (tex: Texture) => void)
     {
         let texPath = this.getPathFromFillTexture(texName);
-        if(this._loadedFillTextures.has(texName))
-            onTextureLoaded(this._loadedFillTextures.get(texName)!);
+        if(this.loadedFillTextures.has(texName))
+            onTextureLoaded(this.loadedFillTextures.get(texName)!);
         else
         {
-            this._textureLoader.load(texPath, (texture: Texture) => {
-                this._loadedFillTextures.set(texName, texture);
+            this.textureLoader.load(texPath, (texture: Texture) => {
+                this.loadedFillTextures.set(texName, texture);
                 onTextureLoaded(texture);
             });
         }
@@ -49,7 +49,7 @@ export class MeshCutterResourceLoader
         {
             //Otherwise, we need to load it from the given path
             let path = this.getPathFromModel(meshName);
-            this._objectLoader.loadModel(path, (obj) => {
+            this.objectLoader.loadModel(path, (obj) => {
                 obj.model.traverse((item) => {
                     if (item instanceof Mesh)
                     {

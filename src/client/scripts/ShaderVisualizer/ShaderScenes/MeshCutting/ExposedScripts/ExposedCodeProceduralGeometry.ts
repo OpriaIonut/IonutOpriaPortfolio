@@ -1,5 +1,5 @@
 export const exposedCodeProceduralGeometry = `
-import { BufferAttribute, BufferGeometry, Uint16BufferAttribute, Float32Array, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Uint16BufferAttribute, Vector3 } from "three";
 import { SimpleTriangle, SimpleVertex } from "../../../../types";
 
 export class ProceduralGeometry

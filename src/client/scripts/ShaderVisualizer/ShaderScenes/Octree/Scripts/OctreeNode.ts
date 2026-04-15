@@ -6,7 +6,7 @@ import { OctreeVisualizer } from "./OctreeVisualizer";
 
 export class OctreeNode
 {
-    public bounds: Box3;
+    private bounds: Box3;
     private boundsSize: Vector3 = new Vector3();
     private boundsCenter: Vector3 = new Vector3();
 
@@ -71,6 +71,7 @@ export class OctreeNode
 
     public IsLeaf(): boolean { return this.isLeaf; }
     public GetObjects(): OctreeObj[] { return this.storedObjects; }
+    public GetBounds(): Box3 { return this.bounds; }
 
     public Destroy()
     {

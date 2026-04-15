@@ -1,4 +1,4 @@
-import { Box3, MathUtils, Mesh, MeshBasicMaterial, Object3D, Scene, SphereGeometry, Vector3 } from "three";
+import { Box3, Object3D, Vector3 } from "three";
 import { timeStats } from "../../../../../client";
 
 export class Spaceship
