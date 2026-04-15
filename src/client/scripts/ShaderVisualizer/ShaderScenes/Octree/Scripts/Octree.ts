@@ -42,92 +42,92 @@ export class Octree
         {
             for (let index = 0; index < objects.length; ++index)
             {
-                if (objects[index].IsMovable())
+                if (objects[index].isObjMovable())
                     this.movableObjects.push(objects[index]);
             }
         }
         this.root = new OctreeNode(undefined, bounds, objects, 0, maxObjPerNode, maxDepth, minNodeSize, this.debugVisualizer);
     }
 
-    public static EnableLogs(warnings: boolean, errors: boolean)
+    public static enableLogs(warnings: boolean, errors: boolean)
     {
         Octree.displayWarnings = warnings;
         Octree.displayErrors = errors;
     }
 
-    public Destroy()
+    public destroy()
     {
         this.movableObjects = [];
-        this.root.Destroy();
+        this.root.destroy();
     }
 
-    public SetDebugVisualizer(debugVisualizer?: OctreeVisualizer)
+    public setDebugVisualizer(debugVisualizer?: OctreeVisualizer)
     {
         if(debugVisualizer == undefined && this.debugVisualizer != undefined)
         {
             this.debugVisualizer.releaseAllCubes();
-            this.root.ClearDebugDataNoRelease();
+            this.root.clearDebugDataNoRelease();
         }
         else if(debugVisualizer != undefined && this.debugVisualizer == undefined)
         {
             this.debugVisualizer = debugVisualizer;
-            this.root.DrawDebugData(this.debugVisualizer);
+            this.root.drawDebugData(this.debugVisualizer);
         }
         this.debugVisualizer = debugVisualizer;
     }
 
-    public AddObject(obj: OctreeObj)
+    public addObject(obj: OctreeObj)
     {
-        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), obj.GetBounds()))
+        if (!OctreeHelper.containsBounds(this.root.getBounds(), obj.getBounds()))
         {
             if(Octree.DisplayErrors)
                 console.error("Cannot add objects outside the bounds!. Please create a bigger octree.");
             return;
         }
-        if(obj.IsMovable())
+        if(obj.isObjMovable())
             this.movableObjects.push(obj);
-        this.root.AddObject(obj);
+        this.root.addObject(obj);
     }
 
-    public RemoveObject(obj: Object3D): boolean
+    public removeObject(obj: Object3D): boolean
     {
         let objBounds = new Box3().setFromObject(obj);
 
         for(let index = 0; index < this.movableObjects.length; ++index)
         {
-            if(this.movableObjects[index].GetObject3D() == obj)
+            if(this.movableObjects[index].getObject3D() == obj)
             {
                 this.movableObjects.splice(index, 1);
                 break;
             }
         }
 
-        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), objBounds))
+        if (!OctreeHelper.containsBounds(this.root.getBounds(), objBounds))
         {
             if (Octree.DisplayErrors)
                 console.error("Cannot remove objects outside the bounds!. Please create a bigger octree.");
             return false;
         }
 
-        if(this.root.RemoveObject(obj, objBounds))
+        if(this.root.removeObject(obj, objBounds))
         {
-            if (this.root.CanCollapseNode())
-                this.root.Collapse();
+            if (this.root.canCollapseNode())
+                this.root.collapse();
             return true;
         }
         return false;
     }
 
-    public SetMovingObjectFlag(obj: Object3D, canMove: boolean)
+    public setMovingObjectFlag(obj: Object3D, canMove: boolean)
     {
         let objBounds = new Box3().setFromObject(obj);
-        if (!OctreeHelper.ContainsBounds(this.root.GetBounds(), objBounds))
+        if (!OctreeHelper.containsBounds(this.root.getBounds(), objBounds))
         {
             if (Octree.DisplayErrors)
                 console.error("Object is outside of the octree bounds, this is not allowed.");
             return;
         }
-        let foundObj: OctreeObj | undefined = this.root.SetMovingObjectFlag(obj, objBounds, canMove);
+        let foundObj: OctreeObj | undefined = this.root.setMovingObjectFlag(obj, objBounds, canMove);
         if(foundObj != undefined)
         {
             if (!canMove)
@@ -146,78 +146,78 @@ export class Octree
         }
     }
 
-    public QueryPoint(point: Vector3, foundObjects: OctreeObj[], depthLimit: number = -1) //Returns all objects in the same node with this point
+    public queryPoint(point: Vector3, foundObjects: OctreeObj[], depthLimit: number = -1) //Returns all objects in the same node with this point
     {
         foundObjects = [];
-        this.root.QueryPoint(point, foundObjects, depthLimit);
+        this.root.queryPoint(point, foundObjects, depthLimit);
     }
 
-    public QueryBounds(box: Box3, depthLimit: number = -1) //Returns all objects from all nodes that intersect this bounding box
+    public queryBounds(box: Box3, depthLimit: number = -1) //Returns all objects from all nodes that intersect this bounding box
     {
         let foundObjects: OctreeObj[] = [];
-        this.root.QueryBounds(box, foundObjects, depthLimit);
+        this.root.queryBounds(box, foundObjects, depthLimit);
         return foundObjects;
     }
 
-    public UpdateBounds()
+    public updateBounds()
     {
         for(let index = 0; index < this.movableObjects.length; ++index)
         {
-            this.movableObjects[index].UpdateBounds();
+            this.movableObjects[index].updateBounds();
         }
     }
 
-    public UpdateMovableObjects()
+    public updateMovableObjects()
     {
         for(let index = 0; index < this.movableObjects.length; ++index)
         {
             let obj: OctreeObj = this.movableObjects[index];
-            let parent: OctreeNode | undefined = obj.GetNode();
+            let parent: OctreeNode | undefined = obj.getNode();
             if(parent == undefined)
                 continue;
 
-            let objBounds = obj.GetBounds();
+            let objBounds = obj.getBounds();
 
-            if (OctreeHelper.ContainsBounds(parent.GetBounds(), objBounds))
+            if (OctreeHelper.containsBounds(parent.getBounds(), objBounds))
             {
-                let smallerNode = parent.FindSmallestEncompasingNode(obj);
+                let smallerNode = parent.findSmallestEncompasingNode(obj);
                 if(smallerNode.res == true && smallerNode.node != parent)
                 {
-                    parent.RemoveObject(obj.GetObject3D(), objBounds, false);
-                    smallerNode.node!.AddObject(obj);
+                    parent.removeObject(obj.getObject3D(), objBounds, false);
+                    smallerNode.node!.addObject(obj);
                 }
                 continue;
             }
 
-            parent.RemoveObject(obj.GetObject3D(), objBounds, false);
+            parent.removeObject(obj.getObject3D(), objBounds, false);
 
             let foundNewParent = false;
-            parent = parent.GetParent();
+            parent = parent.getParent();
             while(parent != undefined)
             {
-                if(OctreeHelper.ContainsBounds(parent.GetBounds(), objBounds))
+                if(OctreeHelper.containsBounds(parent.getBounds(), objBounds))
                 {
-                    parent.AddObject(obj);
+                    parent.addObject(obj);
                     foundNewParent = true;
                     break;
                 }
-                parent = parent.GetParent();
+                parent = parent.getParent();
             }
             if(!foundNewParent)
             {
                 if (Octree.DisplayErrors)
-                    console.error("The following object is outside the bounds. Adding into root: ", obj, obj.GetObject3D().position);
-                this.root.AddObject(obj);
+                    console.error("The following object is outside the bounds. Adding into root: ", obj, obj.getObject3D().position);
+                this.root.addObject(obj);
                 continue;
             }
         }
-        this.root.TryCollapseRecursive();
+        this.root.tryCollapseRecursive();
     }
 
-    public GetAllObjects()
+    public getAllObjects()
     {
         let foundElements: OctreeObj[] = [];
-        this.root.GetChildrenRecursive(foundElements);
+        this.root.getChildrenRecursive(foundElements);
         return foundElements;
     }
 }

@@ -18,21 +18,21 @@ tree: https://sketchfab.com/3d-models/pine-tree-e52769d653cd4e52a4acff3041961e65
 //Handles high-level management of the scene and it's components
 export class ShaderSceneOctree
 {
-    private _scene: Scene = new Scene();
-    private _visualizer!: ShaderVisualizer;
-    private _camera!: PerspectiveCamera;
+    private scene: Scene = new Scene();
+    private visualizer!: ShaderVisualizer;
+    private camera!: PerspectiveCamera;
 
-    private _debugUI!: DebugUI;
-    private _textureLoader: TextureLoader = new TextureLoader();
-    private _spaceshipDemo!: OctreeSpaceshipDemo;
-    private _frustumCullingDemo!: OctreeFrustumCullingDemo;
+    private debugUI!: DebugUI;
+    private textureLoader: TextureLoader = new TextureLoader();
+    private spaceshipDemo!: OctreeSpaceshipDemo;
+    private frustumCullingDemo!: OctreeFrustumCullingDemo;
 
-    private _defaultSceneColor!: Color;
-    private _defaultCameraNear: number = 0.01;
-    private _defaultCameraFar: number = 100.0;
-    private _defaultCameraPos: Vector3 = new Vector3();
+    private defaultSceneColor!: Color;
+    private defaultCameraNear: number = 0.01;
+    private defaultCameraFar: number = 100.0;
+    private defaultCameraPos: Vector3 = new Vector3();
 
-    private _settings = {
+    private settings = {
         //General
         selectedDemo: "Spaceships",
         availableDemos: ["Spaceships", "FrustumCulling"],
@@ -51,114 +51,114 @@ export class ShaderSceneOctree
         frustumCullingTime: ""
     }
 
-    public getUISettings() { return this._settings; }
-    public setBackgroundColor(color: Color) { this._visualizer._cameraManager.scene.background = color; }
-    public getCamera() { return this._camera; }
-    public getObjectLoader() { return this._visualizer._objectLoader; }
-    public getTextureLoader() { return this._textureLoader; }
-    public getScene() { return this._scene; }
+    public getUISettings() { return this.settings; }
+    public setBackgroundColor(color: Color) { this.visualizer.cameraManager.getScene().background = color; }
+    public getCamera() { return this.camera; }
+    public getObjectLoader() { return this.visualizer.objectLoader; }
+    public getTextureLoader() { return this.textureLoader; }
+    public getScene() { return this.scene; }
 
     public init(visualizer: ShaderVisualizer)
     {
-        this._visualizer = visualizer;
-        this._camera = visualizer._cameraManager.camera;
+        this.visualizer = visualizer;
+        this.camera = visualizer.cameraManager.getCamera();
 
-        this._defaultCameraFar = this._camera.far;
-        this._defaultCameraNear = this._camera.near;
-        this._defaultSceneColor = this._visualizer._cameraManager.scene.background as Color;
-        this._defaultCameraPos.copy(this._camera.position);
+        this.defaultCameraFar = this.camera.far;
+        this.defaultCameraNear = this.camera.near;
+        this.defaultSceneColor = this.visualizer.cameraManager.getScene().background as Color;
+        this.defaultCameraPos.copy(this.camera.position);
 
-        this._camera.near = 0.1;
-        this._camera.far = 1000;
-        this._camera.updateProjectionMatrix();
+        this.camera.near = 0.1;
+        this.camera.far = 1000;
+        this.camera.updateProjectionMatrix();
 
         //Set up lights in the scene
         let ambientLight = new AmbientLight(0xffffff, 0.25);
-        this._scene.add(ambientLight);
+        this.scene.add(ambientLight);
         
         let directionalLight = new DirectionalLight(0xffffff, 3.0);
         directionalLight.position.set(10.0, 10.0, 5.0);
-        this._scene.add(directionalLight);
+        this.scene.add(directionalLight);
 
-        this._debugUI = new DebugUI();
-        let guiHtml = this._debugUI.getGUIClass()!.domElement;
+        this.debugUI = new DebugUI();
+        let guiHtml = this.debugUI.getGUIClass()!.domElement;
         let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
         guiParent.appendChild(guiHtml);
         guiHtml.style.position = "absolute";
         guiHtml.style.left = "0px";
         guiHtml.style.top = "0px";
 
-        this._spaceshipDemo = new OctreeSpaceshipDemo(this);
-        this._frustumCullingDemo = new OctreeFrustumCullingDemo(this);
+        this.spaceshipDemo = new OctreeSpaceshipDemo(this);
+        this.frustumCullingDemo = new OctreeFrustumCullingDemo(this);
 
         this.displayUI();
-        Octree.EnableLogs(false, true);
+        Octree.enableLogs(false, true);
         this.onSceneChanged();
     }
 
     public update(deltaTime: number)
     {
-        this._spaceshipDemo.update();
-        this._frustumCullingDemo.update();
+        this.spaceshipDemo.update();
+        this.frustumCullingDemo.update();
     }
 
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {
-        this._spaceshipDemo.discardScene();
-        this._frustumCullingDemo.discardScene();
+        this.spaceshipDemo.discardScene();
+        this.frustumCullingDemo.discardScene();
 
-        this._debugUI.reset(); //Events will also unsubscribe here
-        this._visualizer._cameraManager.scene.background = this._defaultSceneColor;
-        this._camera.position.copy(this._defaultCameraPos);
-        this._camera.far = this._defaultCameraFar;
-        this._camera.near = this._defaultCameraNear;
+        this.debugUI.reset(); //Events will also unsubscribe here
+        this.visualizer.cameraManager.getScene().background = this.defaultSceneColor;
+        this.camera.position.copy(this.defaultCameraPos);
+        this.camera.far = this.defaultCameraFar;
+        this.camera.near = this.defaultCameraNear;
     }
 
 
     private displayUI()
     {
-        this._debugUI.reset();
-        this._debugUI.addDropdown("", this._settings, "selectedDemo", this._settings.availableDemos, "DemoScene", () => { this.onSceneChanged(); });
-        this._debugUI.addCheckbox("", this._settings, "displayOctreeDebug", "Display Octree", () => { this.onDebugDisplayChanged(); });
-        this._debugUI.addCheckbox("", this._settings, "displayObjectsDebug", "Display Object Bounds", () => { this.onDebugDisplayChanged(); });
+        this.debugUI.reset();
+        this.debugUI.addDropdown("", this.settings, "selectedDemo", this.settings.availableDemos, "DemoScene", () => { this.onSceneChanged(); });
+        this.debugUI.addCheckbox("", this.settings, "displayOctreeDebug", "Display Octree", () => { this.onDebugDisplayChanged(); });
+        this.debugUI.addCheckbox("", this.settings, "displayObjectsDebug", "Display Object Bounds", () => { this.onDebugDisplayChanged(); });
 
-        if(this._settings.selectedDemo == "Spaceships")
+        if(this.settings.selectedDemo == "Spaceships")
         {
-            this._debugUI.addSlider("", this._settings, "asteroidCount", 0, 5000, "Asteroid Count", () => { this._spaceshipDemo.updateAsteroidCount(); });
-            this._debugUI.addSlider("", this._settings, "spaceshipCount", 0, 1000, "Spaceship Count", () => { this._spaceshipDemo.updateSpaceshipCount(); });
-            this._debugUI.addText("", this._settings, "objBoundsUpdate", "Bounds Recompute", false);
-            this._debugUI.addText("", this._settings, "octreeUpdateTime", "Octree Update", false);
+            this.debugUI.addSlider("", this.settings, "asteroidCount", 0, 5000, "Asteroid Count", () => { this.spaceshipDemo.updateAsteroidCount(); });
+            this.debugUI.addSlider("", this.settings, "spaceshipCount", 0, 1000, "Spaceship Count", () => { this.spaceshipDemo.updateSpaceshipCount(); });
+            this.debugUI.addText("", this.settings, "objBoundsUpdate", "Bounds Recompute", false);
+            this.debugUI.addText("", this.settings, "octreeUpdateTime", "Octree Update", false);
         }
-        else if(this._settings.selectedDemo == "FrustumCulling")
+        else if(this.settings.selectedDemo == "FrustumCulling")
         {
-            this._debugUI.addSlider("", this._settings, "treeCount", 0, 10000, "Tree Count", () => { this._frustumCullingDemo.updateTreeCount(); });
-            this._debugUI.addText("", this._settings, "octreeQueryTime", "Octree Query", false);
-            this._debugUI.addText("", this._settings, "frustumCullingTime", "Frustum Culling", false);
+            this.debugUI.addSlider("", this.settings, "treeCount", 0, 10000, "Tree Count", () => { this.frustumCullingDemo.updateTreeCount(); });
+            this.debugUI.addText("", this.settings, "octreeQueryTime", "Octree Query", false);
+            this.debugUI.addText("", this.settings, "frustumCullingTime", "Frustum Culling", false);
         }
     }
 
     private onSceneChanged()
     {
-        this._frustumCullingDemo.hideScene();
-        this._spaceshipDemo.hideScene();
+        this.frustumCullingDemo.hideScene();
+        this.spaceshipDemo.hideScene();
         this.displayUI();
 
-        switch(this._settings.selectedDemo)
+        switch(this.settings.selectedDemo)
         {
             case "Spaceships":
-                this._spaceshipDemo.setupScene();
+                this.spaceshipDemo.setupScene();
                 break;
             case "FrustumCulling":
-                this._frustumCullingDemo.setupScene();
+                this.frustumCullingDemo.setupScene();
                 break;
         }
     }
 
     private onDebugDisplayChanged()
     {
-        this._frustumCullingDemo.onDebugDisplayChanged();
-        this._spaceshipDemo.onDebugDisplayChanged();
+        this.frustumCullingDemo.onDebugDisplayChanged();
+        this.spaceshipDemo.onDebugDisplayChanged();
     }
 
     public spawnRandomObjects(objToSpawn: Object3D, count: number, minScale: number, maxScale: number, randomizeY: boolean, fixedY: number, maxSpawnDistance: Vector3, isMovable: boolean, objectsDebugVisualizer: OctreeVisualizer)
@@ -186,8 +186,8 @@ export class ShaderSceneOctree
             let scale = minScale + Math.random() * (maxScale - minScale)
             obj.scale.set(scale, scale, scale);
 
-            this._scene.add(obj);
-            let octreeObj = new OctreeObj(obj, isMovable, this._settings.displayObjectsDebug ? objectsDebugVisualizer : undefined);
+            this.scene.add(obj);
+            let octreeObj = new OctreeObj(obj, isMovable, this.settings.displayObjectsDebug ? objectsDebugVisualizer : undefined);
             newObjects.push(octreeObj);
         }
         return newObjects;

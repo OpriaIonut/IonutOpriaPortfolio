@@ -27,42 +27,42 @@ export class OctreeObj
         }
     }
 
-    public UpdateBounds()
+    public updateBounds()
     {
-        OctreeHelper.RecomputeBoundsFast(this.bounds, this.obj);
+        OctreeHelper.recomputeBoundsFast(this.bounds, this.obj);
     }
 
-    public GetBounds(): Box3
+    public getBounds(): Box3
     {
         return this.bounds;
     }
 
-    public GetObject3D(): Object3D
+    public getObject3D(): Object3D
     {
         return this.obj;
     }
 
-    public GetNode(): OctreeNode | undefined
+    public getNode(): OctreeNode | undefined
     {
         return this.node;
     }
 
-    public IsMovable(): boolean
+    public isObjMovable(): boolean
     {
         return this.isMovable;
     }
 
-    public SetCurrentNode(node: OctreeNode)
+    public setCurrentNode(node: OctreeNode)
     {
         this.node = node;
     }
 
-    public SetMovingFlag(canMove: boolean)
+    public setMovingFlag(canMove: boolean)
     {
         this.isMovable = canMove;
     }
 
-    public SetDebugVisualizer(debugVisualizer?: OctreeVisualizer)
+    public setDebugVisualizer(debugVisualizer?: OctreeVisualizer)
     {
         if(debugVisualizer == undefined && this.debugVisualizer != undefined)
             this.debugVisualizer.releaseCube(this.debugCubeId);

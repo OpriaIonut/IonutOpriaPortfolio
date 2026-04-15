@@ -3,12 +3,12 @@ import { OctreeObj } from "./OctreeObj";
 
 export class OctreeHelper
 {
-    public static ContainsPoint(bounds: Box3, point: Vector3): boolean
+    public static containsPoint(bounds: Box3, point: Vector3): boolean
     {
         return bounds.containsPoint(point);
     }
 
-    public static ContainsBounds(largeBounds: Box3, smallBounds: Box3): boolean
+    public static containsBounds(largeBounds: Box3, smallBounds: Box3): boolean
     {
         let largeMin: Vector3 = largeBounds.min;
         let largeMax: Vector3 = largeBounds.max;
@@ -21,7 +21,7 @@ export class OctreeHelper
             smallMin.z >= largeMin.z && smallMax.z <= largeMax.z;
     }
 
-    public static CalculateBoundsFromObjects(objects: Object3D[]): Box3
+    public static calculateBoundsFromObjects(objects: Object3D[]): Box3
     {
         let isInit = false;
         let bounds = new Box3();
@@ -42,7 +42,7 @@ export class OctreeHelper
         return bounds;
     }
 
-    public static CalculateBoundsFromOctreeObjects(objects: OctreeObj[]): Box3
+    public static calculateBoundsFromOctreeObjects(objects: OctreeObj[]): Box3
     {
         let isInit = false;
         let bounds = new Box3();
@@ -54,16 +54,16 @@ export class OctreeHelper
 
             if (!isInit)
             {
-                bounds.setFromObject(objects[index].GetObject3D());
+                bounds.setFromObject(objects[index].getObject3D());
                 isInit = true;
             }
             else
-                bounds.expandByObject(objects[index].GetObject3D());
+                bounds.expandByObject(objects[index].getObject3D());
         }
         return bounds;
     }
 
-    public static RecomputeBoundsFast(bounds: Box3, obj: Object3D)
+    public static recomputeBoundsFast(bounds: Box3, obj: Object3D)
     {
         bounds.makeEmpty();
         

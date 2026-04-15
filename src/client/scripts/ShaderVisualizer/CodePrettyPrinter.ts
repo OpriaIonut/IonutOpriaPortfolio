@@ -1,7 +1,7 @@
 export class CodePrettyPrinter
 {
-    private _style1Color: string = "rgb(114, 161, 230)";
-    private _style1Keywords = [
+    private style1Color: string = "rgb(114, 161, 230)";
+    private style1Keywords = [
         "class", "private", "public", "let", "void",
         "sampler2D", "samplerCube", "sampler3D", "sampler1D",
         "varying", "const", "uniform", "true", "false", "struct", "readonly", "this",
@@ -9,10 +9,10 @@ export class CodePrettyPrinter
     ];
 
     // Preprocessor-style keywords (no word boundaries)
-    private _style1SpecialKeywords = ["#define", "#if", "#else"];
+    private style1SpecialKeywords = ["#define", "#if", "#else"];
 
-    private _style2Color: string = "#7cdcfe";
-    private _style2Keywords = [
+    private style2Color: string = "#7cdcfe";
+    private style2Keywords = [
         "gl_Position", "gl_FragColor", "gl_FragCoord",
         "projectionMatrix", "modelMatrix", "viewMatrix",
         "modelViewMatrix", "modelViewProjectionMatrix",
@@ -22,24 +22,24 @@ export class CodePrettyPrinter
         "mat2x2", "mat3x2", "mat4x2", "mat2x3", "mat3x3", "mat4x3", "mat4x4"
     ];
     
-    private _style3Color: string = "#dc8adbff";
-    private _style3Keywords = [
+    private style3Color: string = "#dc8adbff";
+    private style3Keywords = [
         "break", "continue", "return", "do", "for", "while",
         "if", "else", "inout", "discard",
         "lowp", "mediump", "highp", "precision",
         "import", "export", "from", "new", "as"
     ];
 
-    private _commentPlaceholders: string[] = [];
-    private _stringPlaceholders: string[] = [];
+    private commentPlaceholders: string[] = [];
+    private stringPlaceholders: string[] = [];
 
-    private _commentColor: string = "#6a9955"; // green comments
+    private commentColor: string = "#6a9955"; // green comments
 
-    private _importSymbolColor: string = "#4ec9a2"; // purple-ish
-    private _importedSymbols: Set<string> = new Set();
+    private importSymbolColor: string = "#4ec9a2"; // purple-ish
+    private importedSymbols: Set<string> = new Set();
 
-    private _functionCallColor: string = "#d5cfaa";
-    private _stringColor: string = "#ce9178";
+    private functionCallColor: string = "#d5cfaa";
+    private stringColor: string = "#ce9178";
 
     public formatCode(code: string): string
     {
@@ -73,16 +73,16 @@ export class CodePrettyPrinter
             }
         };
 
-        replaceKeywords(this._style1Keywords, this._style1Color);
-        replaceKeywords(this._style2Keywords, this._style2Color);
-        replaceKeywords(this._style3Keywords, this._style3Color);
+        replaceKeywords(this.style1Keywords, this.style1Color);
+        replaceKeywords(this.style2Keywords, this.style2Color);
+        replaceKeywords(this.style3Keywords, this.style3Color);
 
         // 7️⃣ Special keywords
-        for (const keyword of this._style1SpecialKeywords)
+        for (const keyword of this.style1SpecialKeywords)
         {
             result = result.replace(
                 new RegExp(keyword, "g"),
-                `<span style="color: ${this._style1Color};">${keyword}</span>`
+                `<span style="color: ${this.style1Color};">${keyword}</span>`
             );
         }
 
@@ -97,12 +97,12 @@ export class CodePrettyPrinter
 
     private colorImportedSymbols(result: string): string
     {
-        for (const symbol of this._importedSymbols)
+        for (const symbol of this.importedSymbols)
         {
             const regex = new RegExp(`\\b${symbol}\\b`, "g");
             result = result.replace(
                 regex,
-                `<span style="color: ${this._importSymbolColor};">${symbol}</span>`
+                `<span style="color: ${this.importSymbolColor};">${symbol}</span>`
             );
         }
         return result;
@@ -122,7 +122,7 @@ export class CodePrettyPrinter
 
             for (const symbol of symbols)
             {
-                this._importedSymbols.add(symbol);
+                this.importedSymbols.add(symbol);
             }
         }
     }
@@ -130,8 +130,8 @@ export class CodePrettyPrinter
     private colorFunctionCalls(code: string): string
     {
         const excluded = new Set([
-            ...this._style1Keywords,
-            ...this._style3Keywords,
+            ...this.style1Keywords,
+            ...this.style3Keywords,
             "function", "constructor"
         ]);
 
@@ -142,7 +142,7 @@ export class CodePrettyPrinter
             if (excluded.has(fnName))
                 return match;
 
-            return `<span style="color: ${this._functionCallColor};">${fnName}</span>(`;
+            return `<span style="color: ${this.functionCallColor};">${fnName}</span>(`;
         });
     }
 
@@ -153,18 +153,18 @@ export class CodePrettyPrinter
 
         return code.replace(stringRegex, match =>
         {
-            return `<span style="color: ${this._stringColor};">${match}</span>`;
+            return `<span style="color: ${this.stringColor};">${match}</span>`;
         });
     }
 
     private extractComments(code: string): string
     {
-        this._commentPlaceholders = [];
+        this.commentPlaceholders = [];
 
         return code.replace(/\/\/.*$/gm, (match) =>
         {
-            const index = this._commentPlaceholders.length;
-            this._commentPlaceholders.push(match);
+            const index = this.commentPlaceholders.length;
+            this.commentPlaceholders.push(match);
             return `@@COMMENT_${index}@@`;
         });
     }
@@ -173,22 +173,22 @@ export class CodePrettyPrinter
     {
         return code.replace(/@@COMMENT_(\d+)@@/g, (_, index) =>
         {
-            const comment = this._commentPlaceholders[Number(index)];
-            return `<span style="color: ${this._commentColor};">${comment}</span>`;
+            const comment = this.commentPlaceholders[Number(index)];
+            return `<span style="color: ${this.commentColor};">${comment}</span>`;
         });
     }
 
     private extractStrings(code: string): string
     {
-        this._stringPlaceholders = [];
+        this.stringPlaceholders = [];
 
         const stringRegex =
             /("([^"\\]|\\.)*")|('([^'\\]|\\.)*')|(`[^`]*`)/gs;
 
         return code.replace(stringRegex, (match) =>
         {
-            const index = this._stringPlaceholders.length;
-            this._stringPlaceholders.push(match);
+            const index = this.stringPlaceholders.length;
+            this.stringPlaceholders.push(match);
             return `@@STRING_${index}@@`;
         });
     }
@@ -197,8 +197,8 @@ export class CodePrettyPrinter
     {
         return code.replace(/@@STRING_(\d+)@@/g, (_, index) =>
         {
-            const value = this._stringPlaceholders[Number(index)];
-            return `<span style="color: ${this._stringColor};">${value}</span>`;
+            const value = this.stringPlaceholders[Number(index)];
+            return `<span style="color: ${this.stringColor};">${value}</span>`;
         });
     }
 }

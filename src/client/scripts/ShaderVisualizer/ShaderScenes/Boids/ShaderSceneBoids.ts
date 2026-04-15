@@ -21,7 +21,7 @@ export class ShaderSceneBoids
     public init(visualizer: ShaderVisualizer)
     {
         this._visualizer = visualizer;
-        this._camera = visualizer._cameraManager.camera;
+        this._camera = visualizer.cameraManager.getCamera();
 
         this._camera.position.set(50, 0.0, 0.0);
 

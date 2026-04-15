@@ -9,75 +9,75 @@ import { OctreeVisualizer } from "../Scripts/OctreeVisualizer";
 
 export class OctreeFrustumCullingDemo
 {
-    private _scene: ShaderSceneOctree;
+    private scene: ShaderSceneOctree;
 
-    private _spawnedTrees: OctreeObj[] = [];
+    private spawnedTrees: OctreeObj[] = [];
     
-    private _spawnDistance: Vector3 = new Vector3(100, 100, 100);
-    private _octreeBounds: Box3 = new Box3(new Vector3(-150, -150, -150), new Vector3(150, 150, 150));
+    private spawnDistance: Vector3 = new Vector3(100, 100, 100);
+    private octreeBounds: Box3 = new Box3(new Vector3(-150, -150, -150), new Vector3(150, 150, 150));
 
-    private _viewRadius: number = 35;
-    private _viewHeight: number = 150.0;
+    private viewRadius: number = 35;
+    private viewHeight: number = 150.0;
 
-    private _octree!: Octree;
-    private _octreeDebugVisualizer!: OctreeVisualizer;
-    private _objectsDebugVisualizer!: OctreeVisualizer;
+    private octree!: Octree;
+    private octreeDebugVisualizer!: OctreeVisualizer;
+    private objectsDebugVisualizer!: OctreeVisualizer;
     
-    private _tree?: Object3D;
-    private _frustumGround?: Mesh;
-    private _frustumViewRadius?: Mesh;
+    private tree?: Object3D;
+    private frustumGround?: Mesh;
+    private frustumViewRadius?: Mesh;
     
     constructor(sceneManager: ShaderSceneOctree)
     {
-        this._scene = sceneManager;
-        this._octreeDebugVisualizer = new OctreeVisualizer(this._scene.getScene());
-        this._objectsDebugVisualizer = new OctreeVisualizer(this._scene.getScene());
+        this.scene = sceneManager;
+        this.octreeDebugVisualizer = new OctreeVisualizer(this.scene.getScene());
+        this.objectsDebugVisualizer = new OctreeVisualizer(this.scene.getScene());
     }
 
     public setupScene()
     {
-        let settings = this._scene.getUISettings();
+        let settings = this.scene.getUISettings();
         settings.displayOctreeDebug = false;
         settings.displayObjectsDebug = false;
 
-        this._scene.setBackgroundColor(new Color(0x555555));
-        this._scene.getCamera().position.set(0, 300, 0.0);
+        this.scene.setBackgroundColor(new Color(0x555555));
+        this.scene.getCamera().position.set(0, 300, 0.0);
 
-        if(this._frustumGround == undefined)
+        if(this.frustumGround == undefined)
         {
-            this._frustumGround = new Mesh(new PlaneGeometry(), new MeshStandardMaterial({ color: 0xffffff, side: DoubleSide }));
-            this._frustumGround.position.set(0, 5, 0);
-            this._frustumGround.scale.set(200, 200, 200);
-            this._frustumGround.rotation.set(-Math.PI / 2.0, 0.0, 0.0);
-            this._scene.getScene().add(this._frustumGround);
+            this.frustumGround = new Mesh(new PlaneGeometry(), new MeshStandardMaterial({ color: 0xffffff, side: DoubleSide }));
+            this.frustumGround.position.set(0, 5, 0);
+            this.frustumGround.scale.set(200, 200, 200);
+            this.frustumGround.rotation.set(-Math.PI / 2.0, 0.0, 0.0);
+            this.scene.getScene().add(this.frustumGround);
 
-            this._scene.getTextureLoader().load("images/textures/grass.jpg", (tex: Texture) => {
+            this.scene.getTextureLoader().load("images/textures/grass.jpg", (tex: Texture) => {
                 tex.wrapS = RepeatWrapping;
                 tex.wrapT = RepeatWrapping;
                 tex.repeat.set(2, 2);
 
-                let mat = this._frustumGround!.material as MeshStandardMaterial;
+                let mat = this.frustumGround!.material as MeshStandardMaterial;
                 mat.map = tex;
                 mat.needsUpdate = true;
             });
         }
         else
-            this._frustumGround.visible = true;
+            this.frustumGround.visible = true;
 
-        if(this._frustumViewRadius == undefined)
+        if(this.frustumViewRadius == undefined)
         {
-            this._frustumViewRadius = new Mesh(new ConeGeometry(35, 150, 32, 1), new MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.25 }));
-            this._frustumViewRadius.rotateX(Math.PI / 2);
-            this._frustumViewRadius.renderOrder = 100;
-            this._scene.getScene().add(this._frustumViewRadius);
+            this.frustumViewRadius = new Mesh(new ConeGeometry(35, 150, 32, 1), new MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.25 }));
+            this.frustumViewRadius.rotateX(Math.PI / 2);
+            this.frustumViewRadius.renderOrder = 100;
+            this.scene.getScene().add(this.frustumViewRadius);
         }
         else
-            this._frustumViewRadius.visible = true;
+            this.frustumViewRadius.visible = true;
         
-        if(this._tree == undefined)
+        if(this.tree == undefined)
         {
-            this._scene.getObjectLoader().loadModel("models/ShaderProjects/Octree/pine_tree.glb", (model: Asset3D) => {
-                this._tree = model.model;
+            this.scene.getObjectLoader().loadModel("models/ShaderProjects/Octree/pine_tree.glb", (model: Asset3D) => {
+                this.tree = model.model;
                 this.onTreeAssetLoaded();
             }, () => {});
         }
@@ -88,7 +88,7 @@ export class OctreeFrustumCullingDemo
     public update()
     {
         this.moveViewRadius();
-        if(this._scene.getUISettings().selectedDemo == "FrustumCulling" && this._octree != undefined && this._frustumViewRadius != undefined && this._frustumViewRadius.visible)
+        if(this.scene.getUISettings().selectedDemo == "FrustumCulling" && this.octree != undefined && this.frustumViewRadius != undefined && this.frustumViewRadius.visible)
         {
             let boxes = this.computeViewBoxes();
             let foundTrees = this.queryOctree(boxes);
@@ -98,103 +98,103 @@ export class OctreeFrustumCullingDemo
 
     public hideScene()
     {
-        if(this._octree)
-            this._octree.Destroy();
-        for(let index = 0; index < this._spawnedTrees.length; ++index)
+        if(this.octree)
+            this.octree.destroy();
+        for(let index = 0; index < this.spawnedTrees.length; ++index)
         {
-            let obj = this._spawnedTrees[index].GetObject3D();
-            this._scene.getScene().remove(obj);
+            let obj = this.spawnedTrees[index].getObject3D();
+            this.scene.getScene().remove(obj);
             ThreeHelpers.disposeObject(obj);
         }
-        this._spawnedTrees = [];
+        this.spawnedTrees = [];
 
-        if(this._frustumViewRadius)
-            this._frustumViewRadius.visible = false;
-        if(this._frustumGround)
-            this._frustumGround.visible = false;
+        if(this.frustumViewRadius)
+            this.frustumViewRadius.visible = false;
+        if(this.frustumGround)
+            this.frustumGround.visible = false;
 
-        this._octreeDebugVisualizer.releaseAllCubes();
-        this._objectsDebugVisualizer.releaseAllCubes();
+        this.octreeDebugVisualizer.releaseAllCubes();
+        this.objectsDebugVisualizer.releaseAllCubes();
     }
 
     public discardScene()
     {
         this.hideScene();
-        if(this._frustumGround)
-            ThreeHelpers.disposeObject(this._frustumGround);
-        if(this._frustumViewRadius)
-            ThreeHelpers.disposeObject(this._frustumViewRadius);
+        if(this.frustumGround)
+            ThreeHelpers.disposeObject(this.frustumGround);
+        if(this.frustumViewRadius)
+            ThreeHelpers.disposeObject(this.frustumViewRadius);
     }
 
     public onDebugDisplayChanged()
     {
-        let settings = this._scene.getUISettings();
-        if(this._octree)
-            this._octree.SetDebugVisualizer(settings.displayOctreeDebug ? this._octreeDebugVisualizer : undefined);
-        for(let index = 0; index < this._spawnedTrees.length; ++index)
+        let settings = this.scene.getUISettings();
+        if(this.octree)
+            this.octree.setDebugVisualizer(settings.displayOctreeDebug ? this.octreeDebugVisualizer : undefined);
+        for(let index = 0; index < this.spawnedTrees.length; ++index)
         {
-            this._spawnedTrees[index].SetDebugVisualizer(settings.displayObjectsDebug ? this._objectsDebugVisualizer : undefined);
+            this.spawnedTrees[index].setDebugVisualizer(settings.displayObjectsDebug ? this.objectsDebugVisualizer : undefined);
         }
     }
 
     public updateTreeCount()
     {
-        let diff = this._scene.getUISettings().treeCount - this._spawnedTrees.length;
+        let diff = this.scene.getUISettings().treeCount - this.spawnedTrees.length;
         if(diff < 0)
         {
             for(let index = 0; index < -diff; ++index)
             {
-                this._spawnedTrees[index].SetDebugVisualizer(undefined);
-                let obj = this._spawnedTrees[index].GetObject3D();
-                this._octree.RemoveObject(obj);
-                this._scene.getScene().remove(obj);
+                this.spawnedTrees[index].setDebugVisualizer(undefined);
+                let obj = this.spawnedTrees[index].getObject3D();
+                this.octree.removeObject(obj);
+                this.scene.getScene().remove(obj);
                 ThreeHelpers.disposeObject(obj);
             }
-            this._spawnedTrees.splice(0, -diff);
+            this.spawnedTrees.splice(0, -diff);
         }
         else if(diff > 0)
         {
-            let newTrees = this._scene.spawnRandomObjects(this._tree!, diff, 1.0, 2.0, false, 5, this._spawnDistance, false, this._objectsDebugVisualizer);
-            let length = this._spawnedTrees.length;
+            let newTrees = this.scene.spawnRandomObjects(this.tree!, diff, 1.0, 2.0, false, 5, this.spawnDistance, false, this.objectsDebugVisualizer);
+            let length = this.spawnedTrees.length;
             for(let index = 0; index < newTrees.length; ++index)
             {
-                this._spawnedTrees.push(newTrees[index]);
-                this._octree.AddObject(this._spawnedTrees[index + length]);
+                this.spawnedTrees.push(newTrees[index]);
+                this.octree.addObject(this.spawnedTrees[index + length]);
             }
         }
     }
 
     private onTreeAssetLoaded()
     {
-        let settings = this._scene.getUISettings();
-        this._spawnedTrees = this._scene.spawnRandomObjects(this._tree!, settings.treeCount, 1.0, 2.0, false, 5, this._spawnDistance, false, this._objectsDebugVisualizer);
-        for(let index = 0; index < this._spawnedTrees.length; ++index)
+        let settings = this.scene.getUISettings();
+        this.spawnedTrees = this.scene.spawnRandomObjects(this.tree!, settings.treeCount, 1.0, 2.0, false, 5, this.spawnDistance, false, this.objectsDebugVisualizer);
+        for(let index = 0; index < this.spawnedTrees.length; ++index)
         {
-            this._spawnedTrees[index].GetObject3D().visible = false;
+            this.spawnedTrees[index].getObject3D().visible = false;
         }
-        this._octree = new Octree(this._octreeBounds, this._spawnedTrees, 5, 7, 1, settings.displayOctreeDebug ? this._octreeDebugVisualizer : undefined);
+        this.octree = new Octree(this.octreeBounds, this.spawnedTrees, 5, 7, 1, settings.displayOctreeDebug ? this.octreeDebugVisualizer : undefined);
     }
 
     private moveViewRadius()
     {
-        if(this._frustumViewRadius != undefined && this._frustumViewRadius.visible == true)
+        if(this.frustumViewRadius != undefined && this.frustumViewRadius.visible == true)
         {
             let time = timeStats.currentTime * 0.5;
-            this._frustumViewRadius.position.set(
+            this.frustumViewRadius.position.set(
                 Math.cos(time) * 75.0,
                 5.0,
                 Math.sin(time) * 75.0
             );
             let angle = Math.atan2(Math.cos(time), -Math.sin(time));
-            this._frustumViewRadius.rotation.set(Math.PI / 2.0, 0.0, angle);
+            this.frustumViewRadius.rotation.set(Math.PI / 2.0, 0.0, angle);
         }
     }
 
     private computeViewBoxes()
     {
-        for(let index = 0; index < this._spawnedTrees.length; ++index)
+        for(let index = 0; index < this.spawnedTrees.length; ++index)
         {
-            this._spawnedTrees[index].GetObject3D().visible = false;
+            this.spawnedTrees[index].getObject3D().visible = false;
         }
 
         let origin = new Vector3();
@@ -203,12 +203,12 @@ export class OctreeFrustumCullingDemo
         let boxes: THREE.Box3[] = [];
         for (let index = 0; index < sliceCount; ++index)
         {
-            let distance1 = index / sliceCount * this._viewHeight;
-            let distance2 = (index + 1) / sliceCount * this._viewHeight;
+            let distance1 = index / sliceCount * this.viewHeight;
+            let distance2 = (index + 1) / sliceCount * this.viewHeight;
             let distanceMid = (distance1 + distance2) * 0.5;
-            let midRadius = (distanceMid / this._viewHeight) * this._viewRadius;
+            let midRadius = (distanceMid / this.viewHeight) * this.viewRadius;
             if(index == 0)
-                midRadius = Math.max(distance1 / this._viewHeight * this._viewRadius, distance2 / this._viewHeight * this._viewRadius) * 2.0;
+                midRadius = Math.max(distance1 / this.viewHeight * this.viewRadius, distance2 / this.viewHeight * this.viewRadius) * 2.0;
 
             let halfSize = new Vector3(midRadius, midRadius, (distance2 - distance1) * 0.5);
             const corners: Vector3[] = [];
@@ -224,7 +224,7 @@ export class OctreeFrustumCullingDemo
                             localCenter.y + dy * halfSize.y,
                             localCenter.z + dz * halfSize.z
                         );
-                        corner.applyQuaternion(this._frustumViewRadius!.quaternion).add(origin);
+                        corner.applyQuaternion(this.frustumViewRadius!.quaternion).add(origin);
                         corners.push(corner);
                     }
                 }
@@ -241,25 +241,25 @@ export class OctreeFrustumCullingDemo
         let queryStartTime = performance.now();
         for(let index = 0; index < boxes.length; ++index)
         {
-            let foundTrees = this._octree.QueryBounds(boxes[index]);
+            let foundTrees = this.octree.queryBounds(boxes[index]);
             for(let index2 = 0; index2 < foundTrees.length; ++index2)
             {
                 allFoundTrees.push(foundTrees[index2]);
             }
         }
-        this._scene.getUISettings().octreeQueryTime = `${(performance.now() - queryStartTime).toFixed(2)}ms`;
+        this.scene.getUISettings().octreeQueryTime = `${(performance.now() - queryStartTime).toFixed(2)}ms`;
         return allFoundTrees;
     }
 
     private frustumCull(allFoundTrees: OctreeObj[])
     {
         let frustumStartTime = performance.now()
-        let coneForward = new Vector3(0, -1, 0).applyQuaternion(this._frustumViewRadius!.quaternion).normalize();
-        let halfAngle = Math.atan(this._viewRadius / this._viewHeight);
+        let coneForward = new Vector3(0, -1, 0).applyQuaternion(this.frustumViewRadius!.quaternion).normalize();
+        let halfAngle = Math.atan(this.viewRadius / this.viewHeight);
         let cosThreshold = Math.cos(halfAngle);
         for(let index = 0; index < allFoundTrees.length; ++index)
         {
-            let obj = allFoundTrees[index].GetObject3D();
+            let obj = allFoundTrees[index].getObject3D();
             let dirToObj = obj.position.clone().normalize();
 
             let dot = coneForward.dot(dirToObj);
@@ -267,6 +267,6 @@ export class OctreeFrustumCullingDemo
             if(insideAngle)
                 obj.visible = true;
         }
-        this._scene.getUISettings().frustumCullingTime = `${(performance.now() - frustumStartTime).toFixed(2)}ms`;
+        this.scene.getUISettings().frustumCullingTime = `${(performance.now() - frustumStartTime).toFixed(2)}ms`;
     }
 }

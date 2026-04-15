@@ -16,45 +16,45 @@ export class ShaderVisualizerCamera
     public renderPasses: Pass[] = [];
     public controls: OrbitControls | FirstPersonControls | undefined;
 
-    private _canvas: HTMLCanvasElement;
+    private canvas: HTMLCanvasElement;
 
-    private _renderer: WebGLRenderer | undefined;
-    private _camera: PerspectiveCamera | undefined;
-    private _scene: Scene = new Scene();
+    private renderer: WebGLRenderer | undefined;
+    private camera: PerspectiveCamera | undefined;
+    private scene: Scene = new Scene();
 
-    private _effectComposer: EffectComposer | undefined;
+    private effectComposer: EffectComposer | undefined;
 
-    private _cameraForward: Vector3 = new Vector3();
-    private _cameraRight:  Vector3 = new Vector3();
-    private _cameraUp: Vector3 = new Vector3();
+    private cameraForward: Vector3 = new Vector3();
+    private cameraRight:  Vector3 = new Vector3();
+    private cameraUp: Vector3 = new Vector3();
 
-    public get scene() { return this._scene as Scene; }
-    public get camera() { return this._camera as PerspectiveCamera; }
-    public get renderer() { return this._renderer as WebGLRenderer; }
+    public getScene() { return this.scene as Scene; }
+    public getCamera() { return this.camera as PerspectiveCamera; }
+    public getRenderer() { return this.renderer as WebGLRenderer; }
     
-    public get cameraForward() { return this._cameraForward; }
-    public get cameraRight() { return this._cameraRight; }
-    public get cameraUp() { return this._cameraUp; }
+    public getCameraForward() { return this.cameraForward; }
+    public getCameraRight() { return this.cameraRight; }
+    public getCameraUp() { return this.cameraUp; }
 
     constructor(canvas: HTMLCanvasElement)
     {
-        this._canvas = canvas;
-        this._renderer = new WebGLRenderer({
+        this.canvas = canvas;
+        this.renderer = new WebGLRenderer({
             canvas: canvas,
             powerPreference: "high-performance"
         });
-        this._renderer.shadowMap.enabled = false;
-        this._renderer.toneMapping = NoToneMapping;
-        this._renderer.outputColorSpace = SRGBColorSpace;
+        this.renderer.shadowMap.enabled = false;
+        this.renderer.toneMapping = NoToneMapping;
+        this.renderer.outputColorSpace = SRGBColorSpace;
         
-        this._scene = new Scene();
+        this.scene = new Scene();
         // new TextureLoader().load("images/model-bg/dark-dirty.jpg", (texture) => {
         //     this._scene.background = texture;
         // });
-        this._scene.background = new Color(0x555555);
+        this.scene.background = new Color(0x555555);
 
         let aspect = window.innerWidth / window.innerHeight;
-        this._camera = new PerspectiveCamera(40, aspect, 0.01, 100);
+        this.camera = new PerspectiveCamera(40, aspect, 0.01, 100);
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.setupPostProcessing();
 
@@ -74,15 +74,15 @@ export class ShaderVisualizerCamera
         );
         postProcessingRT.depthTexture = new DepthTexture(window.innerWidth, window.innerHeight, UnsignedByteType);
 
-        this._effectComposer = new EffectComposer(this._renderer!, postProcessingRT);
-        const renderPass = new RenderPass(this._scene, this._camera!);
-        this._effectComposer.addPass(renderPass);   
+        this.effectComposer = new EffectComposer(this.renderer!, postProcessingRT);
+        const renderPass = new RenderPass(this.scene, this.camera!);
+        this.effectComposer.addPass(renderPass);   
     }
     
     public resetCamera()
     {
-        this._camera!.position.set(0, 0, 10);
-        this._camera!.lookAt(0, 0, 0);
+        this.camera!.position.set(0, 0, 10);
+        this.camera!.lookAt(0, 0, 0);
         if(this.controls instanceof OrbitControls)
         {
             this.controls!.position0.set(0, 0, 10);
@@ -100,9 +100,9 @@ export class ShaderVisualizerCamera
         this.controls?.update(deltaTime);
 
         if(this.usePostProcessing)
-            this._effectComposer?.render(deltaTime);
+            this.effectComposer?.render(deltaTime);
         else
-            this._renderer?.render(this._scene, this._camera as Camera);
+            this.renderer?.render(this.scene, this.camera as Camera);
     }
 
     public onResize()
@@ -110,34 +110,34 @@ export class ShaderVisualizerCamera
         let width = window.innerWidth * 0.89;
         let height = window.innerHeight * 0.9;
 
-        this._renderer?.setSize(width, height);
-        this._renderer?.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer?.setSize(width, height);
+        this.renderer?.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        this._camera!.aspect = width / height;
-        this._camera!.updateProjectionMatrix();
+        this.camera!.aspect = width / height;
+        this.camera!.updateProjectionMatrix();
 
-        this._effectComposer?.setSize(width, height);
-        this._effectComposer?.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.effectComposer?.setSize(width, height);
+        this.effectComposer?.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     }
 
     public refreshCameraVectors()
     {
-        this._camera?.getWorldDirection(this._cameraForward);
+        this.camera?.getWorldDirection(this.cameraForward);
 
-        this._cameraRight.copy(rightDir);
-        this._camera?.localToWorld(this._cameraRight);
+        this.cameraRight.copy(rightDir);
+        this.camera?.localToWorld(this.cameraRight);
 
-        this._cameraUp.copy(upDir);
-        this._camera?.localToWorld(this._cameraUp);
+        this.cameraUp.copy(upDir);
+        this.camera?.localToWorld(this.cameraUp);
     }
 
     public addPostProcessingPass(pass: Pass)
     {
-        this._effectComposer?.addPass(pass);
+        this.effectComposer?.addPass(pass);
     }
 
     public removePostProcessingPass(pass: Pass)
     {
-        this._effectComposer?.removePass(pass);
+        this.effectComposer?.removePass(pass);
     }
 }

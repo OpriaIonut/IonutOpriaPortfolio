@@ -20,61 +20,61 @@ export enum ShaderSceneType
 
 export class ShaderVisualizer
 {
-    public _currentScene?: IShaderScene; //To do: set to private when done debugging
-    private _currentSceneType?: ShaderSceneType;
+    public currentScene?: IShaderScene; //To do: set to private when done debugging
+    private currentSceneType?: ShaderSceneType;
 
-    private _panel!: HTMLDivElement;
-    private _codePanelParent!: HTMLDivElement;
-    private _codePanelHeader!: HTMLDivElement;
-    private _codePanelInspector!: HTMLDivElement;
-    private _codePanelBtnActivation!: HTMLButtonElement;
+    private panel!: HTMLDivElement;
+    private codePanelParent!: HTMLDivElement;
+    private codePanelHeader!: HTMLDivElement;
+    private codePanelInspector!: HTMLDivElement;
+    private codePanelBtnActivation!: HTMLButtonElement;
 
-    private _availableShaders: ShaderInspectorData[] = [];
+    private availableShaders: ShaderInspectorData[] = [];
 
-    public _cameraManager!: ShaderVisualizerCamera; //To do: set to private when done debugging
-    public _objectLoader: ObjectLoader
-    // private _materialCache: any;
+    public cameraManager!: ShaderVisualizerCamera; //To do: set to private when done debugging
+    public objectLoader: ObjectLoader
+    // private materialCache: any;
     // private onModelLoaded: any;
     // private onModelProgress: any;
-    private _isMobile: boolean = false;
+    private isMobile: boolean = false;
 
     constructor()
     {
-        this._objectLoader = new ObjectLoader();
+        this.objectLoader = new ObjectLoader();
         this.initializeView();
     }
 
     public activateView(scene: ShaderSceneType)
     {
-        this._panel.style.display = "block";
-        this._currentScene = this.getSceneFromType(scene);
-        if(this._currentScene != undefined)
+        this.panel.style.display = "block";
+        this.currentScene = this.getSceneFromType(scene);
+        if(this.currentScene != undefined)
         {
-            this._currentScene.init(this);
-            this._cameraManager.scene.add(this._currentScene.getScene());
+            this.currentScene.init(this);
+            this.cameraManager.getScene().add(this.currentScene.getScene());
         }
 
     }
 
     public hideView()
     {
-        if(this._currentScene != undefined)
+        if(this.currentScene != undefined)
         {
-            this._currentScene.hide();
-            this._cameraManager.scene.remove(this._currentScene.getScene());
-            this._currentScene = undefined;
+            this.currentScene.hide();
+            this.cameraManager.getScene().remove(this.currentScene.getScene());
+            this.currentScene = undefined;
         }
-        this._cameraManager.resetCamera();
-        this._panel.style.display = "none";
-        this._codePanelParent.style.display = "none";
+        this.cameraManager.resetCamera();
+        this.panel.style.display = "none";
+        this.codePanelParent.style.display = "none";
         this.updateCodeActivationBtnStyle();
     }
 
     public update(deltaTime: number)
     {
-        this._cameraManager.update(deltaTime);
-        if(this._currentScene != undefined)
-            this._currentScene.update(deltaTime);
+        this.cameraManager.update(deltaTime);
+        if(this.currentScene != undefined)
+            this.currentScene.update(deltaTime);
     }
 
     public addScript(scriptName: string, scriptContent: string)
@@ -86,44 +86,44 @@ export class ShaderVisualizer
             let dataIndex = this.findScriptIndex(scriptName);
             if(dataIndex >= 0)
             {
-                for(let index = 0; index < this._availableShaders.length; ++index)
+                for(let index = 0; index < this.availableShaders.length; ++index)
                 {
-                    this._availableShaders[index].btn.className = "shaderBtnHeader";
+                    this.availableShaders[index].btn.className = "shaderBtnHeader";
                 }
-                this._codePanelInspector.innerHTML = this._availableShaders[dataIndex].code;
-                this._availableShaders[dataIndex].btn.className = "shaderBtnHeaderSelected";
+                this.codePanelInspector.innerHTML = this.availableShaders[dataIndex].code;
+                this.availableShaders[dataIndex].btn.className = "shaderBtnHeaderSelected";
             }
         };
-        this._codePanelHeader.appendChild(shaderBtn);
+        this.codePanelHeader.appendChild(shaderBtn);
 
         let shaderData: ShaderInspectorData = {
             name: scriptName,
             code: codePrettyPrinter.formatCode(scriptContent),
             btn: shaderBtn
         };
-        this._availableShaders.push(shaderData);
+        this.availableShaders.push(shaderData);
     }
 
     public removeScript(scriptName: string)
     {
-        if(this._availableShaders.length <= 0)
+        if(this.availableShaders.length <= 0)
             return;
 
         let dataIndex = this.findScriptIndex(scriptName);
         if(dataIndex >= 0)
         {
-            if(this._codePanelParent.contains(this._availableShaders[dataIndex].btn))
-                this._codePanelHeader.removeChild(this._availableShaders[dataIndex].btn);
-            this._availableShaders.splice(dataIndex, 1);
+            if(this.codePanelParent.contains(this.availableShaders[dataIndex].btn))
+                this.codePanelHeader.removeChild(this.availableShaders[dataIndex].btn);
+            this.availableShaders.splice(dataIndex, 1);
         }
-        this._codePanelInspector.innerHTML = "";
+        this.codePanelInspector.innerHTML = "";
     }
 
     private findScriptIndex(scriptName: string)
     {
-        for(let index = 0; index < this._availableShaders.length; ++index)
+        for(let index = 0; index < this.availableShaders.length; ++index)
         {
-            if(this._availableShaders[index].name == scriptName)
+            if(this.availableShaders[index].name == scriptName)
             {
                 return index;
             }
@@ -133,48 +133,48 @@ export class ShaderVisualizer
 
     private initializeView()
     {
-        this._panel = document.createElement("div");
-        this._panel.id = "shaderVisualizerParent";
-        this._panel.style.display = "none";
-        document.body.appendChild(this._panel);
+        this.panel = document.createElement("div");
+        this.panel.id = "shaderVisualizerParent";
+        this.panel.style.display = "none";
+        document.body.appendChild(this.panel);
 
         let viewPanel = document.createElement("div");
         viewPanel.id = "shaderVisualizer";
         viewPanel.className = "fullwidth";
-        this._panel.appendChild(viewPanel);
+        this.panel.appendChild(viewPanel);
 
         let canvasElem = document.createElement("canvas");
         canvasElem.className = "fullres";
         viewPanel.appendChild(canvasElem);
 
-        this._codePanelParent = document.createElement("div");
-        this._codePanelParent.id = "codePanelParent";
-        this._codePanelParent.style.display = "none";
-        viewPanel.appendChild(this._codePanelParent);
+        this.codePanelParent = document.createElement("div");
+        this.codePanelParent.id = "codePanelParent";
+        this.codePanelParent.style.display = "none";
+        viewPanel.appendChild(this.codePanelParent);
 
-        this._codePanelHeader = document.createElement("div");
-        this._codePanelHeader.id = "codePanelHeader";
-        this._codePanelParent.appendChild(this._codePanelHeader);
+        this.codePanelHeader = document.createElement("div");
+        this.codePanelHeader.id = "codePanelHeader";
+        this.codePanelParent.appendChild(this.codePanelHeader);
         
-        this._codePanelInspector = document.createElement("div");
-        this._codePanelInspector.id = "codePanelInspector";
-        this._codePanelParent.appendChild(this._codePanelInspector);
+        this.codePanelInspector = document.createElement("div");
+        this.codePanelInspector.id = "codePanelInspector";
+        this.codePanelParent.appendChild(this.codePanelInspector);
 
-        this._codePanelBtnActivation = document.createElement("button");
-        this._codePanelBtnActivation.id = "codePanelActivationBtn";
+        this.codePanelBtnActivation = document.createElement("button");
+        this.codePanelBtnActivation.id = "codePanelActivationBtn";
         this.updateCodeActivationBtnStyle();
-        this._codePanelBtnActivation.onclick = () => {
-            this._codePanelParent.style.display = (this._codePanelParent.style.display == "none") ? "block" : "none";
+        this.codePanelBtnActivation.onclick = () => {
+            this.codePanelParent.style.display = (this.codePanelParent.style.display == "none") ? "block" : "none";
             this.updateCodeActivationBtnStyle();
         }
-        viewPanel.appendChild(this._codePanelBtnActivation);
+        viewPanel.appendChild(this.codePanelBtnActivation);
 
-        this._panel.onclick = () => { this.hideView(); };
+        this.panel.onclick = () => { this.hideView(); };
         viewPanel.onclick = (event: any) => { event.stopPropagation(); };
 
-        this._cameraManager = new ShaderVisualizerCamera(canvasElem);
+        this.cameraManager = new ShaderVisualizerCamera(canvasElem);
         // this._objectLoader = new ObjectLoader();
-        // this._materialCache = new MaterialCache();
+        // this.materialCache = new MaterialCache();
 
         // this.onModelLoaded = this.onModelLoaded.bind(this);
         // this.onModelProgress = this.onModelProgress.bind(this);
@@ -185,8 +185,8 @@ export class ShaderVisualizer
     private async checkStats(viewPanel: HTMLDivElement) 
     {
         let gpuTier = await getGPUTier();
-        this._isMobile = gpuTier.isMobile == true;
-        this._cameraManager.isMobile = this._isMobile;
+        this.isMobile = gpuTier.isMobile == true;
+        this.cameraManager.isMobile = this.isMobile;
     }
 
     private getSceneFromType(scene: ShaderSceneType)
@@ -203,7 +203,7 @@ export class ShaderVisualizer
 
     private updateCodeActivationBtnStyle()
     {
-        this._codePanelBtnActivation.style.right = (this._codePanelParent.style.display == "none") ? "0%" : "40%";
-        this._codePanelBtnActivation.style.transform = (this._codePanelParent.style.display == "none") ? "translateY(-50%) scale(-1, 1)" : "translateY(-50%) scale(1, 1)";
+        this.codePanelBtnActivation.style.right = (this.codePanelParent.style.display == "none") ? "0%" : "40%";
+        this.codePanelBtnActivation.style.transform = (this.codePanelParent.style.display == "none") ? "translateY(-50%) scale(-1, 1)" : "translateY(-50%) scale(1, 1)";
     }
 }
