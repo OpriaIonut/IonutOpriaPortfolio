@@ -1,3 +1,4 @@
+export const exposedCodeSpaceship = `
 import { Box3, Object3D, Vector3 } from "three";
 import { timeStats } from "../../../../../client";
 
@@ -61,3 +62,4 @@ export class Spaceship
         this.obj.translateOnAxis(this.forward, this.movementSpeed * timeStats.deltaTime);
     }
 }
+`;

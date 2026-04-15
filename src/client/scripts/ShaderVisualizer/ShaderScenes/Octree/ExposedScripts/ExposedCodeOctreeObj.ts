@@ -1,3 +1,4 @@
+export const exposedCodeOctreeObj = `
 import { Box3, Color, Object3D } from "three";
 import { OctreeNode } from "./OctreeNode";
 import { OctreeVisualizer } from "./OctreeVisualizer";
@@ -81,3 +82,4 @@ export class OctreeObj
         this.debugVisualizer = debugVisualizer;
     }
 }
+`;

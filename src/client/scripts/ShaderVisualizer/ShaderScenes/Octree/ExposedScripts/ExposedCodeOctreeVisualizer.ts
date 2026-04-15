@@ -1,3 +1,4 @@
+export const exposedCodeOctreeVisualizer = `
 import { Box3, Box3Helper, Color, LineBasicMaterial, Scene } from "three";
 import { GenericPool } from "../../../../Helper/GenericPool";
 
@@ -98,3 +99,4 @@ export class OctreeVisualizer
         return mesh;
     }
 }
+`;

@@ -6,14 +6,12 @@ import { OctreeObj } from "./Scripts/OctreeObj";
 import { OctreeVisualizer } from "./Scripts/OctreeVisualizer";
 import { OctreeSpaceshipDemo } from "./Utility/OctreeSpaceshipDemo";
 import { OctreeFrustumCullingDemo } from "./Utility/OctreeFrustumCullingDemo";
-
-/* Demo scenes to build:
-        Comment everything
-        Display scripts on the page & add credits
-
-spaceship model: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8ccbcd
-tree: https://sketchfab.com/3d-models/pine-tree-e52769d653cd4e52a4acff3041961e65
-*/
+import { exposedCodeOctree } from "./ExposedScripts/ExposedCodeOctree";
+import { exposedCodeOctreeObj } from "./ExposedScripts/ExposedCodeOctreeObj";
+import { exposedCodeOctreeNode } from "./ExposedScripts/ExposedCodeOctreeNode";
+import { exposedCodeOctreeHelper } from "./ExposedScripts/ExposedCodeOctreeHelper";
+import { exposedCodeOctreeVisualizer } from "./ExposedScripts/ExposedCodeOctreeVisualizer";
+import { exposedCodeSpaceship } from "./ExposedScripts/ExposedCodeSpaceship";
 
 //Handles high-level management of the scene and it's components
 export class ShaderSceneOctree
@@ -24,9 +22,12 @@ export class ShaderSceneOctree
 
     private debugUI!: DebugUI;
     private textureLoader: TextureLoader = new TextureLoader();
+
+    //Demo scripts which hold all logic related to their respective demos
     private spaceshipDemo!: OctreeSpaceshipDemo;
     private frustumCullingDemo!: OctreeFrustumCullingDemo;
 
+    //Default properties of the camera/scene in order to reset things back to how they were before
     private defaultSceneColor!: Color;
     private defaultCameraNear: number = 0.01;
     private defaultCameraFar: number = 100.0;
@@ -63,11 +64,13 @@ export class ShaderSceneOctree
         this.visualizer = visualizer;
         this.camera = visualizer.cameraManager.getCamera();
 
+        //Store current camera properties to be able to reset them later on
         this.defaultCameraFar = this.camera.far;
         this.defaultCameraNear = this.camera.near;
         this.defaultSceneColor = this.visualizer.cameraManager.getScene().background as Color;
         this.defaultCameraPos.copy(this.camera.position);
 
+        //Set desired camera properties
         this.camera.near = 0.1;
         this.camera.far = 1000;
         this.camera.updateProjectionMatrix();
@@ -80,6 +83,7 @@ export class ShaderSceneOctree
         directionalLight.position.set(10.0, 10.0, 5.0);
         this.scene.add(directionalLight);
 
+        //Initialize debug ui
         this.debugUI = new DebugUI();
         let guiHtml = this.debugUI.getGUIClass()!.domElement;
         let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
@@ -88,12 +92,28 @@ export class ShaderSceneOctree
         guiHtml.style.left = "0px";
         guiHtml.style.top = "0px";
 
+        //Create demo scripts
         this.spaceshipDemo = new OctreeSpaceshipDemo(this);
         this.frustumCullingDemo = new OctreeFrustumCullingDemo(this);
 
+        //Set up the current scene
         this.displayUI();
         Octree.enableLogs(false, true);
         this.onSceneChanged();
+        
+        this.visualizer.addScript("OctreeObj.ts", exposedCodeOctreeObj);
+        this.visualizer.addScript("Octree.ts", exposedCodeOctree);
+        this.visualizer.addScript("OctreeNode.ts", exposedCodeOctreeNode);
+        this.visualizer.addScript("OctreeHelper.ts", exposedCodeOctreeHelper);
+        this.visualizer.addScript("OctreeVisualizer.ts", exposedCodeOctreeVisualizer);
+        this.visualizer.addScript("Spaceship.ts", exposedCodeSpaceship);
+
+        this.visualizer.addScript("Credits", `
+Special thanks to the following artists for their work:
+
+Tree: https://sketchfab.com/3d-models/pine-tree-e52769d653cd4e52a4acff3041961e65
+Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8ccbcd
+        `, false);
     }
 
     public update(deltaTime: number)
@@ -105,14 +125,24 @@ export class ShaderSceneOctree
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {
+        //Discard everything from the scenes
         this.spaceshipDemo.discardScene();
         this.frustumCullingDemo.discardScene();
 
+        //Reset the debug ui and the camera
         this.debugUI.reset(); //Events will also unsubscribe here
         this.visualizer.cameraManager.getScene().background = this.defaultSceneColor;
         this.camera.position.copy(this.defaultCameraPos);
         this.camera.far = this.defaultCameraFar;
         this.camera.near = this.defaultCameraNear;
+        
+        this.visualizer.removeScript("OctreeObj.ts");
+        this.visualizer.removeScript("Octree.ts");
+        this.visualizer.removeScript("OctreeNode.ts");
+        this.visualizer.removeScript("OctreeHelper.ts");
+        this.visualizer.removeScript("OctreeVisualizer.ts");
+        this.visualizer.removeScript("Spaceship.ts");
+        this.visualizer.removeScript("Credits");
     }
 
 
@@ -140,10 +170,12 @@ export class ShaderSceneOctree
 
     private onSceneChanged()
     {
+        //Hide both scenes
         this.frustumCullingDemo.hideScene();
         this.spaceshipDemo.hideScene();
         this.displayUI();
 
+        //Display the current selected scene
         switch(this.settings.selectedDemo)
         {
             case "Spaceships":
@@ -155,12 +187,14 @@ export class ShaderSceneOctree
         }
     }
 
+    //When changing debug toggles, change them in the demos
     private onDebugDisplayChanged()
     {
         this.frustumCullingDemo.onDebugDisplayChanged();
         this.spaceshipDemo.onDebugDisplayChanged();
     }
 
+    //Utility function to spawn objects. Called by both demos
     public spawnRandomObjects(objToSpawn: Object3D, count: number, minScale: number, maxScale: number, randomizeY: boolean, fixedY: number, maxSpawnDistance: Vector3, isMovable: boolean, objectsDebugVisualizer: OctreeVisualizer)
     {
         let newObjects: OctreeObj[] = [];

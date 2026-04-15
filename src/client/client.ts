@@ -53,15 +53,24 @@ warningMsgText.innerHTML = "Please open the website in a landscape/desktop forma
 warningMsg.appendChild(warningMsgText);
 document.body.appendChild(warningMsg);
 
+//Called when site gets left in the background
+let appIsPaused = false;
+document.addEventListener("visibilitychange", () => {
+    appIsPaused = document.hidden;
+});
+
 let previousFrameTime = 0;
 function gameLoop(timestamp: number)
 {
     requestAnimationFrame(gameLoop);
 
+    if(appIsPaused)
+        return;
+
     isPortraitMode.value = window.innerWidth / window.innerHeight < 1.0;
 
     let frameTime = timestamp * 0.001;
-    let deltaTime = (frameTime - previousFrameTime);
+    let deltaTime = Math.min(frameTime - previousFrameTime, 0.1); //To prevent large deltaTime
     previousFrameTime = frameTime;
 
     timeStats.currentTime = frameTime;
@@ -74,7 +83,6 @@ function gameLoop(timestamp: number)
     gameProjectsPanel.update();
     specialSkillsPanel.update();
     navbar.update();
-
 }
 requestAnimationFrame(gameLoop);
 

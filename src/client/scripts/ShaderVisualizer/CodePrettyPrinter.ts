@@ -2,10 +2,10 @@ export class CodePrettyPrinter
 {
     private style1Color: string = "rgb(114, 161, 230)";
     private style1Keywords = [
-        "class", "private", "public", "let", "void",
+        "class", "private", "public", "protected", "let", "void",
         "sampler2D", "samplerCube", "sampler3D", "sampler1D",
         "varying", "const", "uniform", "true", "false", "struct", "readonly", "this",
-        "declare", "type", "constructor"
+        "declare", "type", "constructor", "undefined", "null", "static"
     ];
 
     // Preprocessor-style keywords (no word boundaries)

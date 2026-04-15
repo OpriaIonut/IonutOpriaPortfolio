@@ -5,7 +5,6 @@ import { DebugUI } from "../../../../ThreeVisualizer/DebugGUI";
 export class MeshCutterUIManager
 {
     private debugUI: DebugUI;
-    private artistCredits: HTMLDivElement;
 
     //Callbacks for all events that can be created by player input
     private cutCallbacks: (() => void)[] = [];
@@ -55,13 +54,6 @@ export class MeshCutterUIManager
         guiHtml.style.left = "0px";
         guiHtml.style.top = "0px";
 
-        //Create a div that can be used to credit artists for their work (for meshes taken from the internet)
-        this.artistCredits = document.createElement("div");
-        this.artistCredits.id = "artistCredits";
-        this.artistCredits.style.display = "none";
-        this.artistCredits.innerHTML = "Please credit <a href='https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324'>SpatialNeglect</a> for the 3D model";
-        guiParent.appendChild(this.artistCredits);
-
         //Bind functions to work properly in callbacks
         this.onMeshChanged = this.onMeshChanged.bind(this);
         this.onNumOfCutsChanged = this.onNumOfCutsChanged.bind(this);
@@ -77,7 +69,6 @@ export class MeshCutterUIManager
         let guiHtml = this.debugUI.getGUIClass()!.domElement;
         let guiParent = document.getElementById("shaderVisualizer") as HTMLElement;
         guiParent.removeChild(guiHtml);
-        guiParent.removeChild(this.artistCredits);
         
         //Remove all listeners
         this.cutCallbacks = [];
@@ -103,8 +94,6 @@ export class MeshCutterUIManager
 
     public setExpandRadius(value: number) { this.debugUISettings.expandRadius = value; }
     public setCutDuration(value: number) { this.debugUISettings.cutDuration = `${value.toFixed(2)}ms`; }
-    public setArtistCreditsDisplay(enabled: boolean) { enabled ? "block" : "none" }
-    public setArtistCreditsName(name: string) { this.artistCredits.innerHTML = name; }
 
     //---------------------------UI Menu
     //Cut menu is the menu that you see by default (before the mesh is cut)

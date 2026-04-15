@@ -1,3 +1,4 @@
+export const exposedCodeOctreeHelper = `
 import { Box3, Mesh, Object3D, SkinnedMesh, Vector3 } from "three";
 import { OctreeObj } from "./OctreeObj";
 
@@ -131,3 +132,4 @@ export class OctreeHelper
         });
     }
 }
+`;

@@ -7,22 +7,27 @@ import { Asset3D } from "../../../../../types";
 import { ThreeHelpers } from "../../../../Helper/ThreeHelpers";
 import { OctreeVisualizer } from "../Scripts/OctreeVisualizer";
 
+//Utility script to hold all logic related to the frustum culling demo
 export class OctreeFrustumCullingDemo
 {
     private scene: ShaderSceneOctree;
 
     private spawnedTrees: OctreeObj[] = [];
     
-    private spawnDistance: Vector3 = new Vector3(100, 100, 100);
-    private octreeBounds: Box3 = new Box3(new Vector3(-150, -150, -150), new Vector3(150, 150, 150));
+    private spawnDistance: Vector3 = new Vector3(100, 100, 100); //How far objects can spawn
+    //Size of the octree. Larger just in case some objects end up outside the octree (although not possible for this demo)
+    private octreeBounds: Box3 = new Box3(new Vector3(-125, -125, -125), new Vector3(125, 125, 125));
 
-    private viewRadius: number = 35;
+    //Controls the cone view that moves left to right
+    private viewRadius: number = 50;
     private viewHeight: number = 150.0;
 
+    //Octree-related data
     private octree!: Octree;
     private octreeDebugVisualizer!: OctreeVisualizer;
     private objectsDebugVisualizer!: OctreeVisualizer;
     
+    //Meshes relevant to this demo
     private tree?: Object3D;
     private frustumGround?: Mesh;
     private frustumViewRadius?: Mesh;
@@ -34,6 +39,7 @@ export class OctreeFrustumCullingDemo
         this.objectsDebugVisualizer = new OctreeVisualizer(this.scene.getScene());
     }
 
+    //Called whenever we shitch to this scene
     public setupScene()
     {
         let settings = this.scene.getUISettings();
@@ -43,6 +49,7 @@ export class OctreeFrustumCullingDemo
         this.scene.setBackgroundColor(new Color(0x555555));
         this.scene.getCamera().position.set(0, 300, 0.0);
 
+        //If we haven't initialized the ground plane, initialize it
         if(this.frustumGround == undefined)
         {
             this.frustumGround = new Mesh(new PlaneGeometry(), new MeshStandardMaterial({ color: 0xffffff, side: DoubleSide }));
@@ -62,18 +69,20 @@ export class OctreeFrustumCullingDemo
             });
         }
         else
-            this.frustumGround.visible = true;
+            this.frustumGround.visible = true; //Otherwise, simply mark it as visible
 
+        //If we don't have a view radius, initialize it
         if(this.frustumViewRadius == undefined)
         {
-            this.frustumViewRadius = new Mesh(new ConeGeometry(35, 150, 32, 1), new MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.25 }));
+            this.frustumViewRadius = new Mesh(new ConeGeometry(this.viewRadius, this.viewHeight, 32, 1), new MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.25 }));
             this.frustumViewRadius.rotateX(Math.PI / 2);
             this.frustumViewRadius.renderOrder = 100;
             this.scene.getScene().add(this.frustumViewRadius);
         }
         else
-            this.frustumViewRadius.visible = true;
+            this.frustumViewRadius.visible = true; //Otherwise, simply mark it as visible
         
+        //If we haven't loaded the tree model, load it and then spawn them in the scene
         if(this.tree == undefined)
         {
             this.scene.getObjectLoader().loadModel("models/ShaderProjects/Octree/pine_tree.glb", (model: Asset3D) => {
@@ -82,20 +91,23 @@ export class OctreeFrustumCullingDemo
             }, () => {});
         }
         else
-            this.onTreeAssetLoaded();
+            this.onTreeAssetLoaded(); //Otherwise, if we already loaded the tree model, spawn them in the scene
     }
 
     public update()
     {
         this.moveViewRadius();
+
+        //If we are fully ready for the frustum culling demo
         if(this.scene.getUISettings().selectedDemo == "FrustumCulling" && this.octree != undefined && this.frustumViewRadius != undefined && this.frustumViewRadius.visible)
         {
-            let boxes = this.computeViewBoxes();
-            let foundTrees = this.queryOctree(boxes);
-            this.frustumCull(foundTrees);
+            let boxes = this.computeViewBoxes();        //Compute boxes that approximate our cone view
+            let foundTrees = this.queryOctree(boxes);   //Query the octree using the boxes we created and get all trees found by it
+            this.frustumCull(foundTrees);               //Check to see if these trees are actually in our cone view or if they are outside and display them based on that
         }
     }
 
+    //Called when we switch to another scene. Deletes procedural data but keeps references to the things loaded through the network
     public hideScene()
     {
         if(this.octree)
@@ -117,6 +129,7 @@ export class OctreeFrustumCullingDemo
         this.objectsDebugVisualizer.releaseAllCubes();
     }
 
+    //Called when we deactivate the octree experiment. Will discard all data
     public discardScene()
     {
         this.hideScene();
@@ -126,6 +139,7 @@ export class OctreeFrustumCullingDemo
             ThreeHelpers.disposeObject(this.frustumViewRadius);
     }
 
+    //Change debug display
     public onDebugDisplayChanged()
     {
         let settings = this.scene.getUISettings();
@@ -137,11 +151,13 @@ export class OctreeFrustumCullingDemo
         }
     }
 
+    //Called when we change the tree slider
     public updateTreeCount()
     {
         let diff = this.scene.getUISettings().treeCount - this.spawnedTrees.length;
         if(diff < 0)
         {
+            //If we have less trees now, discard them and remove from where they were referenced
             for(let index = 0; index < -diff; ++index)
             {
                 this.spawnedTrees[index].setDebugVisualizer(undefined);
@@ -154,6 +170,7 @@ export class OctreeFrustumCullingDemo
         }
         else if(diff > 0)
         {
+            //If we have more trees now, spawn new ones and initialize them
             let newTrees = this.scene.spawnRandomObjects(this.tree!, diff, 1.0, 2.0, false, 5, this.spawnDistance, false, this.objectsDebugVisualizer);
             let length = this.spawnedTrees.length;
             for(let index = 0; index < newTrees.length; ++index)
@@ -166,6 +183,7 @@ export class OctreeFrustumCullingDemo
 
     private onTreeAssetLoaded()
     {
+        //If we have the tree asset available, initialize the scene
         let settings = this.scene.getUISettings();
         this.spawnedTrees = this.scene.spawnRandomObjects(this.tree!, settings.treeCount, 1.0, 2.0, false, 5, this.spawnDistance, false, this.objectsDebugVisualizer);
         for(let index = 0; index < this.spawnedTrees.length; ++index)
@@ -175,34 +193,32 @@ export class OctreeFrustumCullingDemo
         this.octree = new Octree(this.octreeBounds, this.spawnedTrees, 5, 7, 1, settings.displayOctreeDebug ? this.octreeDebugVisualizer : undefined);
     }
 
+    //Rotate the radius by time. Due to the geometry, the center is in the middle of the cone view, so we had to do more complex calculations for it to show up properly
     private moveViewRadius()
     {
         if(this.frustumViewRadius != undefined && this.frustumViewRadius.visible == true)
         {
             let time = timeStats.currentTime * 0.5;
             this.frustumViewRadius.position.set(
-                Math.cos(time) * 75.0,
+                Math.cos(time) * this.viewHeight * 0.5,
                 5.0,
-                Math.sin(time) * 75.0
+                Math.sin(time) * this.viewHeight * 0.5
             );
             let angle = Math.atan2(Math.cos(time), -Math.sin(time));
             this.frustumViewRadius.rotation.set(Math.PI / 2.0, 0.0, angle);
         }
     }
 
+    //Generate boxes that approximate the view radius.
     private computeViewBoxes()
     {
-        for(let index = 0; index < this.spawnedTrees.length; ++index)
-        {
-            this.spawnedTrees[index].getObject3D().visible = false;
-        }
-
-        let origin = new Vector3();
-
-        let sliceCount = 5;
+        let sliceCount = 5; //How many boxes to generate
+        let origin = new Vector3(); //Origin that we want for our boxes (0, 0, 0) in our case.
         let boxes: THREE.Box3[] = [];
+
         for (let index = 0; index < sliceCount; ++index)
         {
+            //Compute start and end distances for our current slice of the view radius
             let distance1 = index / sliceCount * this.viewHeight;
             let distance2 = (index + 1) / sliceCount * this.viewHeight;
             let distanceMid = (distance1 + distance2) * 0.5;
@@ -210,6 +226,7 @@ export class OctreeFrustumCullingDemo
             if(index == 0)
                 midRadius = Math.max(distance1 / this.viewHeight * this.viewRadius, distance2 / this.viewHeight * this.viewRadius) * 2.0;
 
+            //Compute 8 points in world space for the bounding box corners
             let halfSize = new Vector3(midRadius, midRadius, (distance2 - distance1) * 0.5);
             const corners: Vector3[] = [];
             const localCenter = new Vector3(0, -distanceMid, 0);
@@ -229,12 +246,14 @@ export class OctreeFrustumCullingDemo
                     }
                 }
             }
+            //Generate the box based on the corners calculated
             const box = new Box3().setFromPoints(corners);
             boxes.push(box);
         }
         return boxes;
     }
 
+    //Query the octree using all of the boxes and return all trees found by this
     private queryOctree(boxes: Box3[])
     {
         let allFoundTrees: OctreeObj[] = [];
@@ -251,17 +270,26 @@ export class OctreeFrustumCullingDemo
         return allFoundTrees;
     }
 
+    //Display only trees that are within the view radius
     private frustumCull(allFoundTrees: OctreeObj[])
     {
+        //First of all hide all trees
+        for(let index = 0; index < this.spawnedTrees.length; ++index)
+        {
+            this.spawnedTrees[index].getObject3D().visible = false;
+        }
+
         let frustumStartTime = performance.now()
         let coneForward = new Vector3(0, -1, 0).applyQuaternion(this.frustumViewRadius!.quaternion).normalize();
         let halfAngle = Math.atan(this.viewRadius / this.viewHeight);
         let cosThreshold = Math.cos(halfAngle);
         for(let index = 0; index < allFoundTrees.length; ++index)
         {
+            //Go through each tree
             let obj = allFoundTrees[index].getObject3D();
             let dirToObj = obj.position.clone().normalize();
 
+            //And check if the angle towards this tree is close to our cone view forward
             let dot = coneForward.dot(dirToObj);
             let insideAngle = dot >= cosThreshold;
             if(insideAngle)

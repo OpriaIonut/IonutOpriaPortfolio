@@ -52,6 +52,11 @@ export class ShaderSceneMeshCutting
         this.visualizer.addScript("MeshCutterManager.ts", exposedCodeMeshCutterManager);
         this.visualizer.addScript("CutLinePreviewShader.ts", exposedCodeCutLineShader);
         this.visualizer.addScript("CutFillMaterial.ts", exposedCodeCutFillMaterial);
+        this.visualizer.addScript("Credits", `
+Special thanks to the following artist for their work:
+
+City: https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324
+        `, false);
 
         //Activate base state of the scene
         this.uiManager.displayCutMenu();
@@ -76,6 +81,7 @@ export class ShaderSceneMeshCutting
         this.visualizer.removeScript("MeshCutterManager.ts");
         this.visualizer.removeScript("CutLinePreviewShader.ts");
         this.visualizer.removeScript("CutFillMaterial.ts");
+        this.visualizer.removeScript("Credits");
     }
 
     public getScene() { return this.scene; }
@@ -121,7 +127,6 @@ export class ShaderSceneMeshCutting
         this.cutLogic.reset(true);
 
         let meshName = this.uiManager.getCurrentMeshName();
-        this.uiManager.setArtistCreditsDisplay(meshName == "City");
         this.cutLogic.loadNewMesh(meshName, () => {
             this.uiManager.displayCutMenu();
             this.cutLogic.updateCutPlanes(this.uiManager.getNumOfCutPlanes(), this.uiManager.getCutMode());

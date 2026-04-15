@@ -77,7 +77,7 @@ export class ShaderVisualizer
             this.currentScene.update(deltaTime);
     }
 
-    public addScript(scriptName: string, scriptContent: string)
+    public addScript(scriptName: string, scriptContent: string, prettyPrint: boolean = true)
     {
         let shaderBtn = document.createElement("div");
         shaderBtn.innerHTML = scriptName;
@@ -98,7 +98,7 @@ export class ShaderVisualizer
 
         let shaderData: ShaderInspectorData = {
             name: scriptName,
-            code: codePrettyPrinter.formatCode(scriptContent),
+            code: prettyPrint ? codePrettyPrinter.formatCode(scriptContent) : scriptContent,
             btn: shaderBtn
         };
         this.availableShaders.push(shaderData);

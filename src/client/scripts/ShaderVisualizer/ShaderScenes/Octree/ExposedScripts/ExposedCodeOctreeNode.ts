@@ -1,3 +1,4 @@
+export const exposedCodeOctreeNode = `
 import { Box3, Color, Object3D, Vector3 } from "three";
 import { OctreeObj } from "./OctreeObj";
 import { OctreeHelper } from "./OctreeHelper";
@@ -478,3 +479,4 @@ export class OctreeNode
         return childBounds;
     }
 }
+`;
