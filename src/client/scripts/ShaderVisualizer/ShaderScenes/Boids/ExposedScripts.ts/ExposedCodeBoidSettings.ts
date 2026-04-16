@@ -1,3 +1,4 @@
+export const exposedCodeBoidSettings = `
 //Those are settings that control how boids work
 export declare type BoidSettings = {
     //Boids can move between min & max speed depending on the forces that need to be applied to them
@@ -22,3 +23,4 @@ export declare type BoidSettings = {
     viewAngle: number,              //Creates a view cone/hemisphere based on this, which is used to detect nearby boids and for collision detection
     viewRadiusSegmentSize: number   //Controls how many rays we will end up generating for collision detection
 }
+`;

@@ -1,3 +1,4 @@
+export const exposedCodeBoidRaycaster = `
 import { Object3D, Raycaster, Vector3 } from "three";
 
 //This script helps keep trach of obstacles in the scene that we want to raycast to
@@ -36,3 +37,4 @@ export class ObstacleRaycaster
         return this.raycaster.intersectObjects(this.obstacles, true);
     }
 }
+`;

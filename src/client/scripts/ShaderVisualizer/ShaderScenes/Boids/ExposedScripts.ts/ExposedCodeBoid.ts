@@ -1,3 +1,4 @@
+export const exposedCodeBoid = `
 import { AnimationClip, AnimationMixer, Box3, MathUtils, Object3D, Quaternion, Vector2, Vector3 } from "three";
 import { BoidSettings } from "./BoidSettings";
 import { ThreeHelpers } from "../../../../Helper/ThreeHelpers";
@@ -390,3 +391,4 @@ export class Boid
         }
     }
 }
+`;
