@@ -8,6 +8,7 @@ export declare type BoidSettings = {
     cohesionFactor: number,
     boundsSteerFactor: number,
     collisionAvoidFactor: number,
+    pullTargetFactor: number,
 
     boundsDetectDist: number,
     viewRadius: number,
