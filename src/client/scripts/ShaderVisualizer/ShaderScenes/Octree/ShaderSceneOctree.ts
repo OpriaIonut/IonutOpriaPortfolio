@@ -12,9 +12,11 @@ import { exposedCodeOctreeNode } from "./ExposedScripts/ExposedCodeOctreeNode";
 import { exposedCodeOctreeHelper } from "./ExposedScripts/ExposedCodeOctreeHelper";
 import { exposedCodeOctreeVisualizer } from "./ExposedScripts/ExposedCodeOctreeVisualizer";
 import { exposedCodeSpaceship } from "./ExposedScripts/ExposedCodeSpaceship";
+import { IShaderScene } from "../IShaderScene";
+import { timeStats } from "../../../../client";
 
 //Handles high-level management of the scene and it's components
-export class ShaderSceneOctree
+export class ShaderSceneOctree implements IShaderScene
 {
     private scene: Scene = new Scene();
     private visualizer!: ShaderVisualizer;
@@ -33,6 +35,10 @@ export class ShaderSceneOctree
     private defaultCameraFar: number = 100.0;
     private defaultCameraPos: Vector3 = new Vector3();
 
+    //Settings to display proper FPS
+    private previousFrameTime: number = 0.0;
+    private smoothedFPS: number = 0.0;
+
     private settings = {
         //General
         selectedDemo: "Spaceships",
@@ -49,7 +55,8 @@ export class ShaderSceneOctree
         //Frustum
         treeCount: 1000,
         octreeQueryTime: "",
-        frustumCullingTime: ""
+        frustumCullingTime: "",
+        fps: ""
     }
 
     public getUISettings() { return this.settings; }
@@ -120,6 +127,13 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
     {
         this.spaceshipDemo.update();
         this.frustumCullingDemo.update();
+
+        
+        //Calculate and display FPS. Uses a smoothing formula to make numbers easier to read
+        let instantFPS = 1.0 / (timeStats.currentTime - this.previousFrameTime);
+        this.smoothedFPS = this.smoothedFPS ? (this.smoothedFPS * 0.9 + instantFPS * 0.1) : instantFPS;
+        this.settings.fps = `${(this.smoothedFPS).toFixed(2)}`;
+        this.previousFrameTime = timeStats.currentTime;
     }
 
     //Called when you deactivate the view, dispose & reset everything
@@ -167,6 +181,7 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
             this.debugUI.addText("", this.settings, "octreeQueryTime", "Octree Query", false);
             this.debugUI.addText("", this.settings, "frustumCullingTime", "Frustum Culling", false);
         }
+        this.debugUI.addText("", this.settings, "fps", "FPS", false);
     }
 
     private onSceneChanged()

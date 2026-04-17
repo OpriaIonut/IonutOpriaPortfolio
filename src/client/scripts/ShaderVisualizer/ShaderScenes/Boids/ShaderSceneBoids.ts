@@ -11,6 +11,7 @@ import { timeStats } from "../../../../client";
 import { exposedCodeBoid } from "./ExposedScripts.ts/ExposedCodeBoid";
 import { exposedCodeBoidSettings } from "./ExposedScripts.ts/ExposedCodeBoidSettings";
 import { exposedCodeBoidRaycaster } from "./ExposedScripts.ts/ExposedCodeBoidRaycaster";
+import { IShaderScene } from "../IShaderScene";
 
 //Struct defining some settings which are used to spawn the boids and which are different for each demo
 declare type BoidSpawnSettings =
@@ -22,7 +23,7 @@ declare type BoidSpawnSettings =
 }
 
 //Handles high-level management of the scene and it's components
-export class ShaderSceneBoids
+export class ShaderSceneBoids implements IShaderScene
 {
     private scene: Scene = new Scene();
     private visualizer!: ShaderVisualizer;

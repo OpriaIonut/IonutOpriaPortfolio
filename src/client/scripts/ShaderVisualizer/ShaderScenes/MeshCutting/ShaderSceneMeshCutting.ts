@@ -7,10 +7,11 @@ import { exposedCodeProceduralGeometry } from "./ExposedScripts/ExposedCodeProce
 import { exposedCodeCutLineShader } from "./ExposedScripts/ExposedCodeCutLineShader";
 import { exposedCodeCutFillMaterial } from "./ExposedScripts/ExposedCodeCutFillMaterial";
 import { exposedCodeMeshCutterManager } from "./ExposedScripts/ExposedCodeMeshCutterManager";
+import { IShaderScene } from "../IShaderScene";
 
 //Demo scene with the mesh cutting project
 //Handles high-level management of the scene and it's components
-export class ShaderSceneMeshCutting
+export class ShaderSceneMeshCutting implements IShaderScene
 {
     private scene: Scene = new Scene();
     private visualizer!: ShaderVisualizer;

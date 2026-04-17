@@ -8,14 +8,15 @@ import { ShaderSceneVolumetricClouds } from "./ShaderScenes/VolumetricClouds/Sha
 import { ShaderSceneBoids } from "./ShaderScenes/Boids/ShaderSceneBoids";
 import { ShaderSceneOctree } from "./ShaderScenes/Octree/ShaderSceneOctree";
 import { ObjectLoader } from "../ThreeVisualizer/ObjectLoader";
+import { ShaderSceneProceduralShapes2D } from "./ShaderScenes/ProceduralShapes2D/ShaderSceneProceduralShapes2D";
 
 export enum ShaderSceneType
 {
     MeshCutting,
-    ProceduralSnow,
-    VolumetricClouds,
+    ProceduralShuriken2D,
     Boids,
-    Octree
+    Octree,
+    VolumetricClouds
 }
 
 export class ShaderVisualizer
@@ -189,7 +190,7 @@ export class ShaderVisualizer
         this.cameraManager.isMobile = this.isMobile;
     }
 
-    private getSceneFromType(scene: ShaderSceneType)
+    private getSceneFromType(scene: ShaderSceneType): IShaderScene | undefined
     {
         switch(scene)
         {
@@ -197,6 +198,7 @@ export class ShaderVisualizer
             case ShaderSceneType.VolumetricClouds: return new ShaderSceneVolumetricClouds();
             case ShaderSceneType.Boids: return new ShaderSceneBoids();
             case ShaderSceneType.Octree: return new ShaderSceneOctree();
+            case ShaderSceneType.ProceduralShuriken2D: return new ShaderSceneProceduralShapes2D();
             default: undefined;
         }
     }
