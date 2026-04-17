@@ -52,7 +52,7 @@ export class WideCellWithDesc
         {
             this._cellDesc.style.display = "block";
             this._arrowElem.src = "./images/ui/next.png";
-            this._typewriter.displayText(this._description, 0.1, 0, 0, true, null);
+            this._typewriter.displayText(this._description, 0.01, 0, 0, true, null);
         }
         else
         {

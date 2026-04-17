@@ -162,7 +162,7 @@ export class ThreeModelView
         {
             this._cameraManager.update(deltaTime);
             if(this._animMixer !== undefined)
-                this._animMixer.update(deltaTime);
+                this._animMixer.update(deltaTime * 10.0); //Hack because I changed deltaTime calculations and now transitions are too slow (and I forgot how this works)
         }
     }
 

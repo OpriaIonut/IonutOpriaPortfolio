@@ -37,8 +37,8 @@ export class GameProjectsPanel
                 <br>
                 The enemy has multiple attack patterns that it utilizes to get into your cabin, which is the only thing keeping it at bay. You need to react to it's attack patterns and find ways to stop it from breaking through. This includes: building torches to burn the spider webs, navigating labyrinth-like structures, setting up a blockade inside the cabin, shooting the monster down with a slingshot, etc.
             `,
-            _tags: ["Unreal Engine", "Blueprints", "First-Person", "Horror", "Steam Release", "Enemy AI"],
-            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.gameType, tagColors.extra, tagColors.extra],
+            _tags: ["Unreal Engine", "Blueprints", "First-Person", "Horror", "Steam Release"],
+            _tagColors: [tagColors.software, tagColors.language, tagColors.gameType, tagColors.gameType, tagColors.extra],
             _btn1Link: "https://store.steampowered.com/app/2914870/Jorogumos_Cradle/",
             _btn2Link: "",
             _imagesPath: "images/gallery/jorogumos-cradle/",

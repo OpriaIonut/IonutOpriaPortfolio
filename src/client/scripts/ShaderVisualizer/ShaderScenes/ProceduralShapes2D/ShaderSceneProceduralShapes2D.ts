@@ -143,7 +143,7 @@ export class ShaderSceneProceduralShapes2D implements IShaderScene
         this.debugUI.addFolder("Shape Settings", "");
         this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_ShurikenRadius, "value", 0.1, 1.0, "Shuriken Radius");
         this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_NumPoints, "value", 3.0, 10.0, "Num Of Points");
-        this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_MidPointDist, "value", 0.0, 1.0, "Outer Circle Distance");
+        this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_MidPointDist, "value", 0.05, 1.0, "Outer Circle Distance");
         this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_MidPointRadius, "value", 0.0, 0.2, "Outer Circle Radius");
         this.debugUI.addSlider("Shape Settings", this.shurikenSettings.u_CenterRadius, "value", 0.0, 0.2, "Inner Circle Radius");
 
