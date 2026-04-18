@@ -29,6 +29,7 @@ export class ShaderProjectsPanel
         this._cells.push(new CellWithPreview(parentNode, "Octree", cellsPerWidth, "Octree", "images/shaders/OctreePreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Octree); }));
         this._cells.push(new CellWithPreview(parentNode, "Boids", cellsPerWidth, "Boids", "images/shaders/BoidsPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Boids); }));
         this._cells.push(new CellWithPreview(parentNode, "Procedural Shuriken", cellsPerWidth, "ProceduralShuriken", "images/shaders/ProceduralShuriken.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.ProceduralShuriken2D); }));
+        this._cells.push(new CellWithPreview(parentNode, "Water Shader (not finished)", cellsPerWidth, "WaterShader", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.Water); }));
         // this._cells.push(new CellWithPreview(parentNode, "Volumetric Clouds (not finished)", cellsPerWidth, "VolumetricClouds", "images/shaders/MeshCuttingPreview.jpg", () => { shaderVisualizer.activateView(ShaderSceneType.VolumetricClouds); }));
 
         let separator = document.createElement("div");

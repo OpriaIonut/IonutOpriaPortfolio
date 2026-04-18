@@ -17,7 +17,7 @@ export class ObjectLoader
         this._fbxLoader = new FBXLoader(loadingManager);
     }
 
-    public loadModel(path: string, callback: (model: Asset3D) => void, onProgress: (bytesLoaded: number) => void)
+    public loadModel(path: string, callback: (model: Asset3D) => void, onProgress?: (bytesLoaded: number) => void)
     {
         if(this._pool.has(path))
             callback(this._pool.get(path) as Asset3D);
@@ -41,7 +41,8 @@ export class ObjectLoader
                 this._pool.set(path, asset);
                 callback(asset);
             }, (progress: any) => {
-                onProgress(progress.loaded);
+                if(onProgress != undefined)
+                    onProgress(progress.loaded);
             });
         }
     }

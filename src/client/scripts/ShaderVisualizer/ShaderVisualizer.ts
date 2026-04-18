@@ -9,6 +9,7 @@ import { ShaderSceneBoids } from "./ShaderScenes/Boids/ShaderSceneBoids";
 import { ShaderSceneOctree } from "./ShaderScenes/Octree/ShaderSceneOctree";
 import { ObjectLoader } from "../ThreeVisualizer/ObjectLoader";
 import { ShaderSceneProceduralShapes2D } from "./ShaderScenes/ProceduralShapes2D/ShaderSceneProceduralShapes2D";
+import { ShaderSceneWater } from "./ShaderScenes/Water/ShaderSceneWater";
 
 export enum ShaderSceneType
 {
@@ -16,6 +17,7 @@ export enum ShaderSceneType
     ProceduralShuriken2D,
     Boids,
     Octree,
+    Water,
     VolumetricClouds
 }
 
@@ -199,6 +201,7 @@ export class ShaderVisualizer
             case ShaderSceneType.Boids: return new ShaderSceneBoids();
             case ShaderSceneType.Octree: return new ShaderSceneOctree();
             case ShaderSceneType.ProceduralShuriken2D: return new ShaderSceneProceduralShapes2D();
+            case ShaderSceneType.Water: return new ShaderSceneWater();
             default: undefined;
         }
     }

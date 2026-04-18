@@ -128,7 +128,6 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
         this.spaceshipDemo.update();
         this.frustumCullingDemo.update();
 
-        
         //Calculate and display FPS. Uses a smoothing formula to make numbers easier to read
         let instantFPS = 1.0 / (timeStats.currentTime - this.previousFrameTime);
         this.smoothedFPS = this.smoothedFPS ? (this.smoothedFPS * 0.9 + instantFPS * 0.1) : instantFPS;

@@ -1,10 +1,9 @@
 import { Camera, Color, DepthTexture, NoToneMapping, PerspectiveCamera, Scene, SRGBColorSpace, UnsignedByteType, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { FirstPersonControls } from "three/examples/jsm/controls/FirstPersonControls";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { FreeFlyCamera } from "./ShaderScenes/Water/FreeFlyCamera";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
@@ -14,7 +13,7 @@ export class ShaderVisualizerCamera
     public isMobile: boolean = false;
     public usePostProcessing: boolean = false;
     public renderPasses: Pass[] = [];
-    public controls: OrbitControls | FirstPersonControls | undefined;
+    public controls: OrbitControls | FreeFlyCamera | undefined;
 
     private canvas: HTMLCanvasElement;
 
@@ -139,5 +138,11 @@ export class ShaderVisualizerCamera
     public removePostProcessingPass(pass: Pass)
     {
         this.effectComposer?.removePass(pass);
+    }
+
+    public changeControls(controls: OrbitControls | FreeFlyCamera)
+    {
+        this.controls?.dispose();
+        this.controls = controls;
     }
 }
