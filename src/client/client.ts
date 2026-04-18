@@ -76,13 +76,17 @@ function gameLoop(timestamp: number)
     timeStats.currentTime = frameTime;
     timeStats.deltaTime = deltaTime;
 
-    mouseAnim.update();
+    //Renders 3D scenes
     threeModelView.update(deltaTime);
     shaderVisualizer.update(deltaTime);
+
+    mouseAnim.update();
     workProjectsPanel.update();
     gameProjectsPanel.update();
     specialSkillsPanel.update();
     navbar.update();
+
+    shaderVisualizer.render(deltaTime);
 }
 requestAnimationFrame(gameLoop);
 

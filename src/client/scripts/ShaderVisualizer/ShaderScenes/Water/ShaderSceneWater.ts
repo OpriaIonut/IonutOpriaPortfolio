@@ -1,15 +1,20 @@
-import { AmbientLight, Color, DirectionalLight, DoubleSide, LinearSRGBColorSpace, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, RepeatWrapping, Scene, SphereGeometry, SRGBColorSpace, Texture, TextureLoader, Vector3 } from "three";
+import { AmbientLight, Color, DepthFormat, DepthTexture, DirectionalLight, FloatType, LinearSRGBColorSpace, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, RedFormat, RepeatWrapping, Scene, ShaderMaterial, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { IShaderScene } from "../IShaderScene";
 import { Asset3D } from "../../../../types";
-import { FirstPersonControls } from "three/examples/jsm/controls/FirstPersonControls";
-import { FlyControls } from "three/examples/jsm/controls/FlyControls";
 import { FreeFlyCamera } from "./FreeFlyCamera";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { WaterMaterial, WaterMaterialUniforms } from "./WaterMaterial";
 
 
 /*
+To do:
+    -look up a water shader and implement it
+    -improve environment
+    -antialias
+    -check performance
+
 skybox: https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky
 potential tree: https://sketchfab.com/3d-models/coconut-palm-26e787f2ff2e4c0fb004c3b0210805a3
 potential tree: https://sketchfab.com/3d-models/curly-palm-00f2b57dd0e844edbeb116034fa471ec
@@ -26,6 +31,7 @@ export class ShaderSceneWater implements IShaderScene
     private scene: Scene = new Scene();
     private visualizer!: ShaderVisualizer;
     private camera!: PerspectiveCamera;
+    private renderer!: WebGLRenderer;
 
     //Default properties of the camera/scene in order to reset things back to how they were before
     private defaultCameraNear: number = 0.01;
@@ -41,9 +47,12 @@ export class ShaderSceneWater implements IShaderScene
     private palmTree?: Object3D;
     private skybox?: Object3D;
 
+    private depthBuffer!: WebGLRenderTarget;
+
 
     private waterPlaneResolution: number = 50.0;
     private waterMesh?: Mesh;
+    private waterShader!: ShaderMaterial;
 
     private spawnedTrees: SpawnedObj[] = [];
 
@@ -53,12 +62,33 @@ export class ShaderSceneWater implements IShaderScene
         sandColor: new Color(0x48463e)
     }
 
+    private waterUniforms: WaterMaterialUniforms = {
+        u_DepthTex: { value: null },
+        u_ViewportSize: { value: new Vector2() },
+        u_CameraNear: { value: 0.1 },
+        u_CameraFar: { value: 100.0 },
+        
+        u_FarColor: { value: new Color(0x436a92) },
+        u_MidColor: { value: new Color(0x31a6bd) },
+        u_ShoreColor: { value: new Color(0x6dd1c3) }
+    }
+
     public getScene() { return this.scene; }
 
     public init(visualizer: ShaderVisualizer)
     {
         this.visualizer = visualizer;
         this.camera = visualizer.cameraManager.getCamera();
+        this.renderer = visualizer.cameraManager.getRenderer();
+
+        //Set up depth buffer
+        this.depthBuffer = new WebGLRenderTarget(this.renderer.domElement.width, this.renderer.domElement.height);
+        this.depthBuffer.depthBuffer = true;
+        this.depthBuffer.texture.format = RedFormat;
+
+        this.depthBuffer.depthTexture = new DepthTexture(this.renderer.domElement.width, this.renderer.domElement.height);
+        this.depthBuffer.depthTexture.format = DepthFormat;
+        this.depthBuffer.depthTexture.type = FloatType;
 
         //Store current camera properties to be able to reset them later on
         this.defaultCameraFar = this.camera.far;
@@ -68,12 +98,15 @@ export class ShaderSceneWater implements IShaderScene
 
         //Set desired camera properties
         this.camera.near = 0.1;
-        this.camera.far = 1000;
+        this.camera.far = 750;
         this.camera.updateProjectionMatrix();
         this.camera.position.set(40, 20, 0);
 
         this.camera.rotation.set(0, Math.PI / 2.0, 0.0);
         this.camera.rotateX(-Math.PI / 8.0);
+
+        this.waterUniforms.u_CameraNear.value = this.camera.near;
+        this.waterUniforms.u_CameraFar.value = this.camera.far;
 
         let newControls = new FreeFlyCamera(this.camera, this.visualizer.cameraManager.getRenderer().domElement);
         newControls.moveSpeed = 25.0;
@@ -103,7 +136,52 @@ export class ShaderSceneWater implements IShaderScene
 
     public update(deltaTime: number)
     {
+        if(!this.waterMesh)
+            return;
 
+        //Render depth texture
+        this.waterMesh.visible = false;
+        this.setMaterialRendering(false, true); //Update materials to not render color information
+
+        this.depthBuffer.setSize(this.renderer.domElement.width, this.renderer.domElement.height);
+        this.renderer.setRenderTarget(this.depthBuffer);
+        this.renderer.render(this.scene, this.camera);
+        this.renderer.setRenderTarget(null);
+
+        this.setMaterialRendering(true, true); //Reset materials
+        this.waterMesh.visible = true;
+
+        //Update water shader with rendered data
+        this.waterUniforms.u_ViewportSize.value.set(this.renderer.domElement.width, this.renderer.domElement.height);
+        this.waterUniforms.u_DepthTex.value = this.depthBuffer.depthTexture;
+    }
+
+    private setMaterialRendering(drawColor: boolean, drawDepth: boolean)
+    {
+        this.scene.traverse((asset: Object3D) => {
+           if(!(asset instanceof Mesh))
+                return;
+            let mesh = asset as Mesh;
+        
+            if (Object.prototype.toString.call(mesh.material) === '[object Object]')
+            {
+                let mat = mesh.material as Material;
+                mat.colorWrite = drawColor;
+                mat.depthWrite = drawDepth;
+                mat.depthTest = drawDepth;
+            }
+            else
+            {
+                let material = mesh.material as Material[];
+                for (let index = 0; index < material.length; ++index)
+                {
+                    let mat = material[index];
+                    mat.colorWrite = drawColor;
+                    mat.depthWrite = drawDepth;
+                    mat.depthTest = drawDepth;
+                }
+            }
+        });
     }
 
     //Called when you deactivate the view, dispose & reset everything
@@ -121,6 +199,9 @@ export class ShaderSceneWater implements IShaderScene
         controls.target.copy(this.defaultControls.target);
         controls.position0.copy(this.defaultControls.position0);
         this.visualizer.cameraManager.changeControls(controls);
+
+        this.depthBuffer.depthTexture.dispose();
+        this.depthBuffer.dispose();
     }
 
     private displayUI()
@@ -128,6 +209,9 @@ export class ShaderSceneWater implements IShaderScene
         this.debugUI.reset();
 
         this.debugUI.addColorPicker("", this.settings, "sandColor", "Sand Color", (value) => { this.settings.sandColor.set(value); });
+        this.debugUI.addColorPicker("", this.waterUniforms.u_FarColor, "value", "Far Color", (value) => { this.waterUniforms.u_FarColor.value.set(value); });
+        this.debugUI.addColorPicker("", this.waterUniforms.u_MidColor, "value", "Mid Color", (value) => { this.waterUniforms.u_MidColor.value.set(value); });
+        this.debugUI.addColorPicker("", this.waterUniforms.u_ShoreColor, "value", "Shore Color", (value) => { this.waterUniforms.u_ShoreColor.value.set(value); });
     }
 
     private loadResources()
@@ -236,8 +320,10 @@ export class ShaderSceneWater implements IShaderScene
     private setupWater()
     {
         let waterGeom = new PlaneGeometry(1.0, 1.0, this.waterPlaneResolution, this.waterPlaneResolution);
-        let waterMat = new MeshStandardMaterial({ color: 0x35abc1, transparent: true, opacity: 0.5, side: DoubleSide });
-        this.waterMesh = new Mesh(waterGeom, waterMat);
+        // let waterMat = new MeshStandardMaterial({ color: 0x35abc1, transparent: true, opacity: 0.5, side: DoubleSide });
+        this.waterShader = WaterMaterial.createMaterial(this.waterUniforms);
+
+        this.waterMesh = new Mesh(waterGeom, this.waterShader);
         this.waterMesh.position.set(0, 5, 0);
         this.waterMesh.rotateX(-Math.PI * 0.5)
         this.waterMesh.scale.set(750, 750, 750);

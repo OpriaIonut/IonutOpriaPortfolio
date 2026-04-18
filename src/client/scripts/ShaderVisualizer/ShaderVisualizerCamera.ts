@@ -1,4 +1,4 @@
-import { Camera, Color, DepthTexture, NoToneMapping, PerspectiveCamera, Scene, SRGBColorSpace, UnsignedByteType, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
+import { Camera, Color, DepthFormat, DepthTexture, FloatType, NoToneMapping, PerspectiveCamera, Scene, SRGBColorSpace, UnsignedByteType, UnsignedShortType, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
@@ -38,6 +38,7 @@ export class ShaderVisualizerCamera
     constructor(canvas: HTMLCanvasElement)
     {
         this.canvas = canvas;
+
         this.renderer = new WebGLRenderer({
             canvas: canvas,
             powerPreference: "high-performance"
@@ -97,7 +98,10 @@ export class ShaderVisualizerCamera
     {
         this.refreshCameraVectors();
         this.controls?.update(deltaTime);
+    }
 
+    public render(deltaTime: number)
+    {
         if(this.usePostProcessing)
             this.effectComposer?.render(deltaTime);
         else

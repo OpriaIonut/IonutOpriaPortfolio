@@ -80,6 +80,11 @@ export class ShaderVisualizer
             this.currentScene.update(deltaTime);
     }
 
+    public render(deltaTime: number)
+    {
+        this.cameraManager.render(deltaTime);
+    }
+
     public addScript(scriptName: string, scriptContent: string, prettyPrint: boolean = true)
     {
         let shaderBtn = document.createElement("div");
