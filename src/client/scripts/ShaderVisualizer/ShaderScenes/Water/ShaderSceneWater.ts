@@ -1,4 +1,4 @@
-import { AmbientLight, Color, DepthFormat, DepthTexture, DirectionalLight, FloatType, LinearSRGBColorSpace, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, RedFormat, RepeatWrapping, Scene, ShaderMaterial, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
+import { AmbientLight, BoxGeometry, Color, DepthFormat, DepthTexture, DirectionalLight, FloatType, LinearSRGBColorSpace, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, RedFormat, RepeatWrapping, Scene, ShaderMaterial, SphereGeometry, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { IShaderScene } from "../IShaderScene";
@@ -6,6 +6,7 @@ import { Asset3D } from "../../../../types";
 import { FreeFlyCamera } from "./FreeFlyCamera";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { WaterMaterial, WaterMaterialUniforms } from "./WaterMaterial";
+import { timeStats } from "../../../../client";
 
 
 /*
@@ -50,7 +51,7 @@ export class ShaderSceneWater implements IShaderScene
     private depthBuffer!: WebGLRenderTarget;
 
 
-    private waterPlaneResolution: number = 50.0;
+    private waterPlaneResolution: number = 400.0;
     private waterMesh?: Mesh;
     private waterShader!: ShaderMaterial;
 
@@ -70,7 +71,31 @@ export class ShaderSceneWater implements IShaderScene
         
         u_FarColor: { value: new Color(0x436a92) },
         u_MidColor: { value: new Color(0x31a6bd) },
-        u_ShoreColor: { value: new Color(0x6dd1c3) }
+        u_ShoreColor: { value: new Color(0x6dd1c3) },
+
+        u_CameraPos: { value: new Vector3() },
+
+        u_LightDir: { value: new Vector3() },
+        u_Roughness: { value: 0.15 },
+        u_AmbientIntensity: { value: 0.2 },
+        u_LightIntensity: { value: 5.0 },
+        u_LightColor: { value: new Color(0xffffff) },
+        u_SpecularIntensity: { value: 1.0 },
+        u_SpecularColor: { value: new Color(0xffffff) },
+        
+        u_WaveCount: { value: 4.0 },
+        u_WaveSteepness: { value: 0.5 },
+        u_WaveAmplitude: { value: 0.6 },
+        u_WaveFrequency: { value: 40.0 },
+        u_WaveSpeed: { value: 1.2 },
+
+        u_Time: { value: 0.0 },
+        u_WaterNormalSpeed1: { value: 0.025 },
+        u_WaterNormalSpeed2: { value: 0.035 },
+        u_WaterNormalTiling1: { value: 10 },
+        u_WaterNormalTiling2: { value: 15 },
+
+        u_WaterNormal: { value: null }
     }
 
     public getScene() { return this.scene; }
@@ -109,7 +134,7 @@ export class ShaderSceneWater implements IShaderScene
         this.waterUniforms.u_CameraFar.value = this.camera.far;
 
         let newControls = new FreeFlyCamera(this.camera, this.visualizer.cameraManager.getRenderer().domElement);
-        newControls.moveSpeed = 25.0;
+        newControls.moveSpeed = 225.0;
         this.visualizer.cameraManager.changeControls(newControls);
 
         //Set up lights in the scene
@@ -117,8 +142,9 @@ export class ShaderSceneWater implements IShaderScene
         this.scene.add(ambientLight);
         
         let directionalLight = new DirectionalLight(0xffffff, 7.0);
-        directionalLight.position.set(10.0, 10.0, -10.0);
+        directionalLight.position.set(50.0, 100.0, -50.0);
         this.scene.add(directionalLight);
+        this.waterUniforms.u_LightDir.value.copy(directionalLight.target.position).sub(directionalLight.position).normalize();
 
         //Initialize debug ui
         this.debugUI = new DebugUI();
@@ -154,6 +180,8 @@ export class ShaderSceneWater implements IShaderScene
         //Update water shader with rendered data
         this.waterUniforms.u_ViewportSize.value.set(this.renderer.domElement.width, this.renderer.domElement.height);
         this.waterUniforms.u_DepthTex.value = this.depthBuffer.depthTexture;
+        this.waterUniforms.u_Time.value = timeStats.currentTime;
+        this.waterUniforms.u_CameraPos.value.copy(this.camera.position);
     }
 
     private setMaterialRendering(drawColor: boolean, drawDepth: boolean)
@@ -207,11 +235,28 @@ export class ShaderSceneWater implements IShaderScene
     private displayUI()
     {
         this.debugUI.reset();
+        
+        this.debugUI.addFolder("Colors", "");
+        this.debugUI.addColorPicker("Colors", this.settings, "sandColor", "Sand Color", (value) => { this.settings.sandColor.set(value); });
+        this.debugUI.addColorPicker("Colors", this.waterUniforms.u_FarColor, "value", "Far Color", (value) => { this.waterUniforms.u_FarColor.value.set(value); });
+        this.debugUI.addColorPicker("Colors", this.waterUniforms.u_MidColor, "value", "Mid Color", (value) => { this.waterUniforms.u_MidColor.value.set(value); });
+        this.debugUI.addColorPicker("Colors", this.waterUniforms.u_ShoreColor, "value", "Shore Color", (value) => { this.waterUniforms.u_ShoreColor.value.set(value); });
 
-        this.debugUI.addColorPicker("", this.settings, "sandColor", "Sand Color", (value) => { this.settings.sandColor.set(value); });
-        this.debugUI.addColorPicker("", this.waterUniforms.u_FarColor, "value", "Far Color", (value) => { this.waterUniforms.u_FarColor.value.set(value); });
-        this.debugUI.addColorPicker("", this.waterUniforms.u_MidColor, "value", "Mid Color", (value) => { this.waterUniforms.u_MidColor.value.set(value); });
-        this.debugUI.addColorPicker("", this.waterUniforms.u_ShoreColor, "value", "Shore Color", (value) => { this.waterUniforms.u_ShoreColor.value.set(value); });
+        this.debugUI.addFolder("PBR", "");
+        this.debugUI.addSlider("PBR", this.waterUniforms.u_Roughness, "value", 0.0, 1.0, "Roughness");
+        this.debugUI.addSlider("PBR", this.waterUniforms.u_AmbientIntensity, "value", 0.0, 1.0, "Ambient Intensity");
+        this.debugUI.addSlider("PBR", this.waterUniforms.u_LightIntensity, "value", 0.0, 10.0, "Light Intensity");
+        this.debugUI.addColorPicker("PBR", this.waterUniforms.u_LightColor, "value", "Light Color", (value) => { this.waterUniforms.u_LightColor.value.set(value); });
+        this.debugUI.addSlider("PBR", this.waterUniforms.u_SpecularIntensity, "value", 0.0, 1.0, "Specular Intensity");
+        this.debugUI.addColorPicker("PBR", this.waterUniforms.u_SpecularColor, "value", "Specular Color", (value) => { this.waterUniforms.u_SpecularColor.value.set(value); });
+
+
+        this.debugUI.addFolder("WaveMovement", "");
+        this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveCount, "value", 1.0, 10.0, "Wave Count");
+        this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveSteepness, "value", 0.0, 1.0, "Wave Steepness");
+        this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveAmplitude, "value", 0.001, 3.0, "Wave Amplitude");
+        this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveFrequency, "value", 8.0, 100.0, "Wave Frequency");
+        this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveSpeed, "value", 0.0, 3.0, "Wave Speed");
     }
 
     private loadResources()
@@ -252,6 +297,16 @@ export class ShaderSceneWater implements IShaderScene
                 this.onResourceLoaded();
             });
         }
+        if(this.waterUniforms.u_WaterNormal.value == null)
+        {
+            waitForResources = true;
+            textureLoader.load("models/ShaderProjects/Water/WaterNormal.jpg", (asset: Texture) => {
+                asset.wrapS = RepeatWrapping;
+                asset.wrapT = RepeatWrapping;
+                this.waterUniforms.u_WaterNormal.value = asset;
+                this.onResourceLoaded();
+            });
+        }
 
         if(!waitForResources)
             this.onResourceLoaded();
@@ -259,7 +314,7 @@ export class ShaderSceneWater implements IShaderScene
 
     private onResourceLoaded()
     {
-        if(this.sandMesh == undefined || this.sandTexAO == undefined || this.palmTree == undefined || this.skybox == undefined)
+        if(this.sandMesh == undefined || this.sandTexAO == undefined || this.palmTree == undefined || this.skybox == undefined || this.waterUniforms.u_WaterNormal.value == null)
             return;
 
         this.setupSand();
@@ -319,14 +374,12 @@ export class ShaderSceneWater implements IShaderScene
 
     private setupWater()
     {
-        let waterGeom = new PlaneGeometry(1.0, 1.0, this.waterPlaneResolution, this.waterPlaneResolution);
-        // let waterMat = new MeshStandardMaterial({ color: 0x35abc1, transparent: true, opacity: 0.5, side: DoubleSide });
+        let waterGeom = new PlaneGeometry(750.0, 750.0, this.waterPlaneResolution, this.waterPlaneResolution).rotateX(-Math.PI * 0.5);
+        waterGeom.computeTangents();
         this.waterShader = WaterMaterial.createMaterial(this.waterUniforms);
 
         this.waterMesh = new Mesh(waterGeom, this.waterShader);
         this.waterMesh.position.set(0, 5, 0);
-        this.waterMesh.rotateX(-Math.PI * 0.5)
-        this.waterMesh.scale.set(750, 750, 750);
         this.scene.add(this.waterMesh);
     }
 
