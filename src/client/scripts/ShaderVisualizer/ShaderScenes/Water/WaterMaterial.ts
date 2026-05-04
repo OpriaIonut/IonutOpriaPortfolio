@@ -2,23 +2,22 @@ import { Color, DoubleSide, ShaderMaterial, Texture, Vector2, Vector3 } from "th
 
 export declare type WaterMaterialUniforms = {
     u_DepthTex: { value: Texture | null },
+
     u_ViewportSize: { value: Vector2 }
     u_CameraNear: { value: number },
     u_CameraFar: { value: number },
+    u_CameraPos: { value: Vector3 },
 
     u_FarColor: { value: Color },
     u_MidColor: { value: Color },
     u_ShoreColor: { value: Color },
 
-    u_CameraPos: { value: Vector3 },
-
     u_LightDir: { value: Vector3 },
-    u_Roughness: { value: number },
     u_AmbientIntensity: { value: number },
     u_LightIntensity: { value: number },
     u_LightColor: { value: Color },
-    u_SpecularIntensity: { value: number },
-    u_SpecularColor: { value: Color },
+    u_FresnelColor: { value: Color },
+    u_EnvironmentIntensity: { value: number },
 
     u_WaveCount: { value: number },
     u_WaveSteepness: { value: number },
@@ -27,12 +26,9 @@ export declare type WaterMaterialUniforms = {
     u_WaveSpeed: { value: number },
 
     u_Time: { value: number },
-    u_WaterNormalSpeed1: { value: number },
-    u_WaterNormalSpeed2: { value: number },
-    u_WaterNormalTiling1: { value: number },
-    u_WaterNormalTiling2: { value: number },
 
-    u_WaterNormal: { value: Texture | null }
+    u_WaterNormal: { value: Texture | null },
+    u_SkyTexture: { value: Texture | null }
 }
 
 export class WaterMaterial
@@ -43,25 +39,25 @@ export class WaterMaterial
             vertexShader: waterVert,
             fragmentShader: waterFrag,
             uniforms: uniforms,
-            side: DoubleSide
+            side: DoubleSide,
+            transparent: true
         });
     }
 }
 
 /*
+- fix normal for environment refraction
+- surface fractals or however they are called
 
-- water lighting
-- foam around objects
-- fractals or however they are called
-- scene fog for horizontal line
 - underwater color
 - underwater fog
-- underwater fractals on the sand for areas close to the water surface
+- scene fog for horizontal line
 - scene shadow for palm trees
-
 */
 
 const waterVert = `
+precision highp float;
+
 #define PI 3.14159265359
 
 attribute vec4 tangent;
@@ -80,9 +76,11 @@ uniform float u_WaveAmplitude;
 uniform float u_WaveFrequency;
 uniform float u_WaveSpeed;
 
-vec3 gerstnerSum(vec3 position, float time, int numWaves, float amplitude, float frequency, float speed, float steepness, out float height01)
+vec3 gerstnerSum(vec3 position, float time, int numWaves, float amplitude, float frequency, float speed, float steepness, out float height01, out vec3 normal)
 {
     vec3 displacement = vec3(0.0);
+    vec3 tangent = vec3(1.0, 0.0, 0.0);
+    vec3 bitangent = vec3(0.0, 0.0, 1.0);
 
     for (int index = 0; index < numWaves; index++)
     {
@@ -97,7 +95,10 @@ vec3 gerstnerSum(vec3 position, float time, int numWaves, float amplitude, float
 
         float Q = steepness / (k * amplitude * float(numWaves));
         float QA = Q * amplitude;
+
         displacement += vec3(QA * dir.x * cosPhase, amplitude * sinPhase, QA * dir.y * cosPhase);
+        tangent += vec3(-QA * k * dir.x * dir.x * sinPhase, amplitude * k * dir.x * cosPhase, -QA * k * dir.x * dir.y * sinPhase);
+        bitangent += vec3(-QA * k * dir.x * dir.y * sinPhase, amplitude * k * dir.y * cosPhase, -QA * k * dir.y * dir.y * sinPhase);
 
         amplitude *= 0.75;
         frequency *= 0.65;
@@ -106,6 +107,7 @@ vec3 gerstnerSum(vec3 position, float time, int numWaves, float amplitude, float
     }
 
     height01 = clamp(displacement.y * 0.5 + 0.5, 0.0, 1.0);
+    normal = normalize(cross(tangent, bitangent));
     return position + displacement;
 }
 
@@ -114,7 +116,9 @@ void main()
     vec3 pos = position;
 
     //Gerstner waves
-    pos = gerstnerSum(pos, u_Time, u_WaveCount, u_WaveAmplitude, u_WaveFrequency, u_WaveSpeed, u_WaveSteepness, v_Height);
+    vec3 norm;
+    pos = gerstnerSum(pos, u_Time, u_WaveCount, u_WaveAmplitude, u_WaveFrequency, u_WaveSpeed, u_WaveSteepness, v_Height, norm);
+    v_NormalW = normalize(norm);
 
     //TNB
     vec3 T = normalize(normalMatrix * tangent.xyz);
@@ -126,13 +130,14 @@ void main()
     vec4 worldPos = modelMatrix * vec4(pos, 1.0);
     v_UV = uv;
     v_WorldPos = worldPos.xyz;
-    v_NormalW = normalize(mat3(modelMatrix) * normal);
 
     gl_Position = projectionMatrix * viewMatrix * worldPos;
 }
 `;
 
 const waterFrag = `
+precision highp float;
+
 #define PI 3.14159265359
 
 varying vec2 v_UV;
@@ -155,21 +160,17 @@ uniform vec3 u_ShoreColor;
 
 //Lighting
 uniform vec3 u_LightDir;
-uniform float u_Roughness;
 uniform float u_AmbientIntensity;
 uniform float u_LightIntensity;
 uniform vec3 u_LightColor;
-uniform float u_SpecularIntensity;
-uniform vec3 u_SpecularColor;
+uniform vec3 u_FresnelColor;
+uniform float u_EnvironmentIntensity;
 
 //Water behavior
 uniform float u_Time;
-uniform float u_WaterNormalSpeed1;
-uniform float u_WaterNormalSpeed2;
-uniform float u_WaterNormalTiling1;
-uniform float u_WaterNormalTiling2;
 
 uniform sampler2D u_WaterNormal;
+uniform sampler2D u_SkyTexture;
 
 
 float random(vec2 n)
@@ -184,84 +185,38 @@ float readDepth(sampler2D depthSampler, vec2 coord, float near, float far)
 	return (viewZ + near) / (near - far);
 }
 
-// PBR shader from: https://learnopengl.com/PBR/Lighting
-float DistributionGGX(vec3 N, vec3 H, float roughness)
-{
-    float a      = roughness * roughness;
-    float a2     = a * a;
-    float NdotH  = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
-	
-    float num   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-	
-    return num / denom;
-}
-
-float GeometrySchlickGGX(float NdotV, float roughness)
-{
-    float r = (roughness + 1.0);
-    float k = (r * r) / 8.0;
-
-    float num   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-	
-    return num / denom;
-}
-
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
-{
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
-	
-    return ggx1 * ggx2;
-}
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
 }  
 
-vec3 pbrLighting(vec3 unlitColor, vec3 lightDir, float metallic, float roughness, float ambientIntensity, vec3 specularColor, float specularIntensity, vec3 lightColor, float lightIntensity)
+vec3 pbrLighting(vec3 unlitColor, vec3 lightDir, float ambientIntensity, vec3 lightColor, float lightIntensity)
 {
     vec3 V = normalize(u_CameraPos - v_WorldPos.xyz);
-    vec3 N = normalize(v_NormalW);
-
-    vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, unlitColor, metallic);
-
-    // reflectance equation
-    vec3 Lo = vec3(0.0);
-
-    // calculate per-light radiance
     vec3 L = normalize(-lightDir);
     vec3 H = normalize(V + L);
-    vec3 radiance = lightColor;
 
-    // cook-torrance brdf
-    float NDF = DistributionGGX(N, H, roughness);
-    float G   = GeometrySmith(N, V, L, roughness);
-    vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);
+    float HdotV = max(dot(H, V), 0.0);
 
-    vec3 kS = F;
-    vec3 kD = vec3(1.0) - kS;
-    kD *= 1.0 - metallic;
+    vec3 F0 = vec3(0.04);
+    vec3 F = fresnelSchlick(HdotV, F0);
+    vec3 kD = vec3(1.0) - F;
 
-    vec3 nominator    = NDF * G * F;
-    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
-    vec3 specular = nominator / denominator;
-
-    // add to outgoing radiance Lo
-    float NdotL = max(dot(N, L), 0.0);
-
-    vec3 color = mix(unlitColor, specularColor, 0.1);
-    Lo += (kD * unlitColor / PI + specular * color * specularIntensity * 0.0125) * radiance * NdotL;
-
+    vec3 diffuse = kD * unlitColor / PI;
     vec3 ambient = vec3(ambientIntensity) * unlitColor;
-    return ambient + Lo * lightIntensity;
+
+    return ambient + diffuse * lightIntensity;
+}
+
+vec2 dirToUV(vec3 dir)
+{
+    dir = normalize(dir);
+
+    float u = atan(-dir.z, dir.x) / (2.0 * PI) + 0.5;
+    float v = asin(clamp(dir.y, -1.0, 1.0)) / PI + 0.5;
+
+    return vec2(u, v);
 }
 
 
@@ -271,17 +226,47 @@ void main()
     float alpha = 1.0;
     vec2 screenUV = gl_FragCoord.xy / u_ViewportSize;
 
-    float depthTex = 1.0 - readDepth(u_DepthTex, screenUV, u_CameraNear, u_CameraFar);
+    // vec3 dx = dFdx(v_WorldPos);
+    // vec3 dy = dFdy(v_WorldPos);
+    // vec3 finalNormal = normalize(cross(dx, dy));
+
+    vec2 distortion = v_NormalW.xz * 0.02;
+    float depthTex = 1.0 - readDepth(u_DepthTex, screenUV + distortion, u_CameraNear, u_CameraFar);
     depthTex += mix(-0.0025, 0.0025, random(screenUV)); //Add dithering to reduce color banding
 
     colorOut = mix(u_FarColor, u_MidColor, smoothstep(0.5, 0.9, depthTex));
     colorOut = mix(colorOut, u_ShoreColor, smoothstep(0.9, 1.0, depthTex));
 
-    vec3 topWaveColor = mix(colorOut, vec3(1.0), 0.25);
-    colorOut = mix(colorOut, topWaveColor, v_Height);
+    vec3 topWaveColor = mix(colorOut, vec3(1.0), 0.15);
+    colorOut = mix(colorOut, topWaveColor, v_Height); //Color based on Wave height
 
-    vec3 pbr = pbrLighting(colorOut, u_LightDir, 0.0, u_Roughness, u_AmbientIntensity, u_SpecularColor, u_SpecularIntensity, u_LightColor, u_LightIntensity);
+    //Fresnel
+    vec3 V = normalize(u_CameraPos - v_WorldPos.xyz);
+    float fresnel = pow(1.0 - max(dot(V, v_NormalW), 0.0), 5.0);
+    // colorOut = mix(colorOut, u_FresnelColor, fresnel);
+    
+    //PBR
+    vec3 pbr = pbrLighting(colorOut, u_LightDir, u_AmbientIntensity, u_LightColor, u_LightIntensity);
+
+    //Reflection & Refraction
+    vec3 reflectedDir = reflect(-V, v_NormalW);
+    vec2 skyUV = dirToUV(reflectedDir);
+    vec3 reflectedColor = texture2D(u_SkyTexture, skyUV).rgb;
+
+    vec3 refractedDir = refract(-V, v_NormalW, 0.75);
+    vec2 refractUV = dirToUV(refractedDir);
+    vec3 refractedColor = texture2D(u_SkyTexture, refractUV).rgb;
+
+    vec3 envColor = mix(refractedColor, reflectedColor, fresnel);
+
+    pbr = mix(pbr, envColor, u_EnvironmentIntensity);
+
+    float alphaMask = smoothstep(0.8, 1.0, depthTex);
+    alpha = mix(1.0, 0.65, alphaMask);
+
+    pbr += mix(-vec3(0.5 / 255.0), vec3(0.5 / 255.0), random(screenUV));
 
     gl_FragColor = vec4(pbr, alpha);
+    // gl_FragColor = vec4(vec3(v_NormalW.x, v_NormalW.y * 0.0, v_NormalW.z), 1.0);
 }
 `;

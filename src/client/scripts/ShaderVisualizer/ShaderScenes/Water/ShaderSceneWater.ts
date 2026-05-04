@@ -1,4 +1,4 @@
-import { AmbientLight, BoxGeometry, Color, DepthFormat, DepthTexture, DirectionalLight, FloatType, LinearSRGBColorSpace, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, RedFormat, RepeatWrapping, Scene, ShaderMaterial, SphereGeometry, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
+import { AmbientLight, Color, DepthFormat, DepthTexture, DirectionalLight, EquirectangularReflectionMapping, FloatType, Fog, FogExp2, LinearSRGBColorSpace, Material, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, PMREMGenerator, Raycaster, RedFormat, RepeatWrapping, RGBAFormat, Scene, ShaderMaterial, SphereGeometry, SRGBColorSpace, Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, WebGLRenderTarget } from "three";
 import { ShaderVisualizer } from "../../ShaderVisualizer";
 import { DebugUI } from "../../../ThreeVisualizer/DebugGUI";
 import { IShaderScene } from "../IShaderScene";
@@ -7,6 +7,7 @@ import { FreeFlyCamera } from "./FreeFlyCamera";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { WaterMaterial, WaterMaterialUniforms } from "./WaterMaterial";
 import { timeStats } from "../../../../client";
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
 
 /*
@@ -19,6 +20,7 @@ To do:
 skybox: https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky
 potential tree: https://sketchfab.com/3d-models/coconut-palm-26e787f2ff2e4c0fb004c3b0210805a3
 potential tree: https://sketchfab.com/3d-models/curly-palm-00f2b57dd0e844edbeb116034fa471ec
+env map: https://polyhaven.com/a/farm_field_puresky
 */
 
 declare type SpawnedObj = {
@@ -51,7 +53,7 @@ export class ShaderSceneWater implements IShaderScene
     private depthBuffer!: WebGLRenderTarget;
 
 
-    private waterPlaneResolution: number = 400.0;
+    private waterPlaneResolution: number = 500.0;
     private waterMesh?: Mesh;
     private waterShader!: ShaderMaterial;
 
@@ -68,20 +70,18 @@ export class ShaderSceneWater implements IShaderScene
         u_ViewportSize: { value: new Vector2() },
         u_CameraNear: { value: 0.1 },
         u_CameraFar: { value: 100.0 },
+        u_CameraPos: { value: new Vector3() },
         
         u_FarColor: { value: new Color(0x436a92) },
         u_MidColor: { value: new Color(0x31a6bd) },
         u_ShoreColor: { value: new Color(0x6dd1c3) },
 
-        u_CameraPos: { value: new Vector3() },
-
         u_LightDir: { value: new Vector3() },
-        u_Roughness: { value: 0.15 },
         u_AmbientIntensity: { value: 0.2 },
         u_LightIntensity: { value: 5.0 },
         u_LightColor: { value: new Color(0xffffff) },
-        u_SpecularIntensity: { value: 1.0 },
-        u_SpecularColor: { value: new Color(0xffffff) },
+        u_FresnelColor: { value: new Color(0x93c6c6) },
+        u_EnvironmentIntensity: { value: 0.075 },
         
         u_WaveCount: { value: 4.0 },
         u_WaveSteepness: { value: 0.5 },
@@ -90,12 +90,9 @@ export class ShaderSceneWater implements IShaderScene
         u_WaveSpeed: { value: 1.2 },
 
         u_Time: { value: 0.0 },
-        u_WaterNormalSpeed1: { value: 0.025 },
-        u_WaterNormalSpeed2: { value: 0.035 },
-        u_WaterNormalTiling1: { value: 10 },
-        u_WaterNormalTiling2: { value: 15 },
 
-        u_WaterNormal: { value: null }
+        u_WaterNormal: { value: null },
+        u_SkyTexture: { value: null }
     }
 
     public getScene() { return this.scene; }
@@ -243,13 +240,11 @@ export class ShaderSceneWater implements IShaderScene
         this.debugUI.addColorPicker("Colors", this.waterUniforms.u_ShoreColor, "value", "Shore Color", (value) => { this.waterUniforms.u_ShoreColor.value.set(value); });
 
         this.debugUI.addFolder("PBR", "");
-        this.debugUI.addSlider("PBR", this.waterUniforms.u_Roughness, "value", 0.0, 1.0, "Roughness");
         this.debugUI.addSlider("PBR", this.waterUniforms.u_AmbientIntensity, "value", 0.0, 1.0, "Ambient Intensity");
         this.debugUI.addSlider("PBR", this.waterUniforms.u_LightIntensity, "value", 0.0, 10.0, "Light Intensity");
+        this.debugUI.addSlider("PBR", this.waterUniforms.u_EnvironmentIntensity, "value", 0.0, 1.0, "Environment Intensity");
         this.debugUI.addColorPicker("PBR", this.waterUniforms.u_LightColor, "value", "Light Color", (value) => { this.waterUniforms.u_LightColor.value.set(value); });
-        this.debugUI.addSlider("PBR", this.waterUniforms.u_SpecularIntensity, "value", 0.0, 1.0, "Specular Intensity");
-        this.debugUI.addColorPicker("PBR", this.waterUniforms.u_SpecularColor, "value", "Specular Color", (value) => { this.waterUniforms.u_SpecularColor.value.set(value); });
-
+        this.debugUI.addColorPicker("PBR", this.waterUniforms.u_FresnelColor, "value", "Fresnel Color", (value) => { this.waterUniforms.u_FresnelColor.value.set(value); });
 
         this.debugUI.addFolder("WaveMovement", "");
         this.debugUI.addSlider("WaveMovement", this.waterUniforms.u_WaveCount, "value", 1.0, 10.0, "Wave Count");
@@ -307,6 +302,17 @@ export class ShaderSceneWater implements IShaderScene
                 this.onResourceLoaded();
             });
         }
+        if(this.waterUniforms.u_SkyTexture.value == null)
+        {
+            waitForResources = true;
+            new RGBELoader().load("models/ShaderProjects/Water/SkyEnvMap.hdr", (asset: Texture) => {
+                asset.wrapS = RepeatWrapping;
+                asset.wrapT = RepeatWrapping;
+                asset.mapping = EquirectangularReflectionMapping;
+                this.waterUniforms.u_SkyTexture.value = asset;
+                this.onResourceLoaded();
+            });
+        }
 
         if(!waitForResources)
             this.onResourceLoaded();
@@ -314,7 +320,7 @@ export class ShaderSceneWater implements IShaderScene
 
     private onResourceLoaded()
     {
-        if(this.sandMesh == undefined || this.sandTexAO == undefined || this.palmTree == undefined || this.skybox == undefined || this.waterUniforms.u_WaterNormal.value == null)
+        if(this.sandMesh == undefined || this.sandTexAO == undefined || this.palmTree == undefined || this.skybox == undefined || this.waterUniforms.u_WaterNormal.value == null || this.waterUniforms.u_SkyTexture.value == null)
             return;
 
         this.setupSand();
@@ -381,6 +387,10 @@ export class ShaderSceneWater implements IShaderScene
         this.waterMesh = new Mesh(waterGeom, this.waterShader);
         this.waterMesh.position.set(0, 5, 0);
         this.scene.add(this.waterMesh);
+
+        // let skyMesh = this.skybox!.children[0] as Mesh;
+        // let skyMat = skyMesh.material as MeshBasicMaterial;
+        // this.waterUniforms.u_SkyTexture.value = skyMat.map;
     }
 
     private setupTrees()
