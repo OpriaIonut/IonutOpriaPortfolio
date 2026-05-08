@@ -83,6 +83,8 @@ export class ShaderVisualizer
     public render(deltaTime: number)
     {
         this.cameraManager.render(deltaTime);
+        if(this.currentScene != undefined)
+            this.currentScene.postRender();
     }
 
     public addScript(scriptName: string, scriptContent: string, prettyPrint: boolean = true)

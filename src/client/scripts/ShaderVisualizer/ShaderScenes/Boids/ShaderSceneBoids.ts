@@ -193,6 +193,11 @@ Bird demo:
         this.previousFrameTime = timeStats.currentTime;
     }
 
+    public postRender()
+    {
+        
+    }
+
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {

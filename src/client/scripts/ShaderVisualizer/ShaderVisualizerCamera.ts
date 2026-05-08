@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { FreeFlyCamera } from "./ShaderScenes/Water/FreeFlyCamera";
+import { FreeFlyCamera } from "../ThreeVisualizer/FreeFlyCamera";
 
 const rightDir = new Vector3(1, 0, 0);
 const upDir = new Vector3(0, 1, 0);
@@ -30,6 +30,7 @@ export class ShaderVisualizerCamera
     public getScene() { return this.scene as Scene; }
     public getCamera() { return this.camera as PerspectiveCamera; }
     public getRenderer() { return this.renderer as WebGLRenderer; }
+    public getComposer() { return this.effectComposer as EffectComposer; }
     
     public getCameraForward() { return this.cameraForward; }
     public getCameraRight() { return this.cameraRight; }
@@ -72,7 +73,9 @@ export class ShaderVisualizerCamera
             window.innerWidth,
             window.innerHeight
         );
-        postProcessingRT.depthTexture = new DepthTexture(window.innerWidth, window.innerHeight, UnsignedByteType);
+        postProcessingRT.depthBuffer = true;
+        postProcessingRT.depthTexture = new DepthTexture(window.innerWidth, window.innerHeight, FloatType);
+        postProcessingRT.depthTexture.format = DepthFormat;
 
         this.effectComposer = new EffectComposer(this.renderer!, postProcessingRT);
         const renderPass = new RenderPass(this.scene, this.camera!);

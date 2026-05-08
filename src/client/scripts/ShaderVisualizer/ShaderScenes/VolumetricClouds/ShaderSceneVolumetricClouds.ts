@@ -146,6 +146,11 @@ export class ShaderSceneVolumetricClouds
         this.volumetricCloudsParams.invViewMat.copy(this.camera.matrixWorld);
     }
 
+    public postRender()
+    {
+        
+    }
+
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {

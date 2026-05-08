@@ -135,6 +135,11 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
         this.previousFrameTime = timeStats.currentTime;
     }
 
+    public postRender()
+    {
+        
+    }
+
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {

@@ -90,6 +90,11 @@ export class ShaderSceneProceduralShapes2D implements IShaderScene
 
     }
 
+    public postRender()
+    {
+        
+    }
+
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {

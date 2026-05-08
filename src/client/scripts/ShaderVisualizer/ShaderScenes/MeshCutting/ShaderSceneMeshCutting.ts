@@ -70,6 +70,11 @@ City: https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324
 
     }
 
+    public postRender()
+    {
+        
+    }
+
     //Called when you deactivate the view, dispose & reset everything
     public hide()
     {
