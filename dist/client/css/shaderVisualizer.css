@@ -91,3 +91,19 @@
     text-align: center;
     cursor: default;
 }
+
+#shaderVisualizerInstructions
+{
+    position: absolute;
+    display: none;
+    top: 1vw;
+    left: 50%;
+    width: auto;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.75vw;
+    pointer-events: none;
+    background-color: #00000088;
+    border-radius: 10vw;
+    padding: 0.5vw;
+}

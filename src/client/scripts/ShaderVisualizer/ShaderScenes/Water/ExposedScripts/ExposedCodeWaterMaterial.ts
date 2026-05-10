@@ -1,55 +1,4 @@
-import { Color, DoubleSide, Matrix4, ShaderMaterial, Texture, Vector2, Vector3 } from "three";
-
-export declare type WaterMaterialUniforms = {
-    u_DepthTex: { value: Texture | null },
-    u_SkyTexture: { value: Texture | null },
-
-    u_Time: { value: number },
-
-    u_ViewportSize: { value: Vector2 },
-    u_CameraNear: { value: number },
-    u_CameraFar: { value: number },
-    u_CameraPos: { value: Vector3 },
-    u_InverseViewMatrix: { value: Matrix4 },
-
-    u_FarColor: { value: Color },
-    u_MidColor: { value: Color },
-    u_ShoreColor: { value: Color },
-
-    u_LightDir: { value: Vector3 },
-    u_AmbientIntensity: { value: number },
-    u_LightIntensity: { value: number },
-    u_LightColor: { value: Color },
-    u_FresnelColor: { value: Color },
-    u_FresnelColorIntensity: { value: number },
-    u_EnvironmentIntensity: { value: number },
-
-    u_WaveCount: { value: number },
-    u_WaveSteepness: { value: number },
-    u_WaveAmplitude: { value: number },
-    u_WaveFrequency: { value: number },
-    u_WaveSpeed: { value: number },
-
-    u_FoamDistance: { value: number },
-    u_FoamOpacity: { value: number },
-    u_FoamColor: { value: Color }
-}
-
-export class WaterMaterial
-{
-    public static createMaterial(uniforms: WaterMaterialUniforms)
-    {
-        return new ShaderMaterial({
-            vertexShader: waterVert,
-            fragmentShader: waterFrag,
-            uniforms: uniforms,
-            side: DoubleSide,
-            transparent: true
-        });
-    }
-}
-
-const waterVert = `
+export const exposedCodeWaterMaterialVert = `
 #define PI 3.14159265359
 
 varying vec3 v_WorldPos;
@@ -119,7 +68,7 @@ void main()
 }
 `;
 
-const waterFrag = `
+export const exposedCodeWaterMaterialFrag = `
 #define PI 3.14159265359
 
 varying vec3 v_WorldPos;

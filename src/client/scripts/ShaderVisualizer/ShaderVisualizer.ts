@@ -31,6 +31,7 @@ export class ShaderVisualizer
     private codePanelHeader!: HTMLDivElement;
     private codePanelInspector!: HTMLDivElement;
     private codePanelBtnActivation!: HTMLButtonElement;
+    private instructionsText!: HTMLDivElement;
 
     private availableShaders: ShaderInspectorData[] = [];
 
@@ -129,6 +130,12 @@ export class ShaderVisualizer
         this.codePanelInspector.innerHTML = "";
     }
 
+    public displayInstructions(text: string)
+    {
+        this.instructionsText.style.display = text == "" ? "none" : "block"; 
+        this.instructionsText.innerHTML = text;
+    }
+
     private findScriptIndex(scriptName: string)
     {
         for(let index = 0; index < this.availableShaders.length; ++index)
@@ -156,6 +163,10 @@ export class ShaderVisualizer
         let canvasElem = document.createElement("canvas");
         canvasElem.className = "fullres";
         viewPanel.appendChild(canvasElem);
+
+        this.instructionsText = document.createElement("div");
+        this.instructionsText.id = "shaderVisualizerInstructions";
+        viewPanel.appendChild(this.instructionsText);
 
         this.codePanelParent = document.createElement("div");
         this.codePanelParent.id = "codePanelParent";

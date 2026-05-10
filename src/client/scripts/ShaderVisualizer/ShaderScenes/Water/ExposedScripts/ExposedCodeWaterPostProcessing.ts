@@ -1,35 +1,4 @@
-import { Color, DoubleSide, ShaderMaterial, Texture, Vector3 } from "three"
-
-export declare type WaterPostProcessingParams = {
-    u_CameraNear: { value: number },
-    u_CameraFar: { value: number },
-    u_CameraPos: { value: Vector3 },
-
-    u_IsUnderwater: { value: boolean },
-    
-    u_FarColor: { value: Color },
-    u_MidColor: { value: Color },
-    u_NearColor: { value: Color },
-
-    u_DiffuseTex: { value: Texture | null },
-    u_DepthTex: { value: Texture | null },
-}
-
-// This shader is mainly used to add underwater effect for the water
-export class WaterPostProcessing
-{
-    public static createPass(params: WaterPostProcessingParams): ShaderMaterial
-    {
-        return new ShaderMaterial({
-            uniforms: params,
-            vertexShader: waterPostProcessingVert,
-            fragmentShader: waterPostProcessingFrag,
-            side: DoubleSide
-        });
-    }
-}
-
-const waterPostProcessingVert = `
+export const exposedCodeWaterPostProcessingVert = `
 varying vec2 v_UV;
 
 void main()
@@ -39,7 +8,7 @@ void main()
 }
 `;
 
-const waterPostProcessingFrag = `
+export const exposedCodeWaterPostProcessingFrag = `
 varying vec2 v_UV;
 
 uniform float u_CameraNear;
