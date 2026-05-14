@@ -107,6 +107,8 @@ export class ShaderSceneOctree implements IShaderScene
         this.displayUI();
         Octree.enableLogs(false, true);
         this.onSceneChanged();
+
+        this.visualizer.displayInstructions("Left Click - rotate camera; Scrollwheel - zoom in/out; Right click - drag the camera");
         
         this.visualizer.addScript("OctreeObj.ts", exposedCodeOctreeObj);
         this.visualizer.addScript("Octree.ts", exposedCodeOctree);
@@ -146,6 +148,8 @@ Spaceship: https://sketchfab.com/3d-models/spaceship-70e786969e70447c86bc4168df8
         //Discard everything from the scenes
         this.spaceshipDemo.discardScene();
         this.frustumCullingDemo.discardScene();
+
+        this.visualizer.displayInstructions("");
 
         //Reset the debug ui and the camera
         this.debugUI.reset(); //Events will also unsubscribe here

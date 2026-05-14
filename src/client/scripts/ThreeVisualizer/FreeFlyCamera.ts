@@ -17,6 +17,7 @@ export class FreeFlyCamera
     private onMouseUp!: (e: MouseEvent) => void;
     private onMouseMove!: (e: MouseEvent) => void;
     private onContextMenu!: (e: MouseEvent) => void;
+    private onWheel!: (e: WheelEvent) => void;
 
     constructor(camera: Camera, domElement: HTMLCanvasElement)
     {
@@ -42,6 +43,11 @@ export class FreeFlyCamera
 
         this.onKeyUp = (e: KeyboardEvent) => {
             this.keys[e.code] = false;
+        };
+
+        this.onWheel = (e: WheelEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
         };
 
         // Mouse
@@ -78,6 +84,8 @@ export class FreeFlyCamera
 
         window.addEventListener('mouseup', this.onMouseUp);
         window.addEventListener('mousemove', this.onMouseMove);
+
+        this.domElement.addEventListener('wheel', this.onWheel, { passive: false });
     }
 
     public update(delta: number) {
@@ -111,6 +119,8 @@ export class FreeFlyCamera
         window.removeEventListener('mouseup', this.onMouseUp);
         window.removeEventListener('mousemove', this.onMouseMove);
 
+        this.domElement.removeEventListener('wheel', this.onWheel);
+        
         // Optional: clear state
         this.keys = {};
         this.isRotating = false;

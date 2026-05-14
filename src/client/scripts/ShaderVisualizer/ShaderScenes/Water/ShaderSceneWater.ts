@@ -96,7 +96,7 @@ export class ShaderSceneWater implements IShaderScene
         this.displayUI();
         this.resourceLoader.loadResources(() => { this.onAllResourcesLoaded(); });
 
-        this.visualizer.displayInstructions("WASD - move; Right click - rotate camera<br>Try going underwater")
+        this.visualizer.displayInstructions("WASD - move; Right click - rotate camera<br>Try going underwater");
 
         this.visualizer.addScript("WaterMatrial.vert", exposedCodeWaterMaterialVert);
         this.visualizer.addScript("WaterMatrial.frag", exposedCodeWaterMaterialFrag);

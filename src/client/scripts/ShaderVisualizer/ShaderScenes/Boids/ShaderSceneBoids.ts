@@ -151,6 +151,8 @@ export class ShaderSceneBoids implements IShaderScene
         this.loadNeededResources(); //Start loading all resources needed for the demo. Once the resources finish loading, it will start the demo
         this.displayUI(); //Display the debug ui
 
+        this.visualizer.displayInstructions("Left Click - rotate camera; Scrollwheel - zoom in/out; Right click - drag the camera");
+
         this.visualizer.addScript("Boid.ts", exposedCodeBoid);
         this.visualizer.addScript("BoidSettings.ts", exposedCodeBoidSettings);
         this.visualizer.addScript("BoidRaycaster.ts", exposedCodeBoidRaycaster);
@@ -207,6 +209,8 @@ Bird demo:
         this.camera.far = this.defaultCameraFar;
         this.camera.near = this.defaultCameraNear;
         this.camera.updateProjectionMatrix();
+
+        this.visualizer.displayInstructions("");
 
         //Discard all previously generated data
         for (let index = 0; index < this.boids.length; ++index)

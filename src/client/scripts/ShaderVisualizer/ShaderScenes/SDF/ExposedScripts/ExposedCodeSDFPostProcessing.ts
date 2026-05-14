@@ -1,70 +1,4 @@
-import { Color, Matrix4, ShaderMaterial, Texture, Vector2, Vector3 } from "three"
-
-//Generic data used to draw various basic shapes (cube, sphere, capsule)
-export declare type SDFData = {
-    pos: Vector3,
-    size: number,
-    color: Color
-}
-
-//Data used in the terrain rendering example to draw caves using noise
-export declare type NoiseData = {
-    octaves: number,        //Used to add more granular detail to the noise, but also reduces performance if it is too big
-    scale: number,          //Used to scale the noise and make it more detailed
-    amplitude: number,      //Controls overall brightness of the noise
-    frequency: number       //Used to add more fine detail in later octaves (octave 0 will be low detail, and frequency will controll how much detail is added to each cosequent octave)
-}
-
-//Main data structure for drawing terran
-export declare type TerrainData = {
-    hillFrequency: Vector2,     //Controls how many hills we will have on each of the axes. Hills are created with sine waves
-    hillHeight: number,         //Controls how tall the generated hills are
-    caveData: NoiseData,        //Main noise which controls cave generation
-    caveThreshold: number,      //How much to "cut out" from the terrain to generate caves
-    caveRenderDepth: number,    //How deep the caves should go
-    terrainColor: Color,        //Color of the top surface of the terrain
-    caveColor: Color            //Color of underground surface (in the caves)
-}
-
-export declare type SDFPostProcessingUniforms = {
-    u_DisplayBasicShapes: { value: boolean },   //True when displaying the Basic Shapes Demo
-    u_DisplayTerrain: { value: boolean },       //True when displaying the terrain demo
-
-    //Camera properties used to raymarch
-    u_ScreenResolution: { value: Vector2 },
-    u_CameraPos: { value: Vector3 },
-    u_CameraMatrixWorld: { value: Matrix4 },
-    u_ProjectionMatrixInverse: { value: Matrix4 },
-
-    u_LightDir: { value: Vector3 },
-    u_AmbientIntensity: { value: number },
-    u_SceneColor: { value: Color },             //Used to achieve a trick in which we display "normal 3D elements" on top of the SDF rendering. To achieve this, we chroma key the background color out of the picture
-
-    //SDF data used to generate volume
-    u_SphereData: { value: SDFData },
-    u_BoxData: { value: SDFData },
-    u_CapsuleData: { value: SDFData },
-    u_TerrainData: { value: TerrainData },
-
-    u_Operation: { value: number },             //Operation used in the basic shapes demo; 0 - union, 1 - intersection, 2 - subtraction
-    u_ShapeSmoothness: { value: number },       //How smooth the shapes should be (only used in basic shapes demo)
-
-    u_DiffuseTex: { value: Texture | null }     //We are first rendering the scene to this texture and then applying this post-processing pass to the scene. The texture will contain normal 3D scene elements
-}
-
-export class SDFPostProcessing
-{
-    public static createPass(params: SDFPostProcessingUniforms): ShaderMaterial
-    {
-        return new ShaderMaterial({
-            uniforms: params,
-            vertexShader: sdfPostProcessingVert,
-            fragmentShader: sdfPostProcessingFrag
-        });
-    }
-}
-
-const sdfPostProcessingVert = `
+export const exposedCodeSDFPostProcessingVert = `
 varying vec2 v_UV;
 
 void main()
@@ -74,7 +8,7 @@ void main()
 }
 `;
 
-const sdfPostProcessingFrag = `
+export const exposedCodeSDFPostProcessingFrag = `
 #define MAX_STEPS 128
 #define SURFACE_EPSILON 0.01
 #define MAX_DISTANCE 150.0

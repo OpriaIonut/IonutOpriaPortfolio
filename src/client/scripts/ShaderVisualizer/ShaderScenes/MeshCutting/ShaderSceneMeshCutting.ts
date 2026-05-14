@@ -59,6 +59,8 @@ Special thanks to the following artist for their work:
 City: https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324
         `, false);
 
+        this.visualizer.displayInstructions("Left Click - rotate camera; Scrollwheel - zoom in/out; Right click - drag the camera");
+
         //Activate base state of the scene
         this.uiManager.displayCutMenu();
         this.onFillTextureChanged();
@@ -81,6 +83,8 @@ City: https://sketchfab.com/3d-models/city-1f50f0d6ec5a493d8e91d7db1106b324
         this.cutLogic.reset(true);
         this.cutLogic.disposeBaseModel();
         this.uiManager.reset(); //Events will also unsubscribe here
+
+        this.visualizer.displayInstructions("");
 
         this.visualizer.removeScript("MeshCutter.ts");
         this.visualizer.removeScript("ProceduralGeometry.ts");
