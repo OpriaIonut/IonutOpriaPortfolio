@@ -230,7 +230,7 @@ export class ShaderSceneSDF implements IShaderScene
         {
             this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value.hillFrequency, "x", 0.0, 0.25, "Hill Frequency X");
             this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value.hillFrequency, "y", 0.0, 0.25, "Hill Frequency Y");
-            this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value, "hillHeight", 0.0, 10.0, "Hill Height");
+            this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value, "hillHeight", 0.0, 5.0, "Hill Height");
             this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value.caveData, "octaves", 1.0, 5.0, "Cave Octaves");
             this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value.caveData, "scale", 0.0, 2.0, "Cave Scale");
             this.debugUI.addSlider("", this.sdfUniforms.u_TerrainData.value.caveData, "frequency", 1.0, 5.0, "Cave Frequency");
