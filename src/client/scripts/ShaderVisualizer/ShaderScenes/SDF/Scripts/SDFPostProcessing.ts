@@ -75,9 +75,9 @@ void main()
 `;
 
 const sdfPostProcessingFrag = `
-#define MAX_STEPS 128
+#define MAX_STEPS 100
 #define SURFACE_EPSILON 0.01
-#define MAX_DISTANCE 150.0
+#define MAX_DISTANCE 100.0
 
 varying vec2 v_UV;
 
