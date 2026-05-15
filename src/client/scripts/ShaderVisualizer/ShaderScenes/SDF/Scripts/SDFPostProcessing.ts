@@ -322,20 +322,19 @@ vec3 calculateSceneSDFNormal(vec3 samplePoint, float smoothness)
     float dx0, dx1, dy0, dy1, dz0, dz1;
     vec3 tempColor;
 
-    sceneSDF(samplePoint + vec3(e, 0.0, 0.0), smoothness, dx0, tempColor);
-    sceneSDF(samplePoint - vec3(e, 0.0, 0.0), smoothness, dx1, tempColor);
+    float d1, d2, d3, d4;
 
-    sceneSDF(samplePoint + vec3(0.0, e, 0.0), smoothness, dy0, tempColor);
-    sceneSDF(samplePoint - vec3(0.0, e, 0.0), smoothness, dy1, tempColor);
+    sceneSDF(samplePoint + e * vec3( 1.0, -1.0, -1.0), smoothness, d1, tempColor);
+    sceneSDF(samplePoint + e * vec3(-1.0, -1.0,  1.0), smoothness, d2, tempColor);
+    sceneSDF(samplePoint + e * vec3(-1.0,  1.0, -1.0), smoothness, d3, tempColor);
+    sceneSDF(samplePoint + e * vec3( 1.0,  1.0,  1.0), smoothness, d4, tempColor);
 
-    sceneSDF(samplePoint + vec3(0.0, 0.0, e), smoothness, dz0, tempColor);
-    sceneSDF(samplePoint - vec3(0.0, 0.0, e), smoothness, dz1, tempColor);
-
-    float dx = dx0 - dx1;
-    float dy = dy0 - dy1;
-    float dz = dz0 - dz1;
-
-    return normalize(vec3(dx, dy, dz));
+    return normalize(
+        vec3( 1.0,-1.0,-1.0) * d1 +
+        vec3(-1.0,-1.0, 1.0) * d2 +
+        vec3(-1.0, 1.0,-1.0) * d3 +
+        vec3( 1.0, 1.0, 1.0) * d4
+    );
 }
 
 //This is the core of our rendering logic. It casts rays into the sceneand detects if we hit an SDF surface or not
