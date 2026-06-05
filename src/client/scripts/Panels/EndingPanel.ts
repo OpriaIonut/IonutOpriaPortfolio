@@ -49,7 +49,7 @@ export class EndingPanel
         cell.className = "homePageReferalLink";
         cell.src = imageSrc;
         if(link == "CV")
-            cell.addEventListener('mousedown', () => { this.downloadFile("CV Ionut Opria.pdf", "CV Ionut Opria.pdf"); });
+            cell.addEventListener('mousedown', () => { this.downloadFile("Ion-Bogdan OPRIA - CV.pdf", "Ion-Bogdan OPRIA - CV.pdf"); });
         else
             cell.addEventListener('mousedown', () => { window.open(link, '_blank'); });
         cell.style.cursor = "pointer";
