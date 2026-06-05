@@ -51,9 +51,9 @@ export class SkillChartsPanel
             _chartID: "languageChart",
             _units: " years",
             _dataSets: [
-                { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2.0, 3.5, 2.0, 1.0, 0.6, 0.0, 0.0] },
+                { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [2.0, 3.5, 2.0, 2.0, 0.6, 0.0, 0.0] },
                 { name: "School", color: chartRedColorTheme.backgroundColor, data: [4.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.5] },
-                { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [3.0, 4.0, 0.6, 0.6, 0.0, 0.3, 0.0] }
+                { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [3.0, 4.0, 1.0, 0.6, 0.0, 0.3, 0.0] }
             ]
         });
 
@@ -64,9 +64,9 @@ export class SkillChartsPanel
             _chartID: "softwareChart",
             _units: " years",
             _dataSets: [
-                { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [3.5, 0.0, 0.0, 2.0, 0.0, 0.0] },
+                { name: "Professional", color: chartRedColorTheme.backgroundColor, data: [3.5, 2.0, 0.0, 2.0, 0.0, 0.0] },
                 { name: "School", color: chartRedColorTheme.backgroundColor, data: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0] },
-                { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [4.0, 8.0, 4.0, 0.6, 0.3, 1.0] }
+                { name: "Hobby", color: chartBlueColorTheme.backgroundColor, data: [4.0, 6.0, 4.0, 0.6, 0.3, 1.0] }
             ]
         });
 
